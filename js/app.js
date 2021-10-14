@@ -1,7 +1,7 @@
 /* ---------- MVP Features ---------- */
 
 // // Create init function that will initialize variables and render main page elements
-// Create render function that wil display main elements
+// // Create render function that wil display main elements
 // Create event listener on continueStoryBtn to progress story given user interaction
 // Create event listener on parent element of playerChoice0, playerChoice1, playerChoice2, and playerChoice3 to event bubble player choice given user interaction
 // Create event listener on resetBtn to invoke the init function to restart the game
@@ -31,6 +31,18 @@ const sceneArtArr = [
 
 let playerHealth, maxPlayerHealth, storyScenarioIdx, storyTextIdx
 
+/* ---------- Cached Element References ---------- */
+
+const sceneArt = document.querySelector("#scene-art")
+const storyText = document.querySelector("#story-text")
+const continueStoryBtn = document.querySelector("#continue-button")
+const resetBtn = document.querySelector("#reset-button")
+const playerChoices = document.querySelector("#player-choices")
+const choice1 = document.querySelector("#choice-1")
+const choice2 = document.querySelector("#choice-2")
+const choice3 = document.querySelector("#choice-3")
+const choice4 = document.querySelector("#choice-4")
+
 /* ---------- Event Listeners ---------- */
 
 
@@ -42,13 +54,39 @@ init()
 function init(){
   playerHealth = maxPlayerHealth = 100
   storyScenarioIdx = storyTextIdx = 0
+  // playerHealth = 0
+  storyTextIdx = 1
   render()
 }
 
 function render(){
-  console.log("Render elements on page");
-  console.log(`Player Health is ${playerHealth}`);
-  console.log(`Maximum Player Health is ${maxPlayerHealth}`);
-  console.log(`Story Scenario Index is ${storyScenarioIdx}`);
-  console.log(`Story Text Index is ${storyTextIdx}`);
+  if (playerHealth === 0) {
+    console.log("Game Over");
+    sceneArt.setAttribute("src", sceneArtArr[2])
+    storyText.textContent = storyTextArr[2]
+    playerChoices.setAttribute("hidden", "")
+    continueStoryBtn.setAttribute("hidden", "")
+    resetBtn.removeAttribute("hidden")
+  } else {
+    sceneArt.setAttribute("src", sceneArtArr[storyScenarioIdx])
+    storyText.textContent = storyTextArr[storyScenarioIdx][storyTextIdx]
+    if (storyText.textContent.includes("ENDPOINT")){
+      playerChoices.setAttribute("hidden", "")
+      continueStoryBtn.setAttribute("hidden", "")
+      resetBtn.removeAttribute("hidden")
+    }
+  }
+  if (storyTextIdx === storyTextArr[storyScenarioIdx].length - 1){
+    continueStoryBtn.setAttribute("hidden", "")
+    playerChoices.removeAttribute("hidden")
+    choice1.textContent = scenarioChoicesArr[storyScenarioIdx].choice1.text
+    choice2.textContent = scenarioChoicesArr[storyScenarioIdx].choice2.text
+    choice3.textContent = scenarioChoicesArr[storyScenarioIdx].choice3.text
+    choice4.textContent = scenarioChoicesArr[storyScenarioIdx].choice4.text
+  } else {
+    if (!playerChoices.hasAttribute("hidden")) {
+      playerChoices.setAttribute("hidden", "")
+    }
+    continueStoryBtn.removeAttribute("hidden")
+  }
 }

@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#stat-bar {
+  background-color: #36c6ff;
+}
+
+#scene-art {
+  background-color: #364954;
+}
+
+#story-text {
+  background-color: #9AAEBB;
+}
+
+#player-choices {
+  background-color: #B66AA5;
+}
