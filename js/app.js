@@ -3,7 +3,7 @@
 // // Create init function that will initialize variables and render main page elements
 // // Create render function that wil display main elements
 // // Create event listener on continueStoryBtn to progress story given user interaction
-// Create event listener on parent element of playerChoice0, playerChoice1, playerChoice2, and playerChoice3 to event bubble player choice given user interaction
+// // Create event listener on parent element of playerChoice0, playerChoice1, playerChoice2, and playerChoice3 to event bubble player choice given user interaction
 // Create event listener on resetBtn to invoke the init function to restart the game
 // Find quick basic placeholder art (perhaps lorum picsum) for img src strings in sceneArtArr
 
@@ -46,6 +46,7 @@ const choice4 = document.querySelector("#choice-4")
 /* ---------- Event Listeners ---------- */
 
 continueStoryBtn.addEventListener("click", progressStory)
+playerChoices.addEventListener("click", playerChoiceResult)
 
 /* ---------- Functions ---------- */
 
@@ -94,4 +95,20 @@ function render(){
 function progressStory(){
   storyTextIdx++
   render()
+}
+
+function playerChoiceResult(evt){
+  let choiceId = evt.target.id
+  choiceId = choiceId.slice(choiceId.length - 1)
+  let choiceOptionsObj = scenarioChoicesArr[storyScenarioIdx]
+  let choiceObj = choiceOptionsObj[`choice${choiceId}`]
+  let healthChangeAmount = choiceObj.healthChange
+  playerHealth = Math.max(0, Math.min(playerHealth + healthChangeAmount, maxPlayerHealth))
+  if (playerHealth === 0) {
+    render()
+  } else {
+    storyScenarioIdx = choiceObj.newStoryTextIdx
+    storyTextIdx = 0
+    render()
+  }
 }

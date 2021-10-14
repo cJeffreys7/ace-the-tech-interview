@@ -78,7 +78,7 @@
 
 ##### 4.1.1) function playerChoiceResult(choiceIdx) --> get health change outcome from scenarioChoicesArr[storyScenarioIdx][choiceIdx][1] and add it to the playerHealth, setting the playerHealth to the new value clamped to a max of maxPlayerHealth and a min of 0
 ##### 4.1.2) If playerHealth === 0, invoke render to trigger game over screen
-##### 4.1.3) Else, then set storyTextId to scenarioChoicesArr[storyScenarioIdx][choiceIdx][2]
+##### 4.1.3) Else, then set storyScenarioId to scenarioChoicesArr[storyScenarioIdx][choiceIdx][2]
 ##### 4.1.4) Set storyTextIdx to 0 to restart the element chosen for the next story scenario in storyTextArr
 ##### 4.1.6) Invoke the render function to continue to next story scenario after the player choice result has been handled, continuing the story
 
