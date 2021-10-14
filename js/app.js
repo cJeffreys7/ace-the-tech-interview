@@ -5,7 +5,7 @@
 // // Create event listener on continueStoryBtn to progress story given user interaction
 // // Create event listener on parent element of playerChoice0, playerChoice1, playerChoice2, and playerChoice3 to event bubble player choice given user interaction
 // // Create event listener on resetBtn to invoke the init function to restart the game
-// Find quick basic placeholder art (perhaps lorum picsum) for img src strings in sceneArtArr
+// // Find quick basic placeholder art (perhaps lorum picsum) for img src strings in sceneArtArr
 
 /* ---------- Constants ---------- */
 
@@ -24,7 +24,7 @@ const scenarioChoicesArr = [
 ]
 
 const sceneArtArr = [
-  "https://picsum.photos/200", "https://picsum.photos/400", "https://picsum.photos/50"
+  "https://image.freepik.com/free-photo/fire-steppe-grass-is-burning-destroying-everything-its-path_169016-13759.jpg", "https://image.freepik.com/free-photo/cheerful-group-diverse-students_53876-42761.jpg", "https://image.freepik.com/free-photo/destroyed-architecture-with-great-white-mountain_181624-470.jpg", "https://image.freepik.com/free-photo/pong-with-wooden-village-building-near-it-blue-sky_181624-46168.jpg"
 ]
 
 /* ---------- Variables ---------- */
