@@ -55,7 +55,7 @@ function init(){
   playerHealth = maxPlayerHealth = 100
   storyScenarioIdx = storyTextIdx = 0
   // playerHealth = 0
-  storyTextIdx = 1
+  // storyTextIdx = 1
   render()
 }
 
@@ -74,19 +74,20 @@ function render(){
       playerChoices.setAttribute("hidden", "")
       continueStoryBtn.setAttribute("hidden", "")
       resetBtn.removeAttribute("hidden")
+    } else {
+      if (storyTextIdx === storyTextArr[storyScenarioIdx].length - 1){
+        continueStoryBtn.setAttribute("hidden", "")
+        playerChoices.removeAttribute("hidden")
+        choice1.textContent = scenarioChoicesArr[storyScenarioIdx].choice1.text
+        choice2.textContent = scenarioChoicesArr[storyScenarioIdx].choice2.text
+        choice3.textContent = scenarioChoicesArr[storyScenarioIdx].choice3.text
+        choice4.textContent = scenarioChoicesArr[storyScenarioIdx].choice4.text
+      } else {
+        if (!playerChoices.hasAttribute("hidden")) {
+          playerChoices.setAttribute("hidden", "")
+        }
+        continueStoryBtn.removeAttribute("hidden")
+      }
     }
-  }
-  if (storyTextIdx === storyTextArr[storyScenarioIdx].length - 1){
-    continueStoryBtn.setAttribute("hidden", "")
-    playerChoices.removeAttribute("hidden")
-    choice1.textContent = scenarioChoicesArr[storyScenarioIdx].choice1.text
-    choice2.textContent = scenarioChoicesArr[storyScenarioIdx].choice2.text
-    choice3.textContent = scenarioChoicesArr[storyScenarioIdx].choice3.text
-    choice4.textContent = scenarioChoicesArr[storyScenarioIdx].choice4.text
-  } else {
-    if (!playerChoices.hasAttribute("hidden")) {
-      playerChoices.setAttribute("hidden", "")
-    }
-    continueStoryBtn.removeAttribute("hidden")
   }
 }
