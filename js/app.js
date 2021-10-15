@@ -21,7 +21,7 @@
 
 /* ---------- Constants ---------- */
 
-import { getStoryText, getLastScenarioIndex, getLastScenarioTextIndex,  getScenarioChoice, getSceneArt, getLastSceneArtIndex } from "../data/storyScenarios.js"
+import { getStoryText, getScenarioIndexByScenarioName, getIsScenarioAnEndpoint, getLastScenarioTextIndex,  getScenarioChoice, getSceneArt } from "../data/storyScenarios.js"
 
 /* ---------- Variables ---------- */
 
@@ -63,8 +63,8 @@ function init(){
 
 function render(){
   if (playerHealth === 0) {
-    sceneArt.setAttribute("src", getSceneArt(getLastSceneArtIndex()))
-    storyText.textContent = getStoryText(getLastScenarioIndex(), 0)
+    sceneArt.setAttribute("src", getSceneArt(getScenarioIndexByScenarioName("Player Dies")))
+    storyText.textContent = getStoryText(getScenarioIndexByScenarioName("Player Dies"), 0)
     toggleElementDisplay(playerChoices, "flex")
     toggleElementDisplay(progressBtns, "flex")
     continueStoryBtn.setAttribute("hidden", "")
@@ -72,7 +72,7 @@ function render(){
   } else {
     sceneArt.setAttribute("src", getSceneArt(storyScenarioIdx))
     storyText.textContent = getStoryText(storyScenarioIdx, storyTextIdx)
-    if (storyText.textContent.includes("ENDPOINT")){
+    if (getIsScenarioAnEndpoint(storyScenarioIdx)){
       toggleElementDisplay(playerChoices, "flex")
       toggleElementDisplay(progressBtns, "flex")
       continueStoryBtn.setAttribute("hidden", "")
