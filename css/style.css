@@ -30,6 +30,7 @@ body {
   --story-txt-bg: white;
   --choice-bg: #00e956;
   --choice-txt-color: black;
+  --test: #ff3939;
   /* Use a system font, if none are available use an available sans-sarif font */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -53,12 +54,31 @@ body {
   margin: 12px;
 }
 
-.stat-icon {
-  height: 48px;
-  /* filter: invert(65%) sepia(77%) saturate(2825%) hue-rotate(152deg) brightness(101%) contrast(104%) */
-  /* filter: invert(42%) sepia(98%) saturate(2776%) hue-rotate(176deg) brightness(96%) contrast(101%) */
-  /* color: var(--choice-bg); */
+.icon-container {
+  display: grid;
+  grid-template-columns: 48px;
+  grid-template-rows: 48px;
+  grid-template-areas: 
+  "icon"
+  ;
 }
+
+.stat-icon, .stat-icon-fill, .stat-fill-cover {
+  height: 100%;
+  grid-area: icon;
+  z-index: 3;
+}
+
+.stat-fill-cover {
+  background-color: var(--stat-bar-bg);
+  z-index: 2;
+}
+
+.stat-icon-fill {
+  filter: invert(45%) sepia(65%) saturate(5959%) hue-rotate(341deg) brightness(106%) contrast(107%);
+  z-index: 1;
+}
+
 
 #scene-art-section {
   display: flex;
@@ -72,7 +92,6 @@ body {
 
 #scene-art {
   width: 100%;
-  /* height: 100%; */
 }
 
 #story-text {

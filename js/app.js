@@ -67,6 +67,7 @@ let playerHealth, maxPlayerHealth, storyScenarioIdx, storyTextIdx
 
 /* ---------- Cached Element References ---------- */
 
+const healthFill = document.querySelector("#brain-fill")
 const sceneArt = document.querySelector("#scene-art")
 const storyText = document.querySelector("#story-text")
 const progressBtns = document.querySelector("#buttons")
@@ -91,6 +92,8 @@ init()
 function init(){
   playerHealth = maxPlayerHealth = 100
   storyScenarioIdx = storyTextIdx = 0
+  healthFill.style.height = `${(playerHealth/maxPlayerHealth) * 100}%`
+  console.log(healthFill.style.height, 'health left')
   playerChoices.style.display = "none"
   resetBtn.setAttribute("hidden", "")
   render()
@@ -155,6 +158,8 @@ function playerChoiceResult(evt){
   let choiceObj = choiceOptionsObj[`choice${choiceId}`]
   let healthChangeAmount = choiceObj.healthChange
   playerHealth = Math.max(0, Math.min(playerHealth + healthChangeAmount, maxPlayerHealth))
+  healthFill.style.height = `${(playerHealth/maxPlayerHealth) * 100}%`
+  console.log(healthFill.style.height, 'health left')
   if (playerHealth === 0) {
     render()
   } else {
