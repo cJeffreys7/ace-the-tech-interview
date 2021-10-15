@@ -69,6 +69,7 @@ let playerHealth, maxPlayerHealth, storyScenarioIdx, storyTextIdx
 
 const sceneArt = document.querySelector("#scene-art")
 const storyText = document.querySelector("#story-text")
+const progressBtns = document.querySelector("#buttons")
 const continueStoryBtn = document.querySelector("#continue-button")
 const resetBtn = document.querySelector("#reset-button")
 const playerChoices = document.querySelector("#player-choices")
@@ -90,43 +91,55 @@ init()
 function init(){
   playerHealth = maxPlayerHealth = 100
   storyScenarioIdx = storyTextIdx = 0
-  playerChoices.setAttribute("hidden", "")
+  playerChoices.style.display = "none"
   resetBtn.setAttribute("hidden", "")
   render()
 }
 
 function render(){
-  console.log(`Story Scenario is ${storyScenarioIdx}`);
   if (playerHealth === 0) {
-    console.log("Game Over");
     sceneArt.setAttribute("src", sceneArtArr[sceneArtArr.length - 1])
     storyText.textContent = storyTextArr[storyTextArr.length - 1]
-    playerChoices.setAttribute("hidden", "")
+    toggleElementDisplay(playerChoices, "flex")
+    toggleElementDisplay(progressBtns, "flex")
     continueStoryBtn.setAttribute("hidden", "")
     resetBtn.removeAttribute("hidden")
   } else {
     sceneArt.setAttribute("src", sceneArtArr[storyScenarioIdx])
-    console.log(`Scene art displaying ${sceneArtArr[storyScenarioIdx]}`);
     storyText.textContent = storyTextArr[storyScenarioIdx][storyTextIdx]
     if (storyText.textContent.includes("ENDPOINT")){
-      playerChoices.setAttribute("hidden", "")
+      toggleElementDisplay(playerChoices, "flex")
+      toggleElementDisplay(progressBtns, "flex")
       continueStoryBtn.setAttribute("hidden", "")
       resetBtn.removeAttribute("hidden")
     } else {
       if (storyTextIdx === storyTextArr[storyScenarioIdx].length - 1){
         continueStoryBtn.setAttribute("hidden", "")
-        playerChoices.removeAttribute("hidden")
+        toggleElementDisplay(playerChoices, "flex")
+        //? toggleElementDisplay does not receive progressBtns
+        // toggleElementDisplay(progressBtns, "flex")
+        progressBtns.style.display = "none"
+        console.log("Toggle progressBtns")
         choice1.textContent = scenarioChoicesArr[storyScenarioIdx].choice1.text
         choice2.textContent = scenarioChoicesArr[storyScenarioIdx].choice2.text
         choice3.textContent = scenarioChoicesArr[storyScenarioIdx].choice3.text
         choice4.textContent = scenarioChoicesArr[storyScenarioIdx].choice4.text
       } else {
-        if (!playerChoices.hasAttribute("hidden")) {
-          playerChoices.setAttribute("hidden", "")
+        if (playerChoices.style.display !== "none") {
+          toggleElementDisplay(playerChoices, "flex")
+          toggleElementDisplay(progressBtns, "flex")
         }
         continueStoryBtn.removeAttribute("hidden")
       }
     }
+  }
+}
+
+function toggleElementDisplay(element, value) {
+  if (element.style.display === value) {
+    element.style.display = "none"
+  } else {
+    element.style.display = value
   }
 }
 

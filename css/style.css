@@ -1,4 +1,39 @@
+html {
+  box-sizing: border-box;
+}
+
+/* The Universal Selector */
+*, /* All elements*/
+*::before, /* All ::before pseudo-elements */
+*::after { /* All ::after pseudo-elements */
+  /* height & width will now include border & padding by default
+     but can be over-ridden as needed */
+  box-sizing: inherit;
+}
+
+/* resets font size to be 62.5% of the user preference - 
+   in most browser configurations this will be 10px */
+:root {
+  font-size: 62.5%;
+  /* --italic: '', taviraj; */
+}
+
 body {
+  /* Color scheme: "Classy Palette" */
+  /* #36FF80 */
+  /* #3C4A3E */
+  /* #9FAFA1 */
+  /* #00E1FF */
+  /* #00A9FF */
+  --stat-bar-bg: #36FF80;
+  --icon-color: #9FAFA1;
+  --story-txt-bg: white;
+  --choice-bg: #9FAFA1;
+  --choice-txt-color: black;
+  /* Use a system font, if none are available use an available sans-sarif font */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -6,17 +41,73 @@ body {
 }
 
 #stat-bar {
-  background-color: #36c6ff;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 80px;
+  width: 95%;
+  background-color: var(--stat-bar-bg);
+  border: black 2px solid;
+  border-radius: 40px;
+  margin: 12px;
+}
+
+.stat-icon {
+  height: 48px;
+  color: var(--icon-color);
+}
+
+#scene-art-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  height: 300px;
+  padding: 12px;
+  border: black 2px solid;
 }
 
 #scene-art {
-  background-color: #364954;
+  width: 100%;
+  /* height: 100%; */
 }
 
 #story-text {
-  background-color: #9AAEBB;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 95%;
+  height: 156px;
+  padding: 12px;
+  margin: 12px 12px 0px;
+  font-size: 2.4rem;
+  color: var(--choice-txt-color);
+  background-color: var(--story-txt-bg);
+  border: black 2px solid;
+}
+
+#buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  height: 228px;
+  width: 95%;
 }
 
 #player-choices {
-  background-color: #B66AA5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+}
+
+.choice-btn, .progress-btn {
+  width: 100%;
+  height: 57px;
+  margin: 12px 0px 0px;
+  font-size: 1.8rem;
+  border-radius: 40px;
 }
