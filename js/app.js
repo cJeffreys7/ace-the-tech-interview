@@ -7,6 +7,10 @@
 // // Create event listener on resetBtn to invoke the init function to restart the game
 // // Find quick basic placeholder art (perhaps lorum picsum) for img src strings in sceneArtArr
 // // Can make choices to arrive at 1 of at least 4 endpoints
+// // Includes sound
+// Includes animation
+// Light/Dark Mode
+// README.md includes game title, Getting Started section, Screenshots section, Technologies Used section, Next Steps
 
 /* ---------- POST MVP Features ---------- */
 
@@ -15,13 +19,14 @@
 // Implement food mechanic
 // Implement weapon mechanic
 // Implement money mechanic
-// Move storyTextArr, scenarioChoicesArr, sceneArtArr to data/storyScenarios.js and access data through exported getFunctions
+// // Move storyTextArr, scenarioChoicesArr, sceneArtArr to data/storyScenarios.js and access data through exported getFunctions
 // Improve placeholder story art
 // Visual feedback when health changes, adding or using food, adding or equipping weapons, or money changes
 
 /* ---------- Constants ---------- */
 
 import { getStoryText, getScenarioIndexByScenarioName, getIsScenarioAnEndpoint, getLastScenarioTextIndex,  getScenarioChoice, getSceneArt } from "../data/storyScenarios.js"
+const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
@@ -58,6 +63,7 @@ function init(){
   console.log(healthFill.style.height, 'health left')
   playerChoices.style.display = "none"
   resetBtn.setAttribute("hidden", "")
+  studyingMusic.play()
   render()
 }
 
