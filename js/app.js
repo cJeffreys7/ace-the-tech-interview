@@ -21,45 +21,7 @@
 
 /* ---------- Constants ---------- */
 
-const storyTextArr = [
-  ["You begin your adventure in a small village near the lake.", "Suddently, a small fire breaks out on the outskirts of the village. What do you do?"], ["You try to convince the villagers to rally together, but most seem to be ready to flee.", "What do you say to bolster their courage?"], ["You wait to see what happens. Indeed it is a fire.", "The village is nearly engulfed in flames now.", "There still may be a chance to turn things around."], ["Well, that went well. The villagers trampled you as they fled.", "The village is nearly engulfed in flames now.", "There still may be a chance to turn things around."], ["ENDPOINT1 You saved the village! You are showered with heaps of gold and forever immortalized as the village champion!"], ["ENDPOINT2 The village burned down behind you as you slunk away. Shame on you. Game Over."], ["ENDPOINT3 You burn to a crisp as you attempt a heroic action. Nice going. Game Over."], ["ENDPOINT4 You convince the villagers to help and they save part of the village. They will need to rebuild what they've lost, but they're alive. Game Over."], ["You succumb to your wounds. The world turns black. You gave it your all, but was it enough? Game Over."]
-]
-
-const scenarioChoicesArr = [
-  {
-    scenario: 1,
-    choice1: { text: "Begin looking for water", healthChange: -20, newStoryTextIdx: 4},
-    choice2: { text: "Try to find villagers to help", healthChange: 0, newStoryTextIdx: 1},
-    choice3: { text: "Cautiously scope out the situation", healthChange: -10, newStoryTextIdx: 2},
-    choice4: { text: "Run to the opposite side of the village", healthChange: 0, newStoryTextIdx: 5}
-  },
-  {
-    scenario: 2,
-    choice1: { text: "Yell at them profusely", healthChange: -70, newStoryTextIdx: 3},
-    choice2: { text: "Appeal to saving their heritage", healthChange: 0, newStoryTextIdx: 7},
-    choice3: { text: "Try reverse psychology", healthChange: -50, newStoryTextIdx: 3},
-    choice4: { text: "Run to the opposite side of the village", healthChange: 0, newStoryTextIdx: 5}
-  },
-  {
-    scenario: 3,
-    choice1: { text: "Slowly turn around and walk away", healthChange: -70, newStoryTextIdx: 5},
-    choice2: { text: "Run into the fire to try putting it out", healthChange: -80, newStoryTextIdx: 6},
-    choice3: { text: "Try pouring water on the fire", healthChange: -50, newStoryTextIdx: 6},
-    choice4: { text: "Slowly turn around and walk away", healthChange: 0, newStoryTextIdx: 5}
-  },
-  {
-    scenario: 4,
-    choice1: { text: "Slowly turn around and walk away", healthChange: -70, newStoryTextIdx: 5},
-    choice2: { text: "Run into the fire to try putting it out", healthChange: -80, newStoryTextIdx: 6},
-    choice3: { text: "Try pouring water on the fire", healthChange: -50, newStoryTextIdx: 6},
-    choice4: { text: "Slowly turn around and walk away", healthChange: 0, newStoryTextIdx: 5}
-  }
-]
-
-const sceneArtArr = [
-  "https://image.freepik.com/free-photo/pong-with-wooden-village-building-near-it-blue-sky_181624-46168.jpg", "https://image.freepik.com/free-vector/cartoon-illustration-with-terrified-people-running-away-from-rat_1284-59529.jpg", "https://image.freepik.com/free-photo/fire-steppe-grass-is-burning-destroying-everything-its-path_169016-13759.jpg", "https://image.freepik.com/free-vector/people-joining-stop-racism-movement_52683-40914.jpg", "https://image.freepik.com/free-photo/cheerful-group-diverse-students_53876-42761.jpg", "https://image.freepik.com/free-photo/destroyed-architecture-with-great-white-mountain_181624-470.jpg", "https://image.freepik.com/free-photo/high-angle-shot-heated-volcano-process-eruption_181624-6772.jpg", "https://image.freepik.com/free-photo/destroyed-architecture-with-great-white-mountain_181624-470.jpg", 
-  "https://image.freepik.com/free-photo/abstract-space-wallpaper-background-dark-smoke-design_53876-128279.jpg"
-]
+import { getStoryText, getLastScenarioIndex, getLastScenarioTextIndex,  getScenarioChoice, getSceneArt, getLastSceneArtIndex } from "../data/storyScenarios.js"
 
 /* ---------- Variables ---------- */
 
@@ -101,32 +63,31 @@ function init(){
 
 function render(){
   if (playerHealth === 0) {
-    sceneArt.setAttribute("src", sceneArtArr[sceneArtArr.length - 1])
-    storyText.textContent = storyTextArr[storyTextArr.length - 1]
+    sceneArt.setAttribute("src", getSceneArt(getLastSceneArtIndex()))
+    storyText.textContent = getStoryText(getLastScenarioIndex(), 0)
     toggleElementDisplay(playerChoices, "flex")
     toggleElementDisplay(progressBtns, "flex")
     continueStoryBtn.setAttribute("hidden", "")
     resetBtn.removeAttribute("hidden")
   } else {
-    sceneArt.setAttribute("src", sceneArtArr[storyScenarioIdx])
-    storyText.textContent = storyTextArr[storyScenarioIdx][storyTextIdx]
+    sceneArt.setAttribute("src", getSceneArt(storyScenarioIdx))
+    storyText.textContent = getStoryText(storyScenarioIdx, storyTextIdx)
     if (storyText.textContent.includes("ENDPOINT")){
       toggleElementDisplay(playerChoices, "flex")
       toggleElementDisplay(progressBtns, "flex")
       continueStoryBtn.setAttribute("hidden", "")
       resetBtn.removeAttribute("hidden")
     } else {
-      if (storyTextIdx === storyTextArr[storyScenarioIdx].length - 1){
+      if (storyTextIdx === getLastScenarioTextIndex(storyScenarioIdx)){
         continueStoryBtn.setAttribute("hidden", "")
         toggleElementDisplay(playerChoices, "flex")
         //? toggleElementDisplay does not receive progressBtns
         // toggleElementDisplay(progressBtns, "flex")
         progressBtns.style.display = "none"
-        console.log("Toggle progressBtns")
-        choice1.textContent = scenarioChoicesArr[storyScenarioIdx].choice1.text
-        choice2.textContent = scenarioChoicesArr[storyScenarioIdx].choice2.text
-        choice3.textContent = scenarioChoicesArr[storyScenarioIdx].choice3.text
-        choice4.textContent = scenarioChoicesArr[storyScenarioIdx].choice4.text
+        choice1.textContent = getScenarioChoice(storyScenarioIdx, 1).text
+        choice2.textContent = getScenarioChoice(storyScenarioIdx, 2).text
+        choice3.textContent = getScenarioChoice(storyScenarioIdx, 3).text
+        choice4.textContent = getScenarioChoice(storyScenarioIdx, 4).text
       } else {
         if (playerChoices.style.display !== "none") {
           toggleElementDisplay(playerChoices, "flex")
@@ -154,8 +115,7 @@ function progressStory(){
 function playerChoiceResult(evt){
   let choiceId = evt.target.id
   choiceId = choiceId.slice(choiceId.length - 1)
-  let choiceOptionsObj = scenarioChoicesArr[storyScenarioIdx]
-  let choiceObj = choiceOptionsObj[`choice${choiceId}`]
+  let choiceObj = getScenarioChoice(storyScenarioIdx, choiceId)
   let healthChangeAmount = choiceObj.healthChange
   playerHealth = Math.max(0, Math.min(playerHealth + healthChangeAmount, maxPlayerHealth))
   healthFill.style.height = `${(playerHealth/maxPlayerHealth) * 100}%`
