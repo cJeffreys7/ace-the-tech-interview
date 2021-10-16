@@ -1,39 +1,39 @@
 const storyScenarios = [
   {
-    scenario: 1,
+    scenario: "Start",
     text: ["You begin your adventure in a small village near the lake.", "Suddently, a small fire breaks out on the outskirts of the village. What do you do?"],
     imgSrc: "https://image.freepik.com/free-photo/pong-with-wooden-village-building-near-it-blue-sky_181624-46168.jpg",
-    choice1: { text: "Begin looking for water", healthChange: -20, newStoryTextIdx: 4},
-    choice2: { text: "Try to find villagers to help", healthChange: 0, newStoryTextIdx: 1},
-    choice3: { text: "Cautiously scope out the situation", healthChange: -10, newStoryTextIdx: 2},
-    choice4: { text: "Run to the opposite side of the village", healthChange: 0, newStoryTextIdx: 5}
+    choice1: { text: "Begin looking for water", healthChange: -20, newStoryScenario: "Endpoint 1"},
+    choice2: { text: "Try to find villagers to help", healthChange: 0, newStoryScenario: "1"},
+    choice3: { text: "Cautiously scope out the situation", healthChange: -10, newStoryScenario: "2"},
+    choice4: { text: "Run to the opposite side of the village", healthChange: 0, newStoryScenario: "Endpoing 2"}
   },
   {
-    scenario: 2,
+    scenario: "1",
     text: ["You try to convince the villagers to rally together, but most seem to be ready to flee.", "What do you say to bolster their courage?"],
     imgSrc: "https://image.freepik.com/free-vector/cartoon-illustration-with-terrified-people-running-away-from-rat_1284-59529.jpg",
-    choice1: { text: "Yell at them profusely", healthChange: -70, newStoryTextIdx: 3},
-    choice2: { text: "Appeal to saving their heritage", healthChange: 0, newStoryTextIdx: 7},
-    choice3: { text: "Try reverse psychology", healthChange: -50, newStoryTextIdx: 3},
-    choice4: { text: "Run to the opposite side of the village", healthChange: 0, newStoryTextIdx: 5}
+    choice1: { text: "Yell at them profusely", healthChange: -70, newStoryScenario: "3"},
+    choice2: { text: "Appeal to saving their heritage", healthChange: 0, newStoryScenario: "Endpoint 4"},
+    choice3: { text: "Try reverse psychology", healthChange: -50, newStoryScenario: "3"},
+    choice4: { text: "Run to the opposite side of the village", healthChange: 0, newStoryScenario: "Endpoing 2"}
   },
   {
-    scenario: 3,
+    scenario: "2",
     text: ["You wait to see what happens. Indeed it is a fire.", "The village is nearly engulfed in flames now.", "There still may be a chance to turn things around."],
     imgSrc: "https://image.freepik.com/free-photo/fire-steppe-grass-is-burning-destroying-everything-its-path_169016-13759.jpg",
-    choice1: { text: "Slowly turn around and walk away", healthChange: -70, newStoryTextIdx: 5},
-    choice2: { text: "Run into the fire to try putting it out", healthChange: -80, newStoryTextIdx: 6},
-    choice3: { text: "Try pouring water on the fire", healthChange: -50, newStoryTextIdx: 6},
-    choice4: { text: "Slowly turn around and walk away", healthChange: 0, newStoryTextIdx: 5}
+    choice1: { text: "Slowly turn around and walk away", healthChange: -70, newStoryScenario: "Endpoint 2"},
+    choice2: { text: "Run into the fire to try putting it out", healthChange: -80, newStoryScenario: "Endpoint 3"},
+    choice3: { text: "Try pouring water on the fire", healthChange: -50, newStoryScenario: "Endpoint 3"},
+    choice4: { text: "Slowly turn around and walk away", healthChange: 0, newStoryScenario: "Endpoint 2"}
   },
   {
-    scenario: 4,
+    scenario: "3",
     text: ["Well, that went well. The villagers trampled you as they fled.", "The village is nearly engulfed in flames now.", "There still may be a chance to turn things around."],
     imgSrc: "https://image.freepik.com/free-vector/people-joining-stop-racism-movement_52683-40914.jpg",
-    choice1: { text: "Attack the flames with your fists", healthChange: -100, newStoryTextIdx: 5},
-    choice2: { text: "Stomp on the fire to try putting it out", healthChange: -100, newStoryTextIdx: 6},
-    choice3: { text: "Try pouring water on the fire", healthChange: -20, newStoryTextIdx: 4},
-    choice4: { text: "Slowly turn around and walk away", healthChange: 0, newStoryTextIdx: 5}
+    choice1: { text: "Attack the flames with your fists", healthChange: -100, newStoryScenario: "Endpoing 2"},
+    choice2: { text: "Stomp on the fire to try putting it out", healthChange: -100, newStoryScenario: "Endpoing 3"},
+    choice3: { text: "Try pouring water on the fire", healthChange: -20, newStoryScenario: "Endpoing 1"},
+    choice4: { text: "Slowly turn around and walk away", healthChange: 0, newStoryScenario: "Endpoing 2"}
   }, 
   {
     scenario: "Endpoint 1",
@@ -62,35 +62,27 @@ const storyScenarios = [
   }
 ]
 
-function getStoryText(scenarioIdx, textIdx) {
-  let storyScenario = storyScenarios[scenarioIdx]
+function getStoryText(scenario, textIdx) {
+  let storyScenario = storyScenarios.find(e => e.scenario === scenario)
   return storyScenario.text[textIdx]
 }
 
-function getScenarioIndexByScenarioName(storyScenario) {
-  return storyScenarios.findIndex(e => e.scenario === storyScenario)
+function getDoesStoryNeedAChoice(scenario, textIdx) {
+  let storyScenario = storyScenarios.find(e => e.scenario === scenario)
+  return storyScenario.text.length - 1 === textIdx
 }
 
-function getIsScenarioAnEndpoint(scenarioIdx) {
-  let scenarioText = storyScenarios[scenarioIdx].scenario
-  return scenarioText.toString().includes("Endpoint")
-}
-
-function getLastScenarioTextIndex(scenarioIdx) {
-  let storyScenario = storyScenarios[scenarioIdx]
-  return storyScenario.text.length - 1
-}
-
-function getScenarioChoice(scenarioIdx, choiceIdx) {
-  let scenarioChoicesObj = storyScenarios[scenarioIdx]
+function getScenarioChoice(scenario, choiceIdx) {
+  let scenarioChoicesObj = storyScenarios.find(e => e.scenario === scenario)
   return scenarioChoicesObj[`choice${choiceIdx}`]
 }
 
-function getSceneArt(scenarioIdx) {
-  let sceneObj = storyScenarios[scenarioIdx]
+function getSceneArt(scenario) {
+  console.log("Current scenario", scenario)
+  let sceneObj = storyScenarios.find(e => e.scenario === scenario)
   return sceneObj.imgSrc
 }
 
 export {
-  getStoryText, getScenarioIndexByScenarioName, getIsScenarioAnEndpoint, getLastScenarioTextIndex, getScenarioChoice, getSceneArt
+  getStoryText, getDoesStoryNeedAChoice, getScenarioChoice, getSceneArt
 }

@@ -26,12 +26,12 @@
 
 /* ---------- Constants ---------- */
 
-import { getStoryText, getScenarioIndexByScenarioName, getIsScenarioAnEndpoint, getLastScenarioTextIndex,  getScenarioChoice, getSceneArt } from "../data/storyScenarios.js"
+import { getStoryText, getDoesStoryNeedAChoice,  getScenarioChoice, getSceneArt } from "../data/storyScenarios.js"
 const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerHealth, maxPlayerHealth, storyScenarioIdx, storyTextIdx
+let playerHealth, maxPlayerHealth, storyScenario, storyTextIdx
 
 /* ---------- Cached Element References ---------- */
 
@@ -62,7 +62,8 @@ init()
 
 function init(){
   playerHealth = maxPlayerHealth = 100
-  storyScenarioIdx = storyTextIdx = 0
+  storyTextIdx = 0
+  storyScenario = "Start"
   healthFill.style.height = `${(playerHealth/maxPlayerHealth) * 100}%`
   console.log(healthFill.style.height, 'health left')
   playerChoices.style.display = "none"
@@ -74,31 +75,31 @@ function init(){
 
 function render(){
   if (playerHealth === 0) {
-    sceneArt.setAttribute("src", getSceneArt(getScenarioIndexByScenarioName("Player Dies")))
-    storyText.textContent = getStoryText(getScenarioIndexByScenarioName("Player Dies"), 0)
+    sceneArt.setAttribute("src", getSceneArt("Player Dies"))
+    storyText.textContent = getStoryText("Player Dies", 0)
     toggleElementDisplay(playerChoices, "flex")
     toggleElementDisplay(progressBtns, "flex")
     continueStoryBtn.setAttribute("hidden", "")
     resetBtn.removeAttribute("hidden")
   } else {
-    sceneArt.setAttribute("src", getSceneArt(storyScenarioIdx))
-    storyText.textContent = getStoryText(storyScenarioIdx, storyTextIdx)
-    if (getIsScenarioAnEndpoint(storyScenarioIdx)){
+    sceneArt.setAttribute("src", getSceneArt(storyScenario))
+    storyText.textContent = getStoryText(storyScenario, storyTextIdx)
+    if (storyScenario.includes("Endpoint")){
       toggleElementDisplay(playerChoices, "flex")
       toggleElementDisplay(progressBtns, "flex")
       continueStoryBtn.setAttribute("hidden", "")
       resetBtn.removeAttribute("hidden")
     } else {
-      if (storyTextIdx === getLastScenarioTextIndex(storyScenarioIdx)){
+      if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
         continueStoryBtn.setAttribute("hidden", "")
         toggleElementDisplay(playerChoices, "flex")
         //? toggleElementDisplay does not receive progressBtns
         // toggleElementDisplay(progressBtns, "flex")
         progressBtns.style.display = "none"
-        choice1.textContent = getScenarioChoice(storyScenarioIdx, 1).text
-        choice2.textContent = getScenarioChoice(storyScenarioIdx, 2).text
-        choice3.textContent = getScenarioChoice(storyScenarioIdx, 3).text
-        choice4.textContent = getScenarioChoice(storyScenarioIdx, 4).text
+        choice1.textContent = getScenarioChoice(storyScenario, 1).text
+        choice2.textContent = getScenarioChoice(storyScenario, 2).text
+        choice3.textContent = getScenarioChoice(storyScenario, 3).text
+        choice4.textContent = getScenarioChoice(storyScenario, 4).text
       } else {
         if (playerChoices.style.display !== "none") {
           toggleElementDisplay(playerChoices, "flex")
@@ -126,7 +127,7 @@ function progressStory(){
 function playerChoiceResult(evt){
   let choiceId = evt.target.id
   choiceId = choiceId.slice(choiceId.length - 1)
-  let choiceObj = getScenarioChoice(storyScenarioIdx, choiceId)
+  let choiceObj = getScenarioChoice(storyScenario, choiceId)
   let healthChangeAmount = choiceObj.healthChange
   playerHealth = Math.max(0, Math.min(playerHealth + healthChangeAmount, maxPlayerHealth))
   healthFill.style.height = `${(playerHealth/maxPlayerHealth) * 100}%`
@@ -134,7 +135,7 @@ function playerChoiceResult(evt){
   if (playerHealth === 0) {
     render()
   } else {
-    storyScenarioIdx = choiceObj.newStoryTextIdx
+    storyScenario = choiceObj.newStoryScenario
     storyTextIdx = 0
     render()
   }
