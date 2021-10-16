@@ -9,7 +9,7 @@
 // // Can make choices to arrive at 1 of at least 4 endpoints
 // // Includes sound
 // Includes animation
-// Light/Dark Mode
+// // Light/Dark Mode
 // README.md includes game title, Getting Started section, Screenshots section, Technologies Used section, Next Steps
 // // Format for Desktop
 
@@ -35,9 +35,11 @@ let playerHealth, maxPlayerHealth, storyScenarioIdx, storyTextIdx
 
 /* ---------- Cached Element References ---------- */
 
+const body = document.querySelector("body")
 const healthFill = document.querySelector("#brain-fill")
 const sceneArt = document.querySelector("#scene-art")
 const storyText = document.querySelector("#story-text")
+const lightDarkBtn = document.querySelector("#light-dark-mode-icon")
 const progressBtns = document.querySelector("#buttons")
 const continueStoryBtn = document.querySelector("#continue-button")
 const resetBtn = document.querySelector("#reset-button")
@@ -52,6 +54,7 @@ const choice4 = document.querySelector("#choice-4")
 continueStoryBtn.addEventListener("click", progressStory)
 playerChoices.addEventListener("click", playerChoiceResult)
 resetBtn.addEventListener("click", init)
+lightDarkBtn.addEventListener("click", toggleLightDarkMode)
 
 /* ---------- Functions ---------- */
 
@@ -64,7 +67,8 @@ function init(){
   console.log(healthFill.style.height, 'health left')
   playerChoices.style.display = "none"
   resetBtn.setAttribute("hidden", "")
-  studyingMusic.play()
+  // studyingMusic.play()
+  checkDarkPref()
   render()
 }
 
@@ -133,5 +137,16 @@ function playerChoiceResult(evt){
     storyScenarioIdx = choiceObj.newStoryTextIdx
     storyTextIdx = 0
     render()
+  }
+}
+
+function toggleLightDarkMode() {
+  body.className = body.className === "" ? "dark" : ""
+  lightDarkBtn.src = lightDarkBtn.src.includes("light") ? "./images/darkMode.svg" : "./images/lightMode.svg"
+}
+
+function checkDarkPref() {
+  if (window.matchMedia("(prefers-color-scheme:dark)").matches && body.className !== "dark") {
+    toggleLightDarkMode()
   }
 }

@@ -21,7 +21,6 @@
 
 ## Next Steps:
 
-### - Light/Dark Mode
 ### - Revise story
 ### - Revise story art
 ### - Implement basic animations
