@@ -21,7 +21,6 @@
 
 ## Next Steps:
 
-### - Format for Desktop
 ### - Light/Dark Mode
 ### - Revise story
 ### - Revise story art
