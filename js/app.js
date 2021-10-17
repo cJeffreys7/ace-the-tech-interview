@@ -16,7 +16,7 @@
 /* ---------- POST MVP Features ---------- */
 
 // Flush out styling to better match wireframe
-// Flush out story details to create interesting scenarios
+// // Flush out story details to create interesting scenarios
 // Implement food mechanic
 // Implement weapon mechanic
 // Implement money mechanic
@@ -74,43 +74,34 @@ function init(){
 
 function render(){
   healthFill.style.height = `${(playerSanity/maxPlayerSanity) * 100}%`
-  console.log(healthFill.style.height, 'health left')
-  if (playerSanity === 0) {
-    sceneArt.setAttribute("src", getSceneArt("Player Dies"))
-    storyText.textContent = getStoryText("Player Dies", 0)
-    toggleElementDisplay(playerChoices, "flex")
-    toggleElementDisplay(progressBtns, "flex")
-    continueStoryBtn.setAttribute("hidden", "")
-    resetBtn.removeAttribute("hidden")
-  } else {
-    sceneArt.setAttribute("src", getSceneArt(storyScenario))
-    storyText.textContent = getStoryText(storyScenario, storyTextIdx)
-    if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
-      if (storyScenario.includes("Endpoint")){
-        //? toggleElementDisplay does not receive progressBtns
-        // toggleElementDisplay(progressBtns, "flex")
-        progressBtns.style.display = "none"
-        toggleElementDisplay(progressBtns, "flex")
-        continueStoryBtn.setAttribute("hidden", "")
-        resetBtn.removeAttribute("hidden")
-      } else {
-        continueStoryBtn.setAttribute("hidden", "")
-        toggleElementDisplay(playerChoices, "flex")
-        //? toggleElementDisplay does not receive progressBtns
-        // toggleElementDisplay(progressBtns, "flex")
-        progressBtns.style.display = "none"
-        choice1.textContent = getScenarioChoice(storyScenario, 1).text
-        choice2.textContent = getScenarioChoice(storyScenario, 2).text
-        choice3.textContent = getScenarioChoice(storyScenario, 3).text
-        choice4.textContent = getScenarioChoice(storyScenario, 4).text
-      }
+  // console.log(healthFill.style.height, 'health left')
+  sceneArt.setAttribute("src", getSceneArt(storyScenario))
+  storyText.textContent = getStoryText(storyScenario, storyTextIdx)
+  if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
+    if (storyScenario.includes("Endpoint")){
+      //? toggleElementDisplay does not receive progressBtns
+      // toggleElementDisplay(progressBtns, "flex")
+      progressBtns.style.display = "none"
+      toggleElementDisplay(progressBtns, "flex")
+      continueStoryBtn.setAttribute("hidden", "")
+      resetBtn.removeAttribute("hidden")
     } else {
-      if (playerChoices.style.display !== "none") {
-        toggleElementDisplay(playerChoices, "flex")
-        toggleElementDisplay(progressBtns, "flex")
-      }
-      continueStoryBtn.removeAttribute("hidden")
+      continueStoryBtn.setAttribute("hidden", "")
+      toggleElementDisplay(playerChoices, "flex")
+      //? toggleElementDisplay does not receive progressBtns
+      // toggleElementDisplay(progressBtns, "flex")
+      progressBtns.style.display = "none"
+      choice1.textContent = getScenarioChoice(storyScenario, 1).text
+      choice2.textContent = getScenarioChoice(storyScenario, 2).text
+      choice3.textContent = getScenarioChoice(storyScenario, 3).text
+      choice4.textContent = getScenarioChoice(storyScenario, 4).text
     }
+  } else {
+    if (playerChoices.style.display !== "none") {
+      toggleElementDisplay(playerChoices, "flex")
+      toggleElementDisplay(progressBtns, "flex")
+    }
+    continueStoryBtn.removeAttribute("hidden")
   }
 }
 
@@ -133,11 +124,12 @@ function playerChoiceResult(evt){
   let choiceObj = getScenarioChoice(storyScenario, choiceId)
   let sanityChangeAmount = choiceObj.sanityChange
   playerSanity = Math.max(0, Math.min(playerSanity + sanityChangeAmount, maxPlayerSanity))
+  storyTextIdx = 0
   if (playerSanity === 0) {
+    storyScenario = "Endpoint - Stressed out"
     render()
   } else {
     storyScenario = choiceObj.newStoryScenario
-    storyTextIdx = 0
     render()
   }
 }

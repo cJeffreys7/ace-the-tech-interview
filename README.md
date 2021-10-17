@@ -21,7 +21,6 @@
 
 ## Next Steps:
 
-### - Revise story
 ### - Revise story art
 ### - Implement basic animations
 
