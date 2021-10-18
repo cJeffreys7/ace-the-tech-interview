@@ -25,12 +25,19 @@ body {
   /* #A0AFA0 */
   /* #00C9FF */
   /* #0092E0 */
-  --stat-bar-bg: #00e956;
-  --story-txt-bg: white;
-  --choice-bg: #00e956;
-  --choice-txt-color: black;
-  --body-bg: white;
-  --border: black;
+
+  /* Color scheme: "5 bit" */
+  /* #e0f8cf */
+  /* #86c06c */
+  /* #417d41 */
+  /* #21413a */
+  /* #071821 */
+  --stat-bar-bg: #86c06c;
+  --story-txt-bg: #e0f8cf;
+  --choice-bg: #86c06c;
+  --choice-txt-color: #071821;
+  --body-bg: #e0f8cf;
+  --border: #071821;
   /* Use a system font, if none are available use an available sans-sarif font */
   font-family: 'Lekton', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -43,12 +50,12 @@ body {
 }
 
 body.dark {
-  --stat-bar-bg: #00e956;
-  --story-txt-bg: black;
-  --choice-bg: #00e956;
-  --choice-txt-color: white;
-  --body-bg: black;
-  --border: white;
+  --stat-bar-bg: #86c06c;
+  --story-txt-bg: #071821;
+  --choice-bg: #86c06c;
+  --choice-txt-color: #e0f8cf;
+  --body-bg: #071821;
+  --border: #e0f8cf;
   background-color: var(--body-bg);
 }
 
@@ -113,7 +120,9 @@ body.dark {
   height: 138px;
   padding: 12px;
   margin: 12px 12px 0px;
-  font-size: 2.4rem;
+  /* font-size: 2.4rem; */
+  font-size: 4.5vw;
+  text-align: center;
   color: var(--choice-txt-color);
   background-color: var(--story-txt-bg);
   border: var(--choice-bg) 4px solid;

@@ -17,9 +17,9 @@
 
 // Flush out styling to better match wireframe
 // // Flush out story details to create interesting scenarios
-// Implement food mechanic
-// Implement weapon mechanic
-// Implement money mechanic
+// Implement time mechanic
+// Implement sanity booster mechanic
+// Implement coder toolbox mechanic
 // // Move storyTextArr, scenarioChoicesArr, sceneArtArr to data/storyScenarios.js and access data through exported getFunctions
 // // Improve placeholder story art
 // Visual feedback when health changes, adding or using food, adding or equipping weapons, or money changes
@@ -71,7 +71,7 @@ function init(){
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
-  studyingMusic.play()
+  // studyingMusic.play()
   checkDarkPref()
   render()
 }
