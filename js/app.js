@@ -15,7 +15,7 @@
 
 /* ---------- POST MVP Features ---------- */
 
-// Flush out styling to better match wireframe
+// // Flush out styling to better match wireframe
 // // Flush out story details to create interesting scenarios
 // Implement time mechanic
 // Implement sanity booster mechanic
@@ -58,6 +58,7 @@ continueStoryBtn.addEventListener("click", progressStory)
 playerChoices.addEventListener("click", playerChoiceResult)
 resetBtn.addEventListener("click", init)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
+// window.addEventListener("resize", resizeText)
 
 /* ---------- Functions ---------- */
 
@@ -175,6 +176,7 @@ function playerChoiceResult(evt){
 }
 
 function toggleLightDarkMode() {
+  console.log("LightDark Mode has been pressed")
   body.className = body.className === "" ? "dark" : ""
   lightDarkBtn.src = lightDarkBtn.src.includes("light") ? "./images/darkMode.svg" : "./images/lightMode.svg"
 }
@@ -197,3 +199,8 @@ function animateElement(element, animationName, secondsToDelay, resetAnimation) 
     }, 1000);
   }, (secondsToDelay * 1000 || 0))
 }
+
+// function resizeText() {
+//   storyText.style.fontSize = `${(storyText.clientWidth/1000) * 2.3}rem`
+//   console.log("Inner width of textbox:", storyText.clientWidth);
+// }
