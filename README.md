@@ -29,7 +29,6 @@
 
 ### - Post MVP:
 ####    - Additional styling passes
-####    - Implement additional audio elements
 ####    - Implement Time to be decremented by time used by choices determine remaining time until tech interview
 ####    - Implement Sanity Boosters to recover sanity throughout game
 ####    - Implement Coder Toolbox to defeat tough code problems throughout game with programming concepts

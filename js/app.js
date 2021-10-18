@@ -27,12 +27,12 @@
 
 /* ---------- Constants ---------- */
 
-import { getStoryText, getDoesStoryNeedAChoice,  getScenarioChoice, getSceneArt } from "../data/storyScenarios.js"
+import { getStoryText, getDoesStoryNeedAChoice,  getScenarioChoice, getSceneArt, getSceneSound } from "../data/storyScenarios.js"
 const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval
+let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval, sceneSound
 
 /* ---------- Cached Element References ---------- */
 
@@ -59,6 +59,10 @@ playerChoices.addEventListener("click", playerChoiceResult)
 resetBtn.addEventListener("click", init)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
 // window.addEventListener("resize", resizeText)
+studyingMusic.addEventListener("ended", () => {
+  studyingMusic.currentTime = 0
+  studyingMusic.play()
+}, false)
 
 /* ---------- Functions ---------- */
 
@@ -72,7 +76,7 @@ function init(){
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
-  // studyingMusic.play()
+  studyingMusic.play()
   checkDarkPref()
   render()
 }
@@ -137,6 +141,8 @@ function render(){
     if (continueStoryBtn.style.display !== "initial"){
       toggleElementDisplay(continueStoryBtn, "initial")
       animateElement(continueStoryBtn, "bounce")
+      sceneSound = new Audio(`${getSceneSound(storyScenario)}`)
+      sceneSound.play()
     }
     if (resetBtn.style.display !== "none"){
       toggleElementDisplay(resetBtn, "none")
@@ -176,7 +182,6 @@ function playerChoiceResult(evt){
 }
 
 function toggleLightDarkMode() {
-  console.log("LightDark Mode has been pressed")
   body.className = body.className === "" ? "dark" : ""
   lightDarkBtn.src = lightDarkBtn.src.includes("light") ? "./images/darkMode.svg" : "./images/lightMode.svg"
 }
