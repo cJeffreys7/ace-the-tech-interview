@@ -27,8 +27,6 @@
 
 ## Next Steps:
 
-### - Implement basic animations
-
 ### - Post MVP:
 ####    - Additional styling passes
 ####    - Implement additional audio elements

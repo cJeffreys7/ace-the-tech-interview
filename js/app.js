@@ -8,7 +8,7 @@
 // // Find quick basic placeholder art (perhaps lorum picsum) for img src strings in sceneArtArr
 // // Can make choices to arrive at 1 of at least 4 endpoints
 // // Includes sound
-// Includes animation
+// // Includes animation
 // // Light/Dark Mode
 // // README.md includes game title, Getting Started section, Screenshots section, Technologies Used section, Next Steps
 // // Format for Desktop
@@ -32,12 +32,14 @@ const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx
+let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval
 
 /* ---------- Cached Element References ---------- */
 
 const body = document.querySelector("body")
-const healthFill = document.querySelector("#brain-fill")
+const statBar = document.querySelector("#stat-bar")
+const sanityMeter = document.querySelector("#sanity-meter")
+const sanityFill = document.querySelector("#brain-fill")
 const sceneArt = document.querySelector("#scene-art")
 const storyText = document.querySelector("#story-text")
 const lightDarkBtn = document.querySelector("#light-dark-mode-icon")
@@ -67,51 +69,88 @@ function init(){
   storyTextIdx = 0
   storyScenario = "Start"
   playerChoices.style.display = "none"
-  resetBtn.setAttribute("hidden", "")
+  toggleElementDisplay(resetBtn, "initial")
+  statBar.className = sceneArt.className = ""
   studyingMusic.play()
   checkDarkPref()
   render()
 }
 
 function render(){
-  healthFill.style.height = `${(playerSanity/maxPlayerSanity) * 100}%`
-  // console.log(healthFill.style.height, 'health left')
+  sanityFill.style.height = `${(playerSanity/maxPlayerSanity) * 100}%`
+  // console.log(sanityFill.style.height, 'sanity left')
+  if (0 < playerSanity && playerSanity <= 20) {
+    if (!lowSanityInterval) {
+      animateElement(sanityMeter, "heartBeat", 0, true)
+      lowSanityInterval = setInterval(() => {
+      animateElement(sanityMeter, "heartBeat", 0, true)
+      }, 2000)
+    }
+  } else if (lowSanityInterval) {
+      clearInterval(lowSanityInterval)
+      lowSanityInterval = null
+  }
   sceneArt.setAttribute("src", getSceneArt(storyScenario))
   storyText.textContent = getStoryText(storyScenario, storyTextIdx)
   if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
+    if (progressBtns.style.display !== "none"){
+      toggleElementDisplay(progressBtns, "none")
+    }
+    toggleElementDisplay(continueStoryBtn, "initial")
     if (storyScenario.includes("Endpoint")){
-      //? toggleElementDisplay does not receive progressBtns
-      // toggleElementDisplay(progressBtns, "flex")
-      progressBtns.style.display = "none"
+      setTimeout(() => {
+        animateElement(statBar, "fadeOut")
+        animateElement(sceneArt, "fadeOut")
+        setTimeout(() => {
+          animateElement(resetBtn, "fadeIn")
+          toggleElementDisplay(resetBtn, "initial")
+        }, 2000)
+      }, 1000)
       toggleElementDisplay(progressBtns, "flex")
-      continueStoryBtn.setAttribute("hidden", "")
-      resetBtn.removeAttribute("hidden")
     } else {
-      continueStoryBtn.setAttribute("hidden", "")
+      toggleElementDisplay(resetBtn, "initial")
       toggleElementDisplay(playerChoices, "flex")
-      //? toggleElementDisplay does not receive progressBtns
-      // toggleElementDisplay(progressBtns, "flex")
       progressBtns.style.display = "none"
+      toggleElementDisplay(choice1, "none")
+      toggleElementDisplay(choice2, "none")
+      toggleElementDisplay(choice3, "none")
+      toggleElementDisplay(choice4, "none")
       choice1.textContent = getScenarioChoice(storyScenario, 1).text
+      animateElement(choice1, "slideInRight", 0)
+      toggleElementDisplay(choice1, "initial", 0)
       choice2.textContent = getScenarioChoice(storyScenario, 2).text
+      animateElement(choice2, "slideInRight", 0.5)
+      toggleElementDisplay(choice2, "initial", 0.5)
       choice3.textContent = getScenarioChoice(storyScenario, 3).text
+      animateElement(choice3, "slideInRight", 1)
+      toggleElementDisplay(choice3, "initial", 1)
       choice4.textContent = getScenarioChoice(storyScenario, 4).text
+      animateElement(choice4, "slideInRight", 1.5)
+      toggleElementDisplay(choice4, "initial", 1.5)
     }
   } else {
     if (playerChoices.style.display !== "none") {
       toggleElementDisplay(playerChoices, "flex")
       toggleElementDisplay(progressBtns, "flex")
     }
-    continueStoryBtn.removeAttribute("hidden")
+    if (continueStoryBtn.style.display !== "initial"){
+      toggleElementDisplay(continueStoryBtn, "initial")
+      animateElement(continueStoryBtn, "bounce")
+    }
+    if (resetBtn.style.display !== "none"){
+      toggleElementDisplay(resetBtn, "none")
+    }
   }
 }
 
-function toggleElementDisplay(element, value) {
-  if (element.style.display === value) {
-    element.style.display = "none"
-  } else {
-    element.style.display = value
-  }
+function toggleElementDisplay(element, value, secondsToDelay) {
+  setTimeout(() => {
+    if (element.style.display === value) {
+      element.style.display = "none"
+    } else {
+      element.style.display = value
+    }
+  }, (secondsToDelay * 1000 || 0))
 }
 
 function progressStory(){
@@ -146,7 +185,15 @@ function checkDarkPref() {
   }
 }
 
-function testScenario(scenario) {
-  storyScenario = scenario
-  storyTextIdx = 0
+function animateElement(element, animationName, secondsToDelay, resetAnimation) {
+  setTimeout(() => {
+    let defaultClassName = element.className
+    element.classList.add(`animate__animated`,
+                          `animate__${animationName}`)
+    setTimeout(() => {
+      if (resetAnimation) {
+        element.className = defaultClassName
+      }
+    }, 1000);
+  }, (secondsToDelay * 1000 || 0))
 }
