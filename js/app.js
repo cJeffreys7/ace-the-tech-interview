@@ -21,8 +21,9 @@
 // Implement weapon mechanic
 // Implement money mechanic
 // // Move storyTextArr, scenarioChoicesArr, sceneArtArr to data/storyScenarios.js and access data through exported getFunctions
-// Improve placeholder story art
+// // Improve placeholder story art
 // Visual feedback when health changes, adding or using food, adding or equipping weapons, or money changes
+// Polish scene art
 
 /* ---------- Constants ---------- */
 

@@ -21,7 +21,6 @@
 
 ## Next Steps:
 
-### - Revise story art
 ### - Implement basic animations
 
 ### - Post MVP:
@@ -31,3 +30,4 @@
 ####    - Implement Sanity Boosters to recover sanity throughout game
 ####    - Implement Coder Toolbox to defeat tough code problems throughout game with programming concepts
 ####    - Implement visual feedback when sanity changes, adding or using Sanity Boosters, adding or utilizing Coder Toolbox items, and Time changes
+####    - Polish scene art
