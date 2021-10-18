@@ -10,7 +10,7 @@
 // // Includes sound
 // Includes animation
 // // Light/Dark Mode
-// README.md includes game title, Getting Started section, Screenshots section, Technologies Used section, Next Steps
+// // README.md includes game title, Getting Started section, Screenshots section, Technologies Used section, Next Steps
 // // Format for Desktop
 
 /* ---------- POST MVP Features ---------- */
