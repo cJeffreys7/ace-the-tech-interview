@@ -1,7 +1,7 @@
 const storyScenarios = [
   {
     scenario: "Start",
-    text: ["You are beyond excited! You just finished a great conversation with a hiring manager.", "They are excited about your recent projects and think you would be a great fit within the company.", "However, before they offer you a position, you need to nail it in the technical interview.", "You knew this was going to happen, and you begin to sweat. You are a little out of practice.", "It has been a little while since your coding boot camp. You've spent too much time working on styling and not enough time on creating algorithms.", "That's ok! You know you need to brush up on everything you've learned and it will come flooding back to you.", "You look at the clock. It's 8pm.", "Your technical interview is at 8am tomorrow morning, so you have 12 hours to review everything you have learned.", "It's going to be a long night. Where should you start?"],
+    text: ["You are beyond excited! You just finished a great conversation with a hiring manager.", "They are excited about your recent projects and think you would be a great fit within the company.", "However, before they offer you a position, you need to nail it in the technical interview.", "You knew this was going to happen, and you begin to sweat. You are a little out of practice.", "It's been a while since your coding boot camp. You've spent too much time working on styling and not enough time creating algorithms.", "That's ok! You know you need to brush up on everything you've learned and it will come flooding back to you.", "You look at the clock. It's 8pm.", "Your technical interview is at 8am tomorrow morning, so you have 12 hours to review everything you have learned.", "It's going to be a long night. Where should you start?"],
     imgSrc: "./images/sceneArtStart.svg",
     choice1: { text: "Review past projects", sanityChange: -10, newStoryScenario: "Review projects"},
     choice2: { text: "Watch interview prep videos", sanityChange: 10, newStoryScenario: "Watch videos"},
@@ -60,7 +60,7 @@ const storyScenarios = [
   },
   {
     scenario: "Search the pantry",
-    text: ["Can't fill your mind on an empty stomache.", "You rifle through the pantry to find a quick bite to eat.", "You spot some macadamia nut cookies. That gives you a quick boost.", "You grab a few more, to help you keep burning the midnight oil.", "Now that you've got some sustenance, you are ready to get back to it."],
+    text: ["Can't fill your mind on an empty stomach.", "You rifle through the pantry to find a quick bite to eat.", "You spot some macadamia nut cookies. That gives you a quick boost.", "You grab a few more, to help you keep burning the midnight oil.", "Now that you've got some sustenance, you are ready to get back to it."],
     imgSrc: "./images/sceneArtPantry.svg",
     choice1: { text: "Review past projects", sanityChange: -10, newStoryScenario: "Review projects"},
     choice2: { text: "Watch interview prep videos", sanityChange: 10, newStoryScenario: "Watch videos"},
@@ -233,7 +233,7 @@ const storyScenarios = [
   },
   {
     scenario: "Endpoint - Stressed out",
-    text: ["Your brain shuts down.", "You can feel your mind short-circuiting.", "You pushed yourself too hard and now you can't function anymore.", "Any hopes of passing this tech interview are gone.", "Weeks later you are able to get another tech interview lined up.", "Maybe you could have pace yourself differently this time?"],
+    text: ["Your brain shuts down.", "You can feel your mind short-circuiting.", "You pushed yourself too hard and now you can't function anymore.", "Any hopes of passing this tech interview are gone.", "Weeks later you are able to get another tech interview lined up.", "Maybe you can pace yourself differently next time?"],
     imgSrc: "./images/sceneArtStressedOut.svg"
   }
 ]

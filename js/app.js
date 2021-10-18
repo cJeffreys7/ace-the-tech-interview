@@ -68,7 +68,7 @@ function init(){
   storyScenario = "Start"
   playerChoices.style.display = "none"
   resetBtn.setAttribute("hidden", "")
-  // studyingMusic.play()
+  studyingMusic.play()
   checkDarkPref()
   render()
 }
@@ -144,4 +144,9 @@ function checkDarkPref() {
   if (window.matchMedia("(prefers-color-scheme:dark)").matches && body.className !== "dark") {
     toggleLightDarkMode()
   }
+}
+
+function testScenario(scenario) {
+  storyScenario = scenario
+  storyTextIdx = 0
 }
