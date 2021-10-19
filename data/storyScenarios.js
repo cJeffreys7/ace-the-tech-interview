@@ -288,7 +288,7 @@ const storyScenarios = [
   },
   {
     scenario: "Stare at ceiling",
-    text: ["If you fall asleep in 20 minutes, you will have {sleepTime - 20} to sleep.", "32 minutes pass, so you readjust your calculations and determine you will have {sleepTime - 32} to sleep.", "As your mind keeps track of the time and total sleep time you would have if your mind wasn't keeping tabs of the time, you stare angrily at the ceiling.", "You wish your brain would stop thinking and relax, but there is too much activity rapidfiring to get you into the mindset of sleep.", "Finally, after about 2 hours of overthinking sleep, you drift unawares into an uneasy slumber for {sleepTime - 120} of sleep.", "Suddenly, the alarm is blaring in your ear. The time has come."],
+    text: ["If you fall asleep in 20 minutes, you will have {sleepTime20} to sleep.", "35 minutes pass, so you readjust your calculations and determine you will now have {sleepTime35} to sleep.", "As your mind keeps track of the time and total sleep time you would have if your mind wasn't keeping tabs of the time, you stare angrily at the ceiling.", "You wish your brain would stop thinking and relax, but there is too much activity rapidfiring to get you into the mindset of sleep.", "Finally, after about 2 hours of overthinking sleep, you drift unawares into an uneasy slumber.", "Suddenly, the alarm is blaring in your ear. The time has come."],
     imgSrc: "./images/sceneArtStareCeiling.svg",
     audio: "./audio/Retro Owl 01.wav",
     choice1: { 
@@ -606,7 +606,7 @@ const storyScenarios = [
   },
   {
     scenario: "Interview",
-    text: ["Opening up your laptop, you feel a small adrenaline rush as your nerves kick in.", "Inhale. Exhale.", "The video call opens and you are greeted by your technical interviewer.", "Introductions go well, and you get right into it.", "The questions pops up on the screen, along with the specs that you'll need to consider.", "Your mind begins looking through its archives to find the right tools for the job.", "Now it's your turn. You squeak out your first question, then get more comfortable with your next.", "As you get more information, you take a first pass at walking through the problem.", "Which route do you take to initially work out the algorithm?"],
+    text: ["IT'S TIME!", "Opening up your laptop, you feel a small adrenaline rush as your nerves kick in.", "Inhale. Exhale.", "The video call opens and you are greeted by your technical interviewer.", "Introductions go well, and you get right into it.", "The questions pops up on the screen, along with the specs that you'll need to consider.", "Your mind begins looking through its archives to find the right tools for the job.", "Now it's your turn. You squeak out your first question, then get more comfortable with your next.", "As you get more information, you take a first pass at walking through the problem.", "Which route do you take to initially work out the algorithm?"],
     imgSrc: "./images/sceneArtMockInterview.svg",
     audio: "./audio/Retro Electronic Burst StereoUP 04.wav",
     choice1: { 

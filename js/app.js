@@ -32,7 +32,7 @@ const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval, currentTime, sceneSound
+let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound
 
 /* ---------- Cached Element References ---------- */
 
@@ -75,8 +75,8 @@ function init(){
   maxPlayerSanity = 100
   playerSanity = 80
   storyTextIdx = 0
-  currentTime = 5
-  storyScenario = "Sleep prep"
+  currentTime = 12
+  storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
@@ -112,18 +112,32 @@ function render(){
   if (storyText.textContent.includes("{")) {
     let formattedText = ""
     const regex = new RegExp ("\{(.*?)\}")
-    const matches = storyText.textContent.match(regex)
-    if (matches.some(e => e === "currentTime")) {
+    const timeMatches = storyText.textContent.match(regex)
+    if (timeMatches.some(e => e === "currentTime")) {
+      // let formattedTime = convertDecimalTimeToHoursMins(currentTime)
       let formattedMinutes = Math.floor((currentTime % 1) * 60).toString()
       if (formattedMinutes === "0") {
         formattedMinutes = "00"
       }
       let formattedHours = Math.floor(currentTime)
-      formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12Hour(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
+      formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
+    } else if (timeMatches.some(e => e.includes("sleepTime"))) {
+      let timeChangeAmount = timeMatches[1].slice(-2, timeMatches[1].length)
+      let totalSleepTime = convertDecimalTimeTo12HourInt(convertDecimalTimeTo12HourInt(previousTime, 8) - timeChangeAmount/60, 8)
+      let formattedMinutes = Math.floor((totalSleepTime % 1) * 60)
+      if (formattedMinutes === 0) {
+        formattedMinutes = "00"
+      } else {
+        totalSleepTime += 1
+        formattedMinutes = (60 - formattedMinutes).toString()
+      }
+      let formattedHours = Math.floor(totalSleepTime)
+      formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8)} hours and ${formattedMinutes} minutes`)
     }
     storyText.textContent = formattedText
   } else {
     console.log("No regex")
+    previousTime = currentTime
   }
   if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
     if (progressBtns.style.display !== "none"){
@@ -201,7 +215,7 @@ function playerChoiceResult(evt){
     let sanityChangeAmount = choiceObj.sanityChange
     let timeChangeAmount = choiceObj.hoursUsed
     playerSanity = Math.max(0, Math.min(playerSanity + sanityChangeAmount, maxPlayerSanity))
-    console.log("time change amount:", timeChangeAmount)
+    // Special case calculate hoursUsed from wake up time
     if (isNaN(timeChangeAmount)) {
       let endMinutes = 0
       let endHour = parseInt(timeChangeAmount.slice(0,1))
@@ -210,11 +224,9 @@ function playerChoiceResult(evt){
         endMinutes = parseInt(timeChangeAmount.slice(minutesIdx + 1, minutesIdx + 3))
       }
       let endTime = endHour + (endMinutes/60)
-      console.log(`Total sleep time: ${endTime - convertDecimalTimeTo12Hour(currentTime, 8)}`)
-    } else {
-      console.log(`${currentTime} - ${timeChangeAmount} = ${currentTime - timeChangeAmount}`)
-      currentTime = Math.max(0, currentTime - timeChangeAmount)
+      timeChangeAmount = endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
     }
+    currentTime = Math.max(0, currentTime - timeChangeAmount)
     storyTextIdx = 0
     if (playerSanity === 0) {
       storyScenario = "Endpoint - Stressed out"
@@ -229,8 +241,17 @@ function playerChoiceResult(evt){
   }
 }
 
-function convertDecimalTimeTo12Hour(decimalTime, startingTime){
+function convertDecimalTimeTo12HourInt(decimalTime, startingTime){
   return decimalTime <= startingTime - 1 ? (startingTime - decimalTime) : ((12 - decimalTime) + startingTime)
+}
+
+function convertDecimalTimeToHoursMins(time) {
+  let formattedMinutes = Math.floor((time % 1) * 60).toString()
+      if (formattedMinutes === "0") {
+        formattedMinutes = "00"
+      }
+      let formattedHours = Math.floor(time)
+      return `${formattedHours}:${formattedMinutes}`
 }
 
 function toggleLightDarkMode() {
