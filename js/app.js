@@ -27,12 +27,13 @@
 
 /* ---------- Constants ---------- */
 
-import { getStoryText, getDoesStoryNeedAChoice,  getScenarioChoiceById, getScenarioChoiceByText, getTotalScenarioChoices, getSceneArt, getSceneSound } from "../data/storyScenarios.js"
+import { getStoryText, getDoesStoryNeedAChoice,  getScenarioChoiceById, getScenarioChoiceByText, getTotalScenarioChoices, getScenarioItem, getSceneArt, getSceneSound } from "../data/storyScenarios.js"
+import { getItemByName } from "../data/storyItems.js"
 const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound, isSkippingToInterview
+let playerSanity, maxPlayerSanity, playerItems, storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound, isSkippingToInterview
 
 /* ---------- Cached Element References ---------- */
 
@@ -43,6 +44,7 @@ const gameScreen = document.querySelector("#game-screen")
 const statBar = document.querySelector("#stat-bar")
 const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
+const sanityBoosters = document.querySelector("#sanity-boosters")
 const timeFillLeft = document.querySelector(".left-progress")
 const timeFillRight = document.querySelector(".right-progress")
 const clockTime = document.querySelector("#clock-icon")
@@ -64,6 +66,7 @@ continueStoryBtn.addEventListener("click", progressStory)
 playerChoices.addEventListener("click", playerChoiceResult)
 startBtn.addEventListener("click", viewGameScreen)
 resetBtn.addEventListener("click", init)
+sanityBoosters.addEventListener("click", useItem)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
 // window.addEventListener("resize", resizeText)
 studyingMusic.addEventListener("ended", () => {
@@ -84,6 +87,7 @@ function init(){
   playerSanity = 80
   storyTextIdx = 0
   currentTime = 12
+  playerItems = []
   storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
@@ -266,6 +270,11 @@ function playerChoiceResult(evt){
   if (evt.target.id !== "player-choices"){
     let selectedChoice = evt.target
     let choiceObj = getScenarioChoiceByText(storyScenario, selectedChoice.textContent)
+    if (getScenarioItem(choiceObj.newStoryScenario)) {
+      console.log("Found item")
+      playerItems.push(getItemByName(getScenarioItem(choiceObj.newStoryScenario)))
+      console.log(playerItems)
+    }
     let wakeUsingSpecifiedTime = false
     if (storyScenario !== "Interview") {
       let sanityChangeAmount = choiceObj.sanityChange
@@ -311,7 +320,13 @@ function playerChoiceResult(evt){
 
 function updatePlayerSanityAmount(changeInSanity) {
   playerSanity = Math.max(0, Math.min(playerSanity + changeInSanity, maxPlayerSanity))
+}
 
+function useItem(){
+  if (playerItems.length) {
+    updatePlayerSanityAmount(playerItems[0].sanityBoost)
+    playerItems.shift()
+  }
 }
 
 function convertDecimalTimeTo12HourInt(decimalTime, startingTime){

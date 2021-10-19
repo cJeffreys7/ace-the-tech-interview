@@ -198,7 +198,8 @@ const storyScenarios = [
         hoursUsed: .5,
         newStoryScenario: "Search the pantry"
       }
-    ]
+    ],
+    item: "Coffee"
   },
   {
     scenario: "Search the pantry",
@@ -811,6 +812,11 @@ function getTotalScenarioChoices(scenario) {
   return scenarioChoicesObj.choices.length
 }
 
+function getScenarioItem(scenario) {
+  let sceneObj = storyScenarios.find(e => e.scenario === scenario)
+  return sceneObj.item
+}
+
 function getSceneArt(scenario) {
   let sceneObj = storyScenarios.find(e => e.scenario === scenario)
   return sceneObj.imgSrc
@@ -822,5 +828,5 @@ function getSceneSound(scenario) {
 }
 
 export {
-  getStoryText, getDoesStoryNeedAChoice, getScenarioChoiceById, getScenarioChoiceByText, getTotalScenarioChoices, getSceneArt, getSceneSound
+  getStoryText, getDoesStoryNeedAChoice, getScenarioChoiceById, getScenarioChoiceByText, getTotalScenarioChoices, getScenarioItem, getSceneArt, getSceneSound
 }
