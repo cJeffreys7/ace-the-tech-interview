@@ -398,12 +398,6 @@ const storyScenarios = [
         sanityChange: 30, 
         hoursUsed: .5,
         newStoryScenario: "Workout"
-      },
-      { 
-        text: "Go to interview", 
-        sanityChange: 0, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview"
       }
     ]
   },
@@ -442,12 +436,6 @@ const storyScenarios = [
         sanityChange: 30, 
         hoursUsed: .5,
         newStoryScenario: "Workout"
-      },
-      { 
-        text: "Go to interview", 
-        sanityChange: 0, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview"
       }
     ]
   },
@@ -480,12 +468,6 @@ const storyScenarios = [
         sanityChange: 30, 
         hoursUsed: .5,
         newStoryScenario: "Workout"
-      },
-      { 
-        text: "Go to interview", 
-        sanityChange: 0, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview"
       }
     ]
   },
@@ -518,12 +500,6 @@ const storyScenarios = [
         sanityChange: 30, 
         hoursUsed: .5,
         newStoryScenario: "Workout"
-      },
-      { 
-        text: "Go to interview", 
-        sanityChange: 0, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview"
       }
     ]
   },
@@ -556,12 +532,6 @@ const storyScenarios = [
         sanityChange: 30, 
         hoursUsed: .5,
         newStoryScenario: "Workout"
-      },
-      { 
-        text: "Go to interview", 
-        sanityChange: 0, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview"
       }
     ]
   },
@@ -594,12 +564,6 @@ const storyScenarios = [
         sanityChange: 30, 
         hoursUsed: .5,
         newStoryScenario: "Workout"
-      },
-      { 
-        text: "Go to interview", 
-        sanityChange: 0, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview"
       }
     ]
   },
@@ -632,12 +596,6 @@ const storyScenarios = [
         sanityChange: 5, 
         hoursUsed: .5,
         newStoryScenario: "Dress"
-      }, 
-      { 
-        text: "Go to interview", 
-        sanityChange: 0, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview"
       }
     ]
   },
