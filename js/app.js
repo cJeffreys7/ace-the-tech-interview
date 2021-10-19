@@ -27,12 +27,12 @@
 
 /* ---------- Constants ---------- */
 
-import { getStoryText, getDoesStoryNeedAChoice,  getScenarioChoice, getSceneArt, getSceneSound } from "../data/storyScenarios.js"
+import { getStoryText, getDoesStoryNeedAChoice,  getScenarioChoice, getTotalScenarioChoices, getSceneArt, getSceneSound } from "../data/storyScenarios.js"
 const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound
+let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound, isSkippingToInterview
 
 /* ---------- Cached Element References ---------- */
 
@@ -107,6 +107,7 @@ function render(){
       clearInterval(lowSanityInterval)
       lowSanityInterval = null
   }
+  console.log("Get art and text from:", storyScenario)
   sceneArt.setAttribute("src", getSceneArt(storyScenario))
   storyText.textContent = getStoryText(storyScenario, storyTextIdx)
   if (storyText.textContent.includes("{")) {
@@ -165,18 +166,71 @@ function render(){
       toggleElementDisplay(choice2, "none")
       toggleElementDisplay(choice3, "none")
       toggleElementDisplay(choice4, "none")
-      choice1.textContent = getScenarioChoice(storyScenario, 1).text
-      animateElement(choice1, "slideInRight", 0)
-      toggleElementDisplay(choice1, "initial", 0)
-      choice2.textContent = getScenarioChoice(storyScenario, 2).text
-      animateElement(choice2, "slideInRight", 0.5)
-      toggleElementDisplay(choice2, "initial", 0.5)
-      choice3.textContent = getScenarioChoice(storyScenario, 3).text
-      animateElement(choice3, "slideInRight", 1)
-      toggleElementDisplay(choice3, "initial", 1)
-      choice4.textContent = getScenarioChoice(storyScenario, 4).text
-      animateElement(choice4, "slideInRight", 1.5)
-      toggleElementDisplay(choice4, "initial", 1.5)
+      let currValidChoiceIdx = getNextValidChoiceIdx(0)
+      console.log("Next valid choice:", currValidChoiceIdx)
+      console.log("Choice text:", getScenarioChoice(storyScenario, currValidChoiceIdx).text)
+      if (Number(currValidChoiceIdx)) {
+        choice1.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
+        animateElement(choice1, "slideInRight", 0)
+        toggleElementDisplay(choice1, "initial", 0)
+        currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
+        if (Number(currValidChoiceIdx)) {
+          choice2.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
+          animateElement(choice2, "slideInRight", 0)
+          toggleElementDisplay(choice2, "initial", 0)
+          currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
+          if (Number(currValidChoiceIdx)) {
+            choice3.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
+            animateElement(choice3, "slideInRight", 0)
+            toggleElementDisplay(choice3, "initial", 0)
+            currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
+            if (Number(currValidChoiceIdx)) {
+              choice4.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
+              animateElement(choice4, "slideInRight", 0)
+              toggleElementDisplay(choice4, "initial", 0)
+            } else {
+              storyScenario = "Interview"
+              choice4.textContent = "Go to interview"
+              animateElement(choice4, "slideInRight", 0)
+              toggleElementDisplay(choice4, "initial", 0)
+              isSkippingToInterview = true
+            }
+          } else {
+            storyScenario = "Interview"
+            choice3.textContent = "Go to interview"
+            animateElement(choice3, "slideInRight", 0)
+            toggleElementDisplay(choice3, "initial", 0)
+            isSkippingToInterview = true
+          }
+        } else {
+          storyScenario = "Interview"
+          choice2.textContent = "Go to interview"
+          animateElement(choice2, "slideInRight", 0)
+          toggleElementDisplay(choice2, "initial", 0)
+          isSkippingToInterview = true
+        }
+      } else {
+        storyScenario = "Interview"
+        choice1.textContent = "Go to interview"
+        animateElement(choice1, "slideInRight", 0)
+        toggleElementDisplay(choice1, "initial", 0)
+        isSkippingToInterview = true
+      }
+      // if (getNextValidChoice(2)) {
+      //   choice2.textContent = getNextValidChoice(2).text
+      //   animateElement(choice2, "slideInRight", 0)
+      //   toggleElementDisplay(choice2, "initial", 0)
+      // }
+      // if (getNextValidChoice(3)) {
+      //   choice3.textContent = getNextValidChoice(3).text
+      //   animateElement(choice3, "slideInRight", 0)
+      //   toggleElementDisplay(choice3, "initial", 0)
+      // }
+      // if (getNextValidChoice(4)) {
+      //   choice4.textContent = getNextValidChoice(4).text
+      //   animateElement(choice4, "slideInRight", 0)
+      //   toggleElementDisplay(choice4, "initial", 0)
+      // }
     }
   } else {
     if (playerChoices.style.display !== "none") {
@@ -215,36 +269,39 @@ function playerChoiceResult(evt){
     let choiceId = evt.target.id
     choiceId = choiceId.slice(choiceId.length - 1)
     let choiceObj = getScenarioChoice(storyScenario, choiceId)
-    let sanityChangeAmount = choiceObj.sanityChange
-    let timeChangeAmount = choiceObj.hoursUsed
-    updatePlayerSanityAmount(sanityChangeAmount)
     let wakeUsingSpecifiedTime = false
-    // Special case calculate hoursUsed from wake up time
-    if (isNaN(timeChangeAmount)) {
-      let endMinutes = 0
-      let endHour = parseInt(timeChangeAmount.slice(0,1))
-      if (timeChangeAmount.includes(":")) {
-        let minutesIdx = timeChangeAmount.indexOf(":")
-        endMinutes = parseInt(timeChangeAmount.slice(minutesIdx + 1, minutesIdx + 3))
+    if (storyScenario !== "Interview") {
+      let sanityChangeAmount = choiceObj.sanityChange
+      let timeChangeAmount = choiceObj.hoursUsed
+      console.log(`Go to scenario ${storyScenario} and change sanity by ${sanityChangeAmount} and use up ${timeChangeAmount} hours`)
+      updatePlayerSanityAmount(sanityChangeAmount)
+      // Special case calculate hoursUsed from wake up time
+      if (isNaN(timeChangeAmount)) {
+        let endMinutes = 0
+        let endHour = parseInt(timeChangeAmount.slice(0,1))
+        if (timeChangeAmount.includes(":")) {
+          let minutesIdx = timeChangeAmount.indexOf(":")
+          endMinutes = parseInt(timeChangeAmount.slice(minutesIdx + 1, minutesIdx + 3))
+        }
+        let endTime = endHour + (endMinutes/60)
+        timeChangeAmount = (endTime - convertDecimalTimeTo12HourInt(currentTime, 8)) < 0 ? endTime + (12 - convertDecimalTimeTo12HourInt(currentTime, 8)) : endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
+        // Update sanity and scenario from hours slept
+        if (timeChangeAmount < 2.5) {
+          storyScenario = "Endpoint - Sleep in"
+          wakeUsingSpecifiedTime = true
+          updatePlayerSanityAmount(100)
+        } else if (timeChangeAmount < 5) {
+          storyScenario = "Stare at ceiling"
+          wakeUsingSpecifiedTime = true
+          updatePlayerSanityAmount(25)
+        } else {
+          storyScenario = "Wake well rested"
+          wakeUsingSpecifiedTime = true
+          updatePlayerSanityAmount(45)
+        }
       }
-      let endTime = endHour + (endMinutes/60)
-      timeChangeAmount = (endTime - convertDecimalTimeTo12HourInt(currentTime, 8)) < 0 ? endTime + (12 - convertDecimalTimeTo12HourInt(currentTime, 8)) : endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
-      // Update sanity and scenario from hours slept
-      if (timeChangeAmount < 2.5) {
-        storyScenario = "Endpoint - Sleep in"
-        wakeUsingSpecifiedTime = true
-        updatePlayerSanityAmount(100)
-      } else if (timeChangeAmount < 5) {
-        storyScenario = "Stare at ceiling"
-        wakeUsingSpecifiedTime = true
-        updatePlayerSanityAmount(25)
-      } else {
-        storyScenario = "Wake well rested"
-        wakeUsingSpecifiedTime = true
-        updatePlayerSanityAmount(45)
-      }
+      currentTime = Math.max(0, currentTime - timeChangeAmount)
     }
-    currentTime = Math.max(0, currentTime - timeChangeAmount)
     storyTextIdx = 0
     if (playerSanity === 0) {
       storyScenario = "Endpoint - Stressed out"
@@ -253,6 +310,9 @@ function playerChoiceResult(evt){
       storyScenario = "Interview"
       render()
     } else if (wakeUsingSpecifiedTime) {
+      render()
+    } else if (isSkippingToInterview) {
+      isSkippingToInterview = false
       render()
     } else {
       storyScenario = choiceObj.newStoryScenario
@@ -268,6 +328,16 @@ function updatePlayerSanityAmount(changeInSanity) {
 
 function convertDecimalTimeTo12HourInt(decimalTime, startingTime){
   return decimalTime <= startingTime - 1 ? (startingTime - decimalTime) : ((12 - decimalTime) + startingTime)
+}
+
+function getNextValidChoiceIdx(elementId) {
+  for (let i = elementId; i < getTotalScenarioChoices(storyScenario); i++) {
+    console.log("Checking choice ", i)
+    if (playerSanity + getScenarioChoice(storyScenario, i).sanityChange > 0 && getScenarioChoice(storyScenario, i).hoursUsed < currentTime) {
+      return i
+    }
+  }
+  return null
 }
 
 // function convertDecimalTimeToHoursMins(time) {
