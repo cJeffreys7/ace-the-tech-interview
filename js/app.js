@@ -75,7 +75,7 @@ function init(){
   maxPlayerSanity = 100
   playerSanity = 80
   storyTextIdx = 0
-  currentTime = 12
+  currentTime = 0.5
   storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
@@ -289,9 +289,6 @@ function playerChoiceResult(evt){
     if (playerSanity === 0) {
       storyScenario = "Endpoint - Stressed out"
       render()
-    } else if (currentTime === 0) {
-      storyScenario = "Interview"
-      render()
     } else if (wakeUsingSpecifiedTime) {
       render()
     } else if (isSkippingToInterview) {
@@ -320,7 +317,7 @@ function getValidTimeChoiceIdx(elementId) {
     console.log(`Enough player sanity:`, (playerSanity + getScenarioChoiceById(storyScenario, i).sanityChange) > 0)
     console.log(`Enough time for option:`, getScenarioChoiceById(storyScenario, i).hoursUsed < currentTime)
     // (playerSanity + getScenarioChoiceById(storyScenario, i).sanityChange) > 0
-    if (getScenarioChoiceById(storyScenario, i).hoursUsed < currentTime) {
+    if (getScenarioChoiceById(storyScenario, i).hoursUsed < currentTime || getScenarioChoiceById(storyScenario, i).hoursUsed === 0) {
       return i
     }
   }
