@@ -75,12 +75,12 @@ function init(){
   maxPlayerSanity = 100
   playerSanity = 80
   storyTextIdx = 0
-  currentTime = 12
+  currentTime = 3
   storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
-  studyingMusic.play()
+  // studyingMusic.play()
   checkDarkPref()
   render()
 }
@@ -260,14 +260,7 @@ function playerChoiceResult(evt){
       updatePlayerSanityAmount(sanityChangeAmount)
       // Special case calculate hoursUsed from wake up time
       if (isNaN(timeChangeAmount)) {
-        let endMinutes = 0
-        let endHour = parseInt(timeChangeAmount.slice(0,1))
-        if (timeChangeAmount.includes(":")) {
-          let minutesIdx = timeChangeAmount.indexOf(":")
-          endMinutes = parseInt(timeChangeAmount.slice(minutesIdx + 1, minutesIdx + 3))
-        }
-        let endTime = endHour + (endMinutes/60)
-        timeChangeAmount = (endTime - convertDecimalTimeTo12HourInt(currentTime, 8)) < 0 ? endTime + (12 - convertDecimalTimeTo12HourInt(currentTime, 8)) : endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
+        timeChangeAmount = calculateRemainingTimeFromChoiceText(timeChangeAmount)
         // Update sanity and scenario from hours slept
         if (timeChangeAmount < 2.5) {
           storyScenario = "Endpoint - Sleep in"
@@ -313,15 +306,26 @@ function convertDecimalTimeTo12HourInt(decimalTime, startingTime){
 
 function getValidTimeChoiceIdx(elementId) {
   for (let i = elementId; i < getTotalScenarioChoices(storyScenario); i++) {
-    console.log("Checking choice ", i)
-    console.log(`Enough player sanity:`, (playerSanity + getScenarioChoiceById(storyScenario, i).sanityChange) > 0)
-    console.log(`Enough time for option:`, getScenarioChoiceById(storyScenario, i).hoursUsed < currentTime)
-    // (playerSanity + getScenarioChoiceById(storyScenario, i).sanityChange) > 0
-    if (getScenarioChoiceById(storyScenario, i).hoursUsed < currentTime || getScenarioChoiceById(storyScenario, i).hoursUsed === 0) {
+    let choiceTimeRequired = getScenarioChoiceById(storyScenario, i).hoursUsed
+    if (isNaN(choiceTimeRequired)) {
+      choiceTimeRequired = calculateRemainingTimeFromChoiceText(choiceTimeRequired)
+    }
+    if (choiceTimeRequired < currentTime || choiceTimeRequired === 0) {
       return i
     }
   }
   return null
+}
+
+function calculateRemainingTimeFromChoiceText(choiceTime){
+    let endMinutes = 0
+    let endHour = parseInt(choiceTime.slice(0,1))
+    if (choiceTime.includes(":")) {
+      let minutesIdx = choiceTime.indexOf(":")
+      endMinutes = parseInt(choiceTime.slice(minutesIdx + 1, minutesIdx + 3))
+    }
+    let endTime = endHour + (endMinutes/60)
+    return (endTime - convertDecimalTimeTo12HourInt(currentTime, 8)) < 0 ? endTime + (12 - convertDecimalTimeTo12HourInt(currentTime, 8)) : endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
 }
 
 // function convertDecimalTimeToHoursMins(time) {
