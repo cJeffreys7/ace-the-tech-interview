@@ -121,7 +121,7 @@ const storyScenarios = [
       { 
         text: "It is too late to turn back now...", 
         sanityChange: 0, 
-        hoursUsed: 12,
+        hoursUsed: 0,
         newStoryScenario: "Endpoint - Descend into madness"
       }
     ]
@@ -838,9 +838,14 @@ function getDoesStoryNeedAChoice(scenario, textIdx) {
   return storyScenario.text.length - 1 === textIdx
 }
 
-function getScenarioChoice(scenario, choiceIdx) {
+function getScenarioChoiceById(scenario, choiceIdx) {
   let scenarioChoicesObj = storyScenarios.find(e => e.scenario === scenario)
   return scenarioChoicesObj.choices[choiceIdx]
+}
+
+function getScenarioChoiceByText(scenario, choiceText) {
+  let scenarioChoicesObj = storyScenarios.find(e => e.scenario === scenario)
+  return scenarioChoicesObj.choices.find(e => e.text === choiceText)
 }
 
 function getTotalScenarioChoices(scenario) {
@@ -859,5 +864,5 @@ function getSceneSound(scenario) {
 }
 
 export {
-  getStoryText, getDoesStoryNeedAChoice, getScenarioChoice, getTotalScenarioChoices, getSceneArt, getSceneSound
+  getStoryText, getDoesStoryNeedAChoice, getScenarioChoiceById, getScenarioChoiceByText, getTotalScenarioChoices, getSceneArt, getSceneSound
 }
