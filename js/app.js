@@ -75,12 +75,12 @@ function init(){
   maxPlayerSanity = 100
   playerSanity = 80
   storyTextIdx = 0
-  currentTime = 3
+  currentTime = 12
   storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
-  // studyingMusic.play()
+  studyingMusic.play()
   checkDarkPref()
   render()
 }
