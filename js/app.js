@@ -32,7 +32,7 @@ const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval, sceneSound
+let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterval, currentTime, sceneSound
 
 /* ---------- Cached Element References ---------- */
 
@@ -40,6 +40,9 @@ const body = document.querySelector("body")
 const statBar = document.querySelector("#stat-bar")
 const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
+const timeFillLeft = document.querySelector(".left-progress")
+const timeFillRight = document.querySelector(".right-progress")
+const clockTime = document.querySelector("#clock-icon")
 const sceneArt = document.querySelector("#scene-art")
 const storyText = document.querySelector("#story-text")
 const lightDarkBtn = document.querySelector("#light-dark-mode-icon")
@@ -72,7 +75,8 @@ function init(){
   maxPlayerSanity = 100
   playerSanity = 80
   storyTextIdx = 0
-  storyScenario = "Start"
+  currentTime = 5
+  storyScenario = "Sleep prep"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
@@ -83,6 +87,14 @@ function init(){
 
 function render(){
   sanityFill.style.height = `${(playerSanity/maxPlayerSanity) * 100}%`
+  clockTime.style.transform = `rotate(-${currentTime*30}deg)`
+  if (currentTime < 6) {
+    timeFillLeft.style.transform = "rotate(-180deg)"
+    timeFillLeft.style.transform = `rotate(${(6-currentTime)*30}deg)`
+    console.log("Time left:", currentTime)
+  } else {
+    timeFillRight.style.transform = `rotate(-${currentTime*30}deg)`
+  }
   // console.log(sanityFill.style.height, 'sanity left')
   if (0 < playerSanity && playerSanity <= 20) {
     if (!lowSanityInterval) {
@@ -97,6 +109,22 @@ function render(){
   }
   sceneArt.setAttribute("src", getSceneArt(storyScenario))
   storyText.textContent = getStoryText(storyScenario, storyTextIdx)
+  if (storyText.textContent.includes("{")) {
+    let formattedText = ""
+    const regex = new RegExp ("\{(.*?)\}")
+    const matches = storyText.textContent.match(regex)
+    if (matches.some(e => e === "currentTime")) {
+      let formattedMinutes = Math.floor((currentTime % 1) * 60).toString()
+      if (formattedMinutes === "0") {
+        formattedMinutes = "00"
+      }
+      let formattedHours = Math.floor(currentTime)
+      formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12Hour(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
+    }
+    storyText.textContent = formattedText
+  } else {
+    console.log("No regex")
+  }
   if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
     if (progressBtns.style.display !== "none"){
       toggleElementDisplay(progressBtns, "none")
@@ -166,19 +194,43 @@ function progressStory(){
 }
 
 function playerChoiceResult(evt){
-  let choiceId = evt.target.id
-  choiceId = choiceId.slice(choiceId.length - 1)
-  let choiceObj = getScenarioChoice(storyScenario, choiceId)
-  let sanityChangeAmount = choiceObj.sanityChange
-  playerSanity = Math.max(0, Math.min(playerSanity + sanityChangeAmount, maxPlayerSanity))
-  storyTextIdx = 0
-  if (playerSanity === 0) {
-    storyScenario = "Endpoint - Stressed out"
-    render()
-  } else {
-    storyScenario = choiceObj.newStoryScenario
-    render()
+  if (evt.target.id !== "player-choices"){
+    let choiceId = evt.target.id
+    choiceId = choiceId.slice(choiceId.length - 1)
+    let choiceObj = getScenarioChoice(storyScenario, choiceId)
+    let sanityChangeAmount = choiceObj.sanityChange
+    let timeChangeAmount = choiceObj.hoursUsed
+    playerSanity = Math.max(0, Math.min(playerSanity + sanityChangeAmount, maxPlayerSanity))
+    console.log("time change amount:", timeChangeAmount)
+    if (isNaN(timeChangeAmount)) {
+      let endMinutes = 0
+      let endHour = parseInt(timeChangeAmount.slice(0,1))
+      if (timeChangeAmount.includes(":")) {
+        let minutesIdx = timeChangeAmount.indexOf(":")
+        endMinutes = parseInt(timeChangeAmount.slice(minutesIdx + 1, minutesIdx + 3))
+      }
+      let endTime = endHour + (endMinutes/60)
+      console.log(`Total sleep time: ${endTime - convertDecimalTimeTo12Hour(currentTime, 8)}`)
+    } else {
+      console.log(`${currentTime} - ${timeChangeAmount} = ${currentTime - timeChangeAmount}`)
+      currentTime = Math.max(0, currentTime - timeChangeAmount)
+    }
+    storyTextIdx = 0
+    if (playerSanity === 0) {
+      storyScenario = "Endpoint - Stressed out"
+      render()
+    } else if (currentTime === 0) {
+      storyScenario = "Interview"
+      render()
+    } else {
+      storyScenario = choiceObj.newStoryScenario
+      render()
+    }
   }
+}
+
+function convertDecimalTimeTo12Hour(decimalTime, startingTime){
+  return decimalTime <= startingTime - 1 ? (startingTime - decimalTime) : ((12 - decimalTime) + startingTime)
 }
 
 function toggleLightDarkMode() {
