@@ -37,6 +37,9 @@ let playerSanity, maxPlayerSanity, storyScenario, storyTextIdx, lowSanityInterva
 /* ---------- Cached Element References ---------- */
 
 const body = document.querySelector("body")
+const titleScreen = document.querySelector("#title-screen")
+const startBtn = document.querySelector("#start-button")
+const gameScreen = document.querySelector("#game-screen")
 const statBar = document.querySelector("#stat-bar")
 const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
@@ -59,6 +62,7 @@ const choice4 = document.querySelector("#choice-4")
 
 continueStoryBtn.addEventListener("click", progressStory)
 playerChoices.addEventListener("click", playerChoiceResult)
+startBtn.addEventListener("click", viewGameScreen)
 resetBtn.addEventListener("click", init)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
 // window.addEventListener("resize", resizeText)
@@ -69,7 +73,11 @@ studyingMusic.addEventListener("ended", () => {
 
 /* ---------- Functions ---------- */
 
-init()
+function viewGameScreen(){
+  toggleElementDisplay(gameScreen, "contents")
+  toggleElementDisplay(titleScreen, "none")
+  init()
+}
 
 function init(){
   maxPlayerSanity = 100
@@ -80,12 +88,17 @@ function init(){
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
+  studyingMusic.currentTime = 0
   studyingMusic.play()
   checkDarkPref()
+  console.log(gameScreen.style.display)
   render()
 }
 
 function render(){
+  if (storyScenario.includes("Endpoint")){
+    studyingMusic.pause()
+  }
   sanityFill.style.height = `${(playerSanity/maxPlayerSanity) * 100}%`
   clockTime.style.transform = `rotate(-${currentTime*30}deg)`
   if (currentTime < 6) {
@@ -149,6 +162,7 @@ function render(){
     }
     toggleElementDisplay(continueStoryBtn, "initial")
     if (storyScenario.includes("Endpoint")){
+      studyingMusic.pause()
       setTimeout(() => {
         animateElement(statBar, "fadeOut")
         animateElement(sceneArt, "fadeOut")

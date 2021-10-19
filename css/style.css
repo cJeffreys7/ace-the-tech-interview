@@ -61,6 +61,22 @@ body.dark {
   background-color: var(--body-bg);
 }
 
+#title-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 4rem;
+}
+
+#game-screen {
+  display: none;
+}
+
 #stat-bar {
   display: flex;
   justify-content: space-evenly;
@@ -194,6 +210,10 @@ body.dark {
   background-color: var(--choice-bg)
 }
 
+#start-button {
+  width: 50%;
+}
+
 @media only screen and (min-width: 768px) {
   body {
     display: grid;
@@ -204,6 +224,10 @@ body.dark {
     "empLeft story-text empRight"
     "empLeft buttons empRight"
     ;
+  }
+
+  #title-screen {
+    grid-column: 2 / 3;
   }
   
   #stat-bar {
