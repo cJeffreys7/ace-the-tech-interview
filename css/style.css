@@ -128,31 +128,12 @@ body.dark {
 
 .circle .left .progress {
   z-index: 1;
-  /* animation: left 4s linear both; */
-}
-
-@keyframes left {
-  100%{
-    transform: rotate(180deg);
-  }
 }
 
 .circle .right {
   transform: rotate(180deg);
   z-index: 2;
 }
-
-.circle .right .progress {
-  /* animation: right 4s linear both; */
-  /* animation-delay: 4s; */
-}
-
-@keyframes right {
-  100%{
-    transform: rotate(180deg);
-  }
-}
-
 
 #scene-art-section {
   display: flex;

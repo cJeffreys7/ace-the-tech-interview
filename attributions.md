@@ -9,3 +9,5 @@ Sprites by Pixel Pete at https://petermilko.itch.io/pixel-petes-art-assets
 SFX by Kronbits at https://kronbits.itch.io/freesfx
 
 Crash Landing.mp3 by DOS-88 at https://dos88.itch.io/dos-88-music-library
+
+Circular progress bar by Aphinya Dechalert at https://www.dottedsquirrel.com/circular-progress-css/

@@ -17,7 +17,7 @@
 
 // // Flush out styling to better match wireframe
 // // Flush out story details to create interesting scenarios
-// Implement time mechanic
+// // Implement time mechanic
 // Implement sanity booster mechanic
 // Implement coder toolbox mechanic
 // // Move storyTextArr, scenarioChoicesArr, sceneArtArr to data/storyScenarios.js and access data through exported getFunctions
@@ -114,29 +114,32 @@ function render(){
     const regex = new RegExp ("\{(.*?)\}")
     const timeMatches = storyText.textContent.match(regex)
     if (timeMatches.some(e => e === "currentTime")) {
-      // let formattedTime = convertDecimalTimeToHoursMins(currentTime)
-      let formattedMinutes = Math.floor((currentTime % 1) * 60).toString()
+      let formattedTime = currentTime
+      let formattedMinutes = Math.floor((formattedTime % 1) * 60).toString()
       if (formattedMinutes === "0") {
         formattedMinutes = "00"
+      } else {
+        formattedTime += 1
+        formattedMinutes = (60 - formattedMinutes).toString()
       }
-      let formattedHours = Math.floor(currentTime)
+      console.log("format time");
+      let formattedHours = Math.floor(formattedTime)
       formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
+      // Calculate amount of time to sleep and return hours and minutes
     } else if (timeMatches.some(e => e.includes("sleepTime"))) {
       let timeChangeAmount = timeMatches[1].slice(-2, timeMatches[1].length)
-      let totalSleepTime = convertDecimalTimeTo12HourInt(convertDecimalTimeTo12HourInt(previousTime, 8) - timeChangeAmount/60, 8)
-      let formattedMinutes = Math.floor((totalSleepTime % 1) * 60)
+      let totalSleepTime = previousTime - currentTime - timeChangeAmount/60
+      let formattedMinutes = Math.ceil((totalSleepTime % 1) * 60)
       if (formattedMinutes === 0) {
         formattedMinutes = "00"
       } else {
-        totalSleepTime += 1
-        formattedMinutes = (60 - formattedMinutes).toString()
+        totalSleepTime -= 1
       }
       let formattedHours = Math.floor(totalSleepTime)
-      formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8)} hours and ${formattedMinutes} minutes`)
+      formattedText = storyText.textContent.replace(regex, `${formattedHours} hours and ${formattedMinutes} minutes`)
     }
     storyText.textContent = formattedText
   } else {
-    console.log("No regex")
     previousTime = currentTime
   }
   if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
@@ -214,7 +217,8 @@ function playerChoiceResult(evt){
     let choiceObj = getScenarioChoice(storyScenario, choiceId)
     let sanityChangeAmount = choiceObj.sanityChange
     let timeChangeAmount = choiceObj.hoursUsed
-    playerSanity = Math.max(0, Math.min(playerSanity + sanityChangeAmount, maxPlayerSanity))
+    updatePlayerSanityAmount(sanityChangeAmount)
+    let wakeUsingSpecifiedTime = false
     // Special case calculate hoursUsed from wake up time
     if (isNaN(timeChangeAmount)) {
       let endMinutes = 0
@@ -224,7 +228,21 @@ function playerChoiceResult(evt){
         endMinutes = parseInt(timeChangeAmount.slice(minutesIdx + 1, minutesIdx + 3))
       }
       let endTime = endHour + (endMinutes/60)
-      timeChangeAmount = endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
+      timeChangeAmount = (endTime - convertDecimalTimeTo12HourInt(currentTime, 8)) < 0 ? endTime + (12 - convertDecimalTimeTo12HourInt(currentTime, 8)) : endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
+      // Update sanity and scenario from hours slept
+      if (timeChangeAmount < 2.5) {
+        storyScenario = "Endpoint - Sleep in"
+        wakeUsingSpecifiedTime = true
+        updatePlayerSanityAmount(100)
+      } else if (timeChangeAmount < 5) {
+        storyScenario = "Stare at ceiling"
+        wakeUsingSpecifiedTime = true
+        updatePlayerSanityAmount(25)
+      } else {
+        storyScenario = "Wake well rested"
+        wakeUsingSpecifiedTime = true
+        updatePlayerSanityAmount(45)
+      }
     }
     currentTime = Math.max(0, currentTime - timeChangeAmount)
     storyTextIdx = 0
@@ -234,6 +252,8 @@ function playerChoiceResult(evt){
     } else if (currentTime === 0) {
       storyScenario = "Interview"
       render()
+    } else if (wakeUsingSpecifiedTime) {
+      render()
     } else {
       storyScenario = choiceObj.newStoryScenario
       render()
@@ -241,18 +261,23 @@ function playerChoiceResult(evt){
   }
 }
 
+function updatePlayerSanityAmount(changeInSanity) {
+  playerSanity = Math.max(0, Math.min(playerSanity + changeInSanity, maxPlayerSanity))
+
+}
+
 function convertDecimalTimeTo12HourInt(decimalTime, startingTime){
   return decimalTime <= startingTime - 1 ? (startingTime - decimalTime) : ((12 - decimalTime) + startingTime)
 }
 
-function convertDecimalTimeToHoursMins(time) {
-  let formattedMinutes = Math.floor((time % 1) * 60).toString()
-      if (formattedMinutes === "0") {
-        formattedMinutes = "00"
-      }
-      let formattedHours = Math.floor(time)
-      return `${formattedHours}:${formattedMinutes}`
-}
+// function convertDecimalTimeToHoursMins(time) {
+//   let formattedMinutes = Math.floor((time % 1) * 60).toString()
+//       if (formattedMinutes === "0") {
+//         formattedMinutes = "00"
+//       }
+//       let formattedHours = Math.floor(time)
+//       return `${formattedHours}:${formattedMinutes}`
+// }
 
 function toggleLightDarkMode() {
   body.className = body.className === "" ? "dark" : ""

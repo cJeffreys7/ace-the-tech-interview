@@ -253,25 +253,25 @@ const storyScenarios = [
       text: "Set alarm to go off at 7am", 
       sanityChange: 0, 
       hoursUsed: "7am",
-      newStoryScenario: "Wake well rested"
+      newStoryScenario: "Wakeup"
     },
     choice2: { 
       text: "Set alarm to go off at 6am", 
       sanityChange: 0, 
       hoursUsed: "6am",
-      newStoryScenario: "Stare at ceiling"
+      newStoryScenario: "Wakeup"
     },
     choice3: { 
       text: "Set alarm to go off at 7:50am", 
       sanityChange: 0, 
       hoursUsed: "7:50am",
-      newStoryScenario: "Wake well rested"
+      newStoryScenario: "Wakeup"
     },
     choice4: { 
       text: "Set alarm to go off at 7:30am", 
       sanityChange: 0, 
       hoursUsed: "7:30am",
-      newStoryScenario: "Endpoint - Sleep in"
+      newStoryScenario: "Wakeup"
     },
     choice5: { 
       text: "Lay down for 5 minutes", 
