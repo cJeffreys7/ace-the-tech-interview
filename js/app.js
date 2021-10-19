@@ -80,7 +80,7 @@ function init(){
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
-  studyingMusic.play()
+  // studyingMusic.play()
   checkDarkPref()
   render()
 }
@@ -169,25 +169,26 @@ function render(){
       let currValidChoiceIdx = getNextValidChoiceIdx(0)
       console.log("Next valid choice:", currValidChoiceIdx)
       console.log("Choice text:", getScenarioChoice(storyScenario, currValidChoiceIdx).text)
-      if (Number(currValidChoiceIdx)) {
+      console.log(Number(currValidChoiceIdx))
+      if (!isNaN(currValidChoiceIdx)) {
         choice1.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
         animateElement(choice1, "slideInRight", 0)
         toggleElementDisplay(choice1, "initial", 0)
         currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
         if (Number(currValidChoiceIdx)) {
           choice2.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
-          animateElement(choice2, "slideInRight", 0)
-          toggleElementDisplay(choice2, "initial", 0)
+          animateElement(choice2, "slideInRight", 0.5)
+          toggleElementDisplay(choice2, "initial", 0.5)
           currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
           if (Number(currValidChoiceIdx)) {
             choice3.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
-            animateElement(choice3, "slideInRight", 0)
-            toggleElementDisplay(choice3, "initial", 0)
+            animateElement(choice3, "slideInRight", 1)
+            toggleElementDisplay(choice3, "initial", 1)
             currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
             if (Number(currValidChoiceIdx)) {
               choice4.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
-              animateElement(choice4, "slideInRight", 0)
-              toggleElementDisplay(choice4, "initial", 0)
+              animateElement(choice4, "slideInRight", 1.5)
+              toggleElementDisplay(choice4, "initial", 1.5)
             } else {
               storyScenario = "Interview"
               choice4.textContent = "Go to interview"
