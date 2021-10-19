@@ -167,28 +167,25 @@ function render(){
       toggleElementDisplay(choice3, "none")
       toggleElementDisplay(choice4, "none")
       let currValidChoiceIdx = getNextValidChoiceIdx(0)
-      console.log("Next valid choice:", currValidChoiceIdx)
-      console.log("Choice text:", getScenarioChoice(storyScenario, currValidChoiceIdx).text)
-      console.log(Number(currValidChoiceIdx))
       if (!isNaN(currValidChoiceIdx)) {
         choice1.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
-        animateElement(choice1, "slideInRight", 0)
-        toggleElementDisplay(choice1, "initial", 0)
+        animateElement(choice1, "slideInRight", 0.5)
+        toggleElementDisplay(choice1, "initial", 0.5)
         currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
-        if (Number(currValidChoiceIdx)) {
+        if (!isNan(currValidChoiceIdx)) {
           choice2.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
-          animateElement(choice2, "slideInRight", 0.5)
-          toggleElementDisplay(choice2, "initial", 0.5)
+          animateElement(choice2, "slideInRight", 1)
+          toggleElementDisplay(choice2, "initial", 1)
           currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
-          if (Number(currValidChoiceIdx)) {
+          if (!isNan(currValidChoiceIdx)) {
             choice3.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
-            animateElement(choice3, "slideInRight", 1)
-            toggleElementDisplay(choice3, "initial", 1)
+            animateElement(choice3, "slideInRight", 1.5)
+            toggleElementDisplay(choice3, "initial", 1.5)
             currValidChoiceIdx = getNextValidChoiceIdx(currValidChoiceIdx + 1)
-            if (Number(currValidChoiceIdx)) {
+            if (!isNan(currValidChoiceIdx)) {
               choice4.textContent = getScenarioChoice(storyScenario, currValidChoiceIdx).text
-              animateElement(choice4, "slideInRight", 1.5)
-              toggleElementDisplay(choice4, "initial", 1.5)
+              animateElement(choice4, "slideInRight", 2)
+              toggleElementDisplay(choice4, "initial", 2)
             } else {
               storyScenario = "Interview"
               choice4.textContent = "Go to interview"
@@ -217,21 +214,6 @@ function render(){
         toggleElementDisplay(choice1, "initial", 0)
         isSkippingToInterview = true
       }
-      // if (getNextValidChoice(2)) {
-      //   choice2.textContent = getNextValidChoice(2).text
-      //   animateElement(choice2, "slideInRight", 0)
-      //   toggleElementDisplay(choice2, "initial", 0)
-      // }
-      // if (getNextValidChoice(3)) {
-      //   choice3.textContent = getNextValidChoice(3).text
-      //   animateElement(choice3, "slideInRight", 0)
-      //   toggleElementDisplay(choice3, "initial", 0)
-      // }
-      // if (getNextValidChoice(4)) {
-      //   choice4.textContent = getNextValidChoice(4).text
-      //   animateElement(choice4, "slideInRight", 0)
-      //   toggleElementDisplay(choice4, "initial", 0)
-      // }
     }
   } else {
     if (playerChoices.style.display !== "none") {
