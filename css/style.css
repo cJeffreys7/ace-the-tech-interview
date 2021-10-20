@@ -71,6 +71,7 @@ body.dark {
 
 h1 {
   font-size: 4rem;
+  color: var(--choice-txt-color);
 }
 
 #game-screen {

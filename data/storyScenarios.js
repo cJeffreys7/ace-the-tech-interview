@@ -804,7 +804,7 @@ function getScenarioChoiceById(scenario, choiceIdx) {
 
 function getScenarioChoiceByText(scenario, choiceText) {
   let scenarioChoicesObj = storyScenarios.find(e => e.scenario === scenario)
-  return scenarioChoicesObj.choices.find(e => e.text === choiceText)
+  return (scenarioChoicesObj.choices.find(e => e.text === choiceText) || null)
 }
 
 function getTotalScenarioChoices(scenario) {

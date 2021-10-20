@@ -33,7 +33,7 @@ const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerSanity, maxPlayerSanity, playerItems, storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound, isSkippingToInterview
+let playerSanity, maxPlayerSanity, playerItems, storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound
 
 /* ---------- Cached Element References ---------- */
 
@@ -76,6 +76,8 @@ studyingMusic.addEventListener("ended", () => {
 
 /* ---------- Functions ---------- */
 
+checkDarkPref()
+
 function viewGameScreen(){
   toggleElementDisplay(gameScreen, "contents")
   toggleElementDisplay(titleScreen, "none")
@@ -95,7 +97,6 @@ function init(){
   studyingMusic.currentTime = 0
   studyingMusic.play()
   checkDarkPref()
-  console.log(gameScreen.style.display)
   render()
 }
 
@@ -106,14 +107,13 @@ function render(){
   sanityFill.style.height = `${(playerSanity/maxPlayerSanity) * 100}%`
   clockTime.style.transform = `rotate(-${currentTime*30}deg)`
   if (currentTime < 6) {
-    timeFillLeft.style.transform = "rotate(-180deg)"
+    timeFillRight.style.transform = "rotate(-180deg)"
     timeFillLeft.style.transform = `rotate(${(6-currentTime)*30}deg)`
-    console.log("Time left:", currentTime)
   } else {
     timeFillRight.style.transform = `rotate(-${currentTime*30}deg)`
+    timeFillLeft.style.transform = "rotate(0deg)"
   }
-  // console.log(sanityFill.style.height, 'sanity left')
-  // console.log(currentTime, 'time left')
+  // Low sanity alert animation
   if (0 < playerSanity && playerSanity <= 20) {
     if (!lowSanityInterval) {
       animateElement(sanityMeter, "heartBeat", 0, true)
@@ -127,36 +127,9 @@ function render(){
   }
   sceneArt.setAttribute("src", getSceneArt(storyScenario))
   storyText.textContent = getStoryText(storyScenario, storyTextIdx)
+  // Special story text cases
   if (storyText.textContent.includes("{")) {
-    let formattedText = ""
-    const regex = new RegExp ("\{(.*?)\}")
-    const timeMatches = storyText.textContent.match(regex)
-    if (timeMatches.some(e => e === "currentTime")) {
-      let formattedTime = currentTime
-      let formattedMinutes = Math.floor((formattedTime % 1) * 60).toString()
-      if (formattedMinutes === "0") {
-        formattedMinutes = "00"
-      } else {
-        formattedTime += 1
-        formattedMinutes = (60 - formattedMinutes).toString()
-      }
-      console.log("format time");
-      let formattedHours = Math.floor(formattedTime)
-      formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
-      // Calculate amount of time to sleep and return hours and minutes
-    } else if (timeMatches.some(e => e.includes("sleepTime"))) {
-      let timeChangeAmount = timeMatches[1].slice(-2, timeMatches[1].length)
-      let totalSleepTime = previousTime - currentTime - timeChangeAmount/60
-      let formattedMinutes = Math.ceil((totalSleepTime % 1) * 60)
-      if (formattedMinutes === 0) {
-        formattedMinutes = "00"
-      } else {
-        totalSleepTime -= 1
-      }
-      let formattedHours = Math.floor(totalSleepTime)
-      formattedText = storyText.textContent.replace(regex, `${formattedHours} hours and ${formattedMinutes} minutes`)
-    }
-    storyText.textContent = formattedText
+    storyText.textContent = formatSpecialCaseText()
   } else {
     previousTime = currentTime
   }
@@ -164,6 +137,7 @@ function render(){
     if (progressBtns.style.display !== "none"){
       toggleElementDisplay(progressBtns, "none")
     }
+    // Render endpoint and option to restart game
     toggleElementDisplay(continueStoryBtn, "initial")
     if (storyScenario.includes("Endpoint")){
       studyingMusic.pause()
@@ -176,6 +150,7 @@ function render(){
         }, 2000)
       }, 1000)
       toggleElementDisplay(progressBtns, "flex")
+      // Show valid scenario choices
     } else {
       toggleElementDisplay(resetBtn, "initial")
       toggleElementDisplay(playerChoices, "flex")
@@ -185,55 +160,21 @@ function render(){
       toggleElementDisplay(choice3, "none")
       toggleElementDisplay(choice4, "none")
       let currValidChoiceIdx = getValidTimeChoiceIdx(0)
-      if (Number.isInteger(currValidChoiceIdx)) {
-        console.log(currValidChoiceIdx, "Valid choice index")
-        choice1.textContent = getScenarioChoiceById(storyScenario, currValidChoiceIdx).text
-        animateElement(choice1, "slideInRight", 0.5)
-        toggleElementDisplay(choice1, "initial", 0.5)
+      console.log(currValidChoiceIdx)
+      if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5)) {
         currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-        if (Number.isInteger(currValidChoiceIdx)) {
-          choice2.textContent = getScenarioChoiceById(storyScenario, currValidChoiceIdx).text
-          animateElement(choice2, "slideInRight", 1)
-          toggleElementDisplay(choice2, "initial", 1)
+        if (setNextValidChoice(choice2, currValidChoiceIdx, 1)) {
           currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-          if (Number.isInteger(currValidChoiceIdx)) {
-            choice3.textContent = getScenarioChoiceById(storyScenario, currValidChoiceIdx).text
-            animateElement(choice3, "slideInRight", 1.5)
-            toggleElementDisplay(choice3, "initial", 1.5)
+          if (setNextValidChoice(choice3, currValidChoiceIdx, 1.5)) {
             currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-            if (Number.isInteger(currValidChoiceIdx)) {
-              choice4.textContent = getScenarioChoiceById(storyScenario, currValidChoiceIdx).text
-              animateElement(choice4, "slideInRight", 2)
-              toggleElementDisplay(choice4, "initial", 2)
-            } else {
-              storyScenario = "Interview"
-              choice4.textContent = "Go to interview"
-              animateElement(choice4, "slideInRight", 0)
-              toggleElementDisplay(choice4, "initial", 0)
-              isSkippingToInterview = true
+            if (setNextValidChoice(choice4, currValidChoiceIdx, 2)) {
+              currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
             }
-          } else {
-            storyScenario = "Interview"
-            choice3.textContent = "Go to interview"
-            animateElement(choice3, "slideInRight", 0)
-            toggleElementDisplay(choice3, "initial", 0)
-            isSkippingToInterview = true
           }
-        } else {
-          storyScenario = "Interview"
-          choice2.textContent = "Go to interview"
-          animateElement(choice2, "slideInRight", 0)
-          toggleElementDisplay(choice2, "initial", 0)
-          isSkippingToInterview = true
         }
-      } else {
-        storyScenario = "Interview"
-        choice1.textContent = "Go to interview"
-        animateElement(choice1, "slideInRight", 0)
-        toggleElementDisplay(choice1, "initial", 0)
-        isSkippingToInterview = true
       }
     }
+  // Show continue option for progressing through scenario
   } else {
     if (playerChoices.style.display !== "none") {
       toggleElementDisplay(playerChoices, "flex")
@@ -248,6 +189,52 @@ function render(){
     if (resetBtn.style.display !== "none"){
       toggleElementDisplay(resetBtn, "none")
     }
+  }
+}
+
+function formatSpecialCaseText(){
+  let formattedText = ""
+  const regex = new RegExp ("\{(.*?)\}")
+  const timeMatches = storyText.textContent.match(regex)
+  if (timeMatches.some(e => e === "currentTime")) {
+    let formattedTime = currentTime
+    let formattedMinutes = Math.floor((formattedTime % 1) * 60).toString()
+    if (formattedMinutes === "0") {
+      formattedMinutes = "00"
+    } else {
+      formattedTime += 1
+      formattedMinutes = (60 - formattedMinutes).toString()
+    }
+    console.log("format time");
+    let formattedHours = Math.floor(formattedTime)
+    formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
+    // Calculate amount of time to sleep and return hours and minutes
+  } else if (timeMatches.some(e => e.includes("sleepTime"))) {
+    let timeChangeAmount = timeMatches[1].slice(-2, timeMatches[1].length)
+    let totalSleepTime = previousTime - currentTime - timeChangeAmount/60
+    let formattedMinutes = Math.ceil((totalSleepTime % 1) * 60)
+    if (formattedMinutes === 0) {
+      formattedMinutes = "00"
+    } else {
+      totalSleepTime -= 1
+    }
+    let formattedHours = Math.floor(totalSleepTime)
+    formattedText = storyText.textContent.replace(regex, `${formattedHours} hours and ${formattedMinutes} minutes`)
+  }
+  return formattedText
+}
+
+function setNextValidChoice(button, startingChoiceIdx, animDelay){
+  if (Number.isInteger(startingChoiceIdx)) {
+    button.textContent = getScenarioChoiceById(storyScenario, startingChoiceIdx).text
+    animateElement(button, "slideInRight", animDelay)
+    toggleElementDisplay(button, "initial", animDelay)
+    return true
+  } else {
+    button.textContent = "Go to interview"
+    animateElement(button, "slideInRight", 0)
+    toggleElementDisplay(button, "initial", 0)
+    return false
   }
 }
 
@@ -268,18 +255,18 @@ function progressStory(){
 
 function playerChoiceResult(evt){
   if (evt.target.id !== "player-choices"){
+    storyTextIdx = 0
     let selectedChoice = evt.target
     let choiceObj = getScenarioChoiceByText(storyScenario, selectedChoice.textContent)
-    if (getScenarioItem(choiceObj.newStoryScenario)) {
-      console.log("Found item")
+    // Collect item from scenario
+    if (choiceObj && getScenarioItem(choiceObj.newStoryScenario)) {
       playerItems.push(getItemByName(getScenarioItem(choiceObj.newStoryScenario)))
       console.log(playerItems)
     }
     let wakeUsingSpecifiedTime = false
-    if (storyScenario !== "Interview") {
+    if (selectedChoice.textContent !== "Go to interview") {
       let sanityChangeAmount = choiceObj.sanityChange
       let timeChangeAmount = choiceObj.hoursUsed
-      // console.log(`Go to scenario ${storyScenario} and change sanity by ${sanityChangeAmount} and use up ${timeChangeAmount} hours`)
       updatePlayerSanityAmount(sanityChangeAmount)
       // Special case calculate hoursUsed from wake up time
       if (isNaN(timeChangeAmount)) {
@@ -300,19 +287,19 @@ function playerChoiceResult(evt){
         }
       }
       currentTime = Math.max(0, currentTime - timeChangeAmount)
-    }
-    storyTextIdx = 0
-    if (playerSanity === 0) {
-      storyScenario = "Endpoint - Stressed out"
-      render()
-    } else if (wakeUsingSpecifiedTime) {
-      render()
-    } else if (isSkippingToInterview) {
-      isSkippingToInterview = false
-      currentTime = 0
-      render()
+      if (playerSanity === 0) {
+        storyScenario = "Endpoint - Stressed out"
+        render()
+      } else if (wakeUsingSpecifiedTime) {
+        render()
+      } else {
+        storyScenario = choiceObj.newStoryScenario
+        render()
+      }
     } else {
-      storyScenario = choiceObj.newStoryScenario
+      storyScenario = "Interview"
+      currentTime = 0
+      console.log("Go to Interview");
       render()
     }
   }
@@ -327,6 +314,7 @@ function useItem(){
     updatePlayerSanityAmount(playerItems[0].sanityBoost)
     playerItems.shift()
   }
+  render()
 }
 
 function convertDecimalTimeTo12HourInt(decimalTime, startingTime){
@@ -356,15 +344,6 @@ function calculateRemainingTimeFromChoiceText(choiceTime){
     let endTime = endHour + (endMinutes/60)
     return (endTime - convertDecimalTimeTo12HourInt(currentTime, 8)) < 0 ? endTime + (12 - convertDecimalTimeTo12HourInt(currentTime, 8)) : endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
 }
-
-// function convertDecimalTimeToHoursMins(time) {
-//   let formattedMinutes = Math.floor((time % 1) * 60).toString()
-//       if (formattedMinutes === "0") {
-//         formattedMinutes = "00"
-//       }
-//       let formattedHours = Math.floor(time)
-//       return `${formattedHours}:${formattedMinutes}`
-// }
 
 function toggleLightDarkMode() {
   body.className = body.className === "" ? "dark" : ""
