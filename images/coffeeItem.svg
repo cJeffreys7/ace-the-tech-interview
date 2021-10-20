@@ -1,0 +1,10 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+	<title>coffeeItem</title>
+	<defs>
+		<image  width="32" height="28" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcAgMAAAB9rFWxAAAAAXNSR0IB2cksfwAAAAxQTFRFAAAAAAAA4PjPIUE6YyZC+QAAAAR0Uk5TAP///7MtQIgAAAAxSURBVHicY2BgYAgFAgYGvAw4gZMBURnKgJfBELpq1f//ofgYQFVAmiDjP2EGQX8BAMLRSQ0RcPLMAAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+	</style>
+	<use id="img3 copy" href="#img1" x="0" y="2" />
+</svg>

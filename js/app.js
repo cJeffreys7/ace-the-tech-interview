@@ -45,6 +45,7 @@ const statBar = document.querySelector("#stat-bar")
 const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
 const sanityBoosters = document.querySelector("#sanity-boosters")
+const sanityBoosterList = document.querySelector("#stat-icon-list")
 const timeFillLeft = document.querySelector(".left-progress")
 const timeFillRight = document.querySelector(".right-progress")
 const clockTime = document.querySelector("#clock-icon")
@@ -66,7 +67,8 @@ continueStoryBtn.addEventListener("click", progressStory)
 playerChoices.addEventListener("click", playerChoiceResult)
 startBtn.addEventListener("click", viewGameScreen)
 resetBtn.addEventListener("click", init)
-sanityBoosters.addEventListener("click", useItem)
+sanityBoosters.addEventListener("click", openBoosterList)
+sanityBoosterList.addEventListener("click", useBoosterItem)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
 // window.addEventListener("resize", resizeText)
 studyingMusic.addEventListener("ended", () => {
@@ -90,6 +92,8 @@ function init(){
   storyTextIdx = 0
   currentTime = 12
   playerItems = []
+  createBoosterItem("Coffee")
+  createBoosterItem("Cookie")
   storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
@@ -151,16 +155,17 @@ function render(){
       }, 1000)
       toggleElementDisplay(progressBtns, "flex")
       // Show valid scenario choices
-    } else {
+    } else if (playerChoices.style.display === "none") {
+      console.log((playerChoices.style.display));
       toggleElementDisplay(resetBtn, "initial")
       toggleElementDisplay(playerChoices, "flex")
       progressBtns.style.display = "none"
+      console.log("Determine choice visibility");
       toggleElementDisplay(choice1, "none")
       toggleElementDisplay(choice2, "none")
       toggleElementDisplay(choice3, "none")
       toggleElementDisplay(choice4, "none")
       let currValidChoiceIdx = getValidTimeChoiceIdx(0)
-      console.log(currValidChoiceIdx)
       if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5)) {
         currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
         if (setNextValidChoice(choice2, currValidChoiceIdx, 1)) {
@@ -260,8 +265,7 @@ function playerChoiceResult(evt){
     let choiceObj = getScenarioChoiceByText(storyScenario, selectedChoice.textContent)
     // Collect item from scenario
     if (choiceObj && getScenarioItem(choiceObj.newStoryScenario)) {
-      playerItems.push(getItemByName(getScenarioItem(choiceObj.newStoryScenario)))
-      console.log(playerItems)
+      createBoosterItem(getScenarioItem(choiceObj.newStoryScenario))
     }
     let wakeUsingSpecifiedTime = false
     if (selectedChoice.textContent !== "Go to interview") {
@@ -307,14 +311,37 @@ function playerChoiceResult(evt){
 
 function updatePlayerSanityAmount(changeInSanity) {
   playerSanity = Math.max(0, Math.min(playerSanity + changeInSanity, maxPlayerSanity))
+  // render()
 }
 
-function useItem(){
+function createBoosterItem(itemName) {
+  let newItem = getItemByName(itemName)
+  playerItems.push(newItem)
+  let newBoosterItem = document.createElement("div")
+  newBoosterItem.innerHTML = `
+  <div class="${newItem.name} booster-item-container carousel-item"><img class="booster-item" id="${newItem.name}" src="${newItem.icon}"></img><span>${newItem.name}</span></div>` // add to class name${playerItems.length === 1 ? "active" : ""}
+  sanityBoosterList.appendChild(newBoosterItem)
+  console.log(playerItems)
+}
+
+function openBoosterList(){
   if (playerItems.length) {
-    updatePlayerSanityAmount(playerItems[0].sanityBoost)
-    playerItems.shift()
+    toggleElementDisplay(sanityBoosterList, "flex")
   }
-  render()
+}
+
+function useBoosterItem(evt) {
+  let selectedItem = evt.target
+  if (selectedItem.className === "booster-item") {
+    updatePlayerSanityAmount(getItemByName(selectedItem.id).sanityBoost)
+    let itemIdx = playerItems.findIndex(e => e.name === selectedItem.id)
+    playerItems.splice(itemIdx, 1)
+    sanityBoosterList.children.item(itemIdx).remove()
+    if (!playerItems.length) {
+      toggleElementDisplay(sanityBoosterList, "flex")
+    }
+    render()
+  }
 }
 
 function convertDecimalTimeTo12HourInt(decimalTime, startingTime){

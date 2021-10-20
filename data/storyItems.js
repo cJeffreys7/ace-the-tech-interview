@@ -3,13 +3,15 @@ const items = [
     type: "booster",
     name: "Coffee",
     description: "Electricity in a tumbler",
-    sanityBoost: 30
+    sanityBoost: 30,
+    icon: "./images/coffeeItem.svg"
   },
   {
     type: "booster",
     name: "Cookie",
     description: "Sweet, nutty deliciousness",
-    sanityBoost: 20
+    sanityBoost: 20,
+    icon: "./images/cookieItem.svg"
   }
 ]
 

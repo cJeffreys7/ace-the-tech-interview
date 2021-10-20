@@ -80,14 +80,42 @@ h1 {
 
 #stat-bar {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  flex-direction: column;
+}
+
+#stat-bar-menu, #stat-icon-list {
+  display: flex;
   justify-content: space-evenly;
   align-items: center;
   height: 80px;
-  width: 95%;
+  width: 100%;
   background-color: var(--stat-bar-bg);
   border: var(--border) 2px solid;
   border-radius: 40px;
   margin: 12px;
+}
+
+#stat-icon-list {
+  display: none;
+  justify-content: flex-start;
+  /* width: 80px; */
+  width: fit-content;
+}
+
+.booster-item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 12px 0;
+}
+
+.booster-item {
+  height: 48px;
+  width: 48px;
 }
 
 .icon-container {
@@ -233,9 +261,40 @@ h1 {
   
   #stat-bar {
     grid-area: stat-bar;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    height: 572px;
+    width: 70px;
+  }
+
+  #stat-bar-menu, #stat-icon-list  {
+    position: absolute;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
     flex-direction: column;
     height: 572px;
     width: 80px;
+  }
+
+  #stat-icon-list {
+    display: none;
+    justify-content: flex-start;
+    position: absolute;
+    width: 80px;
+    left: 100px;
+    /* height: 80px; */
+    height: fit-content;
+  }
+
+  .booster-item-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 6px 10px 6px;
   }
 
   #scene-art-section {
