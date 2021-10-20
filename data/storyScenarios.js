@@ -61,7 +61,8 @@ const storyScenarios = [
         hoursUsed: .5,
         newStoryScenario: "Search the pantry"
       }
-    ]
+    ],
+    item: "codeConcept"
   },
   {
     scenario: "Search online for a solution",
@@ -92,7 +93,8 @@ const storyScenarios = [
         hoursUsed: 1,
         newStoryScenario: "Mock interview"
       }
-    ]
+    ],
+    item: "codeConcept"
   },
   {
     scenario: "Watch videos",
@@ -165,8 +167,8 @@ const storyScenarios = [
         hoursUsed: 1,
         newStoryScenario: "Mock interview"
       }
-    ]
-
+    ],
+    item: "codeConcept"
   },
   {
     scenario: "Prep coffee",
@@ -534,7 +536,8 @@ const storyScenarios = [
         hoursUsed: .5,
         newStoryScenario: "Workout"
       }
-    ]
+    ],
+    item: "codeConcept"
   },
   {
     scenario: "Dress",

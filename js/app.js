@@ -28,12 +28,12 @@
 /* ---------- Constants ---------- */
 
 import { getStoryText, getDoesStoryNeedAChoice,  getScenarioChoiceById, getScenarioChoiceByText, getTotalScenarioChoices, getScenarioItem, getSceneArt, getSceneSound } from "../data/storyScenarios.js"
-import { getItemByName } from "../data/storyItems.js"
+import { getItemByName, getItemsOfType } from "../data/storyItems.js"
 const studyingMusic = new Audio("../audio/Crash Landing.mp3")
 
 /* ---------- Variables ---------- */
 
-let playerSanity, maxPlayerSanity, playerItems, storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound
+let playerSanity, maxPlayerSanity, playerItems, playerCodeConcepts,  storyScenario, storyTextIdx, lowSanityInterval, currentTime, previousTime, sceneSound
 
 /* ---------- Cached Element References ---------- */
 
@@ -45,10 +45,12 @@ const statBar = document.querySelector("#stat-bar")
 const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
 const sanityBoosters = document.querySelector("#sanity-boosters")
-const sanityBoosterList = document.querySelector("#stat-icon-list")
+const sanityBoosterList = document.querySelector("#booster-icon-list")
 // const sanityBoosterCarousel = document.querySelector(".carousel")
 // const nextSanityBoosterBtn = document.querySelector(".carousel-control-prev")
 // const prevSanityBoosterBtn = document.querySelector(".carousel-control-next")
+const codeConcepts = document.querySelector("#code-concepts")
+const codeConceptList = document.querySelector("#code-icon-list")
 const timeFillLeft = document.querySelector(".left-progress")
 const timeFillRight = document.querySelector(".right-progress")
 const clockTime = document.querySelector("#clock-icon")
@@ -72,6 +74,7 @@ startBtn.addEventListener("click", viewGameScreen)
 resetBtn.addEventListener("click", init)
 sanityBoosters.addEventListener("click", openBoosterList)
 sanityBoosterList.addEventListener("click", useBoosterItem)
+codeConcepts.addEventListener("click", openCodeToolbox)
 // prevSanityBoosterBtn.addEventListener("click", getNextBoosterItem)
 // nextSanityBoosterBtn.addEventListener("click", getPreviousBoosterItem)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
@@ -97,12 +100,13 @@ function init(){
   storyTextIdx = 0
   currentTime = 12
   playerItems = []
+  playerCodeConcepts = []
   storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
   studyingMusic.currentTime = 0
-  studyingMusic.play()
+  // studyingMusic.play()
   checkDarkPref()
   render()
 }
@@ -159,11 +163,9 @@ function render(){
       toggleElementDisplay(progressBtns, "flex")
       // Show valid scenario choices
     } else if (playerChoices.style.display === "none") {
-      console.log((playerChoices.style.display));
       toggleElementDisplay(resetBtn, "initial")
       toggleElementDisplay(playerChoices, "flex")
       progressBtns.style.display = "none"
-      console.log("Determine choice visibility");
       toggleElementDisplay(choice1, "none")
       toggleElementDisplay(choice2, "none")
       toggleElementDisplay(choice3, "none")
@@ -266,9 +268,17 @@ function playerChoiceResult(evt){
     storyTextIdx = 0
     let selectedChoice = evt.target
     let choiceObj = getScenarioChoiceByText(storyScenario, selectedChoice.textContent)
-    // Collect item from scenario
-    if (choiceObj && getScenarioItem(choiceObj.newStoryScenario)) {
-      createUniqueBoosterItem(getScenarioItem(choiceObj.newStoryScenario))
+    if (choiceObj) {
+      let scenarioItem = getScenarioItem(choiceObj.newStoryScenario)
+      // Collect item from scenario
+      if (scenarioItem) {
+        if (scenarioItem === "codeConcept") {
+          createUniqueCodeConcept(scenarioItem)
+          console.log("Added new code concept")
+        } else {
+          createUniqueBoosterItem(scenarioItem)
+        }
+      }
     }
     let wakeUsingSpecifiedTime = false
     if (selectedChoice.textContent !== "Go to interview") {
@@ -332,11 +342,39 @@ function createUniqueBoosterItem(itemName) {
   }
 }
 
+function createUniqueCodeConcept(itemName) {
+  if (playerCodeConcepts.length < getItemsOfType(itemName).length) {
+    let newCodeItem = null
+    do {
+      newCodeItem = getItemsOfType(itemName)[Math.floor(Math.random() * (getItemsOfType(itemName).length - 1))]
+    } while (playerCodeConcepts.includes(newCodeItem))
+    playerCodeConcepts.push(newCodeItem)
+    let newCodeConcept = document.createElement("div")
+    newCodeConcept.innerHTML = `
+    <div class="${newCodeItem.name} booster-item-container">
+      <img class="booster-item" id="${newCodeItem.name}" src="./images/binary-code.svg">
+        <span>${newCodeItem.name}</span>
+    </div>`
+    // add to class name for carousel ${playerItems.length === 1 ? "carousel-item active" : "carousel-item"}
+    codeConceptList.appendChild(newCodeConcept)
+  }
+}
+
 function openBoosterList(){
   if (playerItems.length) {
+    console.log(sanityBoosterList);
     toggleElementDisplay(sanityBoosterList, "flex")
   } else {
     animateElement(sanityBoosters, "shakeX", 0, true)
+  }
+}
+
+function openCodeToolbox(){
+  if (playerCodeConcepts.length) {
+    console.log(codeConceptList);
+    toggleElementDisplay(codeConceptList, "flex")
+  } else {
+    animateElement(codeConcepts, "shakeX", 0, true)
   }
 }
 
