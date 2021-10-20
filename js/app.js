@@ -18,7 +18,7 @@
 // // Flush out styling to better match wireframe
 // // Flush out story details to create interesting scenarios
 // // Implement time mechanic
-// Implement sanity booster mechanic
+// // Implement sanity booster mechanic
 // Implement coder toolbox mechanic
 // // Move storyTextArr, scenarioChoicesArr, sceneArtArr to data/storyScenarios.js and access data through exported getFunctions
 // // Improve placeholder story art
@@ -46,6 +46,9 @@ const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
 const sanityBoosters = document.querySelector("#sanity-boosters")
 const sanityBoosterList = document.querySelector("#stat-icon-list")
+// const sanityBoosterCarousel = document.querySelector(".carousel")
+// const nextSanityBoosterBtn = document.querySelector(".carousel-control-prev")
+// const prevSanityBoosterBtn = document.querySelector(".carousel-control-next")
 const timeFillLeft = document.querySelector(".left-progress")
 const timeFillRight = document.querySelector(".right-progress")
 const clockTime = document.querySelector("#clock-icon")
@@ -69,6 +72,8 @@ startBtn.addEventListener("click", viewGameScreen)
 resetBtn.addEventListener("click", init)
 sanityBoosters.addEventListener("click", openBoosterList)
 sanityBoosterList.addEventListener("click", useBoosterItem)
+// prevSanityBoosterBtn.addEventListener("click", getNextBoosterItem)
+// nextSanityBoosterBtn.addEventListener("click", getPreviousBoosterItem)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
 // window.addEventListener("resize", resizeText)
 studyingMusic.addEventListener("ended", () => {
@@ -92,8 +97,6 @@ function init(){
   storyTextIdx = 0
   currentTime = 12
   playerItems = []
-  createBoosterItem("Coffee")
-  createBoosterItem("Cookie")
   storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
@@ -265,7 +268,7 @@ function playerChoiceResult(evt){
     let choiceObj = getScenarioChoiceByText(storyScenario, selectedChoice.textContent)
     // Collect item from scenario
     if (choiceObj && getScenarioItem(choiceObj.newStoryScenario)) {
-      createBoosterItem(getScenarioItem(choiceObj.newStoryScenario))
+      createUniqueBoosterItem(getScenarioItem(choiceObj.newStoryScenario))
     }
     let wakeUsingSpecifiedTime = false
     if (selectedChoice.textContent !== "Go to interview") {
@@ -314,21 +317,43 @@ function updatePlayerSanityAmount(changeInSanity) {
   // render()
 }
 
-function createBoosterItem(itemName) {
+function createUniqueBoosterItem(itemName) {
   let newItem = getItemByName(itemName)
-  playerItems.push(newItem)
-  let newBoosterItem = document.createElement("div")
-  newBoosterItem.innerHTML = `
-  <div class="${newItem.name} booster-item-container carousel-item"><img class="booster-item" id="${newItem.name}" src="${newItem.icon}"></img><span>${newItem.name}</span></div>` // add to class name${playerItems.length === 1 ? "active" : ""}
-  sanityBoosterList.appendChild(newBoosterItem)
-  console.log(playerItems)
+  if (!playerItems.includes(newItem)) {
+    playerItems.push(newItem)
+    let newBoosterItem = document.createElement("div")
+    newBoosterItem.innerHTML = `
+    <div class="${newItem.name} booster-item-container">
+      <img class="booster-item" id="${newItem.name}" src="${newItem.icon}">
+        <span>${newItem.name}</span>
+    </div>`
+    // add to class name for carousel ${playerItems.length === 1 ? "carousel-item active" : "carousel-item"}
+    sanityBoosterList.appendChild(newBoosterItem)
+  }
 }
 
 function openBoosterList(){
   if (playerItems.length) {
     toggleElementDisplay(sanityBoosterList, "flex")
+  } else {
+    animateElement(sanityBoosters, "shakeX", 0, true)
   }
 }
+
+// function getNextBoosterItem(){
+//   nextSanityBoosterBtn.dataset.bsSlide = "prev"
+//   console.log(nextSanityBoosterBtn.dataset.bsSlide);
+//   // for (let i = 0; i < sanityBoosterList.children.length; i++) {
+//   //   if (sanityBoosterList.children.item(i).innerHTML.includes("active") && i !== sanityBoosterList.children.length - 1) {
+//   //     sanityBoosterList.children.item(i).innerHTML.replace("active", "")
+//   //     sanityBoosterList.children.item(i).innerHTML.replace
+//   //   }
+//   // }
+// }
+
+// function getPreviousBoosterItem(){
+
+// }
 
 function useBoosterItem(evt) {
   let selectedItem = evt.target

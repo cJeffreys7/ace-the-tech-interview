@@ -170,7 +170,7 @@ const storyScenarios = [
   },
   {
     scenario: "Prep coffee",
-    text: ["You head into the kitchen and pull out the dark roast.", "The smell kick starts the senses, helps clear your mind.", "The smoky auroma fills the room as the water begins to run through the filter.", "You take a moment to enjoy the full body taste. It courses through you, fills your body with electricity.", "You are glad to started a fresh tumbler, you can always come back to it later.", "That gives you the boost you need. You are ready to keep studying."],
+    text: ["You head into the kitchen and pull out the dark roast.", "The smell kick starts the senses, helps clear your mind.", "The smoky auroma fills the room as the water begins to run through the filter.", "You take a moment to enjoy the full body taste. It courses through you, fills your body with electricity.", "You are glad to started a fresh pot, you can always come back to it later.", "That gives you the boost you need. You are ready to keep studying."],
     imgSrc: "./images/sceneArtCoffee.svg",
     audio: "./audio/Retro Event StereoUP 02.wav",
     choices: [
