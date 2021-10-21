@@ -67,7 +67,7 @@ const storyScenarios = [
   },
   {
     scenario: "Tutorial 4 coffee",
-    text: ["You can access your sanity boosters if you have any by pressing the party hat button.", "These sanity boosters may be the only thing that can help you keep your cool during crunch time, so make sure to use them wisely!"],
+    text: ["You can access your sanity boosters if you have any by pressing the party hat button.", "These sanity boosters may be the only thing that can help you keep your cool during crunch time, so use them wisely!"],
     imgSrc: "./images/sceneArtStart.svg",
     audio: "./audio/Retro Event StereoUP 02.wav",
     choices: [

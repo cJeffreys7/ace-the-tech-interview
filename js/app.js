@@ -445,7 +445,21 @@ function updateClockTimeAmount(timeChangeAmount) {
 
 function openBoosterList(){
   if (playerItems.length) {
-    toggleElementDisplay(sanityBoosterList, "flex")
+    let fadeInAnim, fadeOutAnim
+    if (window.innerWidth < 768) {
+      fadeInAnim = "fadeInDown"
+      fadeOutAnim = "fadeOutUp"
+    } else {
+      fadeInAnim = "fadeInLeft"
+      fadeOutAnim = "fadeOutLeft"
+    }
+    if (sanityBoosterList.style.display !== "none") {
+      animateElement(sanityBoosterList, fadeOutAnim, 0, true)
+      toggleElementDisplay(sanityBoosterList, "none", 1)
+    } else {
+      toggleElementDisplay(sanityBoosterList, "flex")
+      animateElement(sanityBoosterList, fadeInAnim, 0, true)
+    }
   } else {
     animateElement(sanityBoosters, "shakeX", 0, true)
   }
@@ -453,7 +467,21 @@ function openBoosterList(){
 
 function openCodeToolbox(){
   if (playerCodeConcepts.length) {
-    toggleElementDisplay(codeConceptList, "flex")
+    let fadeInAnim, fadeOutAnim
+    if (window.innerWidth < 768) {
+      fadeInAnim = "fadeInDown"
+      fadeOutAnim = "fadeOutUp"
+    } else {
+      fadeInAnim = "fadeInLeft"
+      fadeOutAnim = "fadeOutLeft"
+    }
+    if (codeConceptList.style.display !== "none") {
+      animateElement(codeConceptList, fadeOutAnim, 0, true)
+      toggleElementDisplay(codeConceptList, "none", 1)
+    } else {
+      toggleElementDisplay(codeConceptList, "flex")
+      animateElement(codeConceptList, fadeInAnim, 0, true)
+    }
   } else {
     animateElement(codeConcepts, "shakeX", 0, true)
   }

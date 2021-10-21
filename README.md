@@ -55,7 +55,7 @@
 - [x] Implement stat bar tutorial
 - [x] Implement visual feedback when sanity changes, adding or using Sanity Boosters, adding or utilizing Coder Toolbox items, and Time changes
 - [x] Polish scene art
-- [ ] Transition animation for Sanity Booster and Coder Toolbox submenus
+- [x] Transition animation for Sanity Booster and Coder Toolbox submenus
 - [ ] Carousel for offscreen items in Sanity Booster and Coder Toolbox submenus
 - [ ] Refactor data objects to inherit from .__prototype__ objects
 - [ ] Sounds that can be triggered in the middle of scenarios and not just at the start of a new scenario
