@@ -171,6 +171,7 @@ function render(){
       toggleElementDisplay(choice3, "none")
       toggleElementDisplay(choice4, "none")
       let currValidChoiceIdx = 0
+      console.log("Show interview choices:", storyScenario.includes("Interview"))
       if (storyScenario.includes("Interview")) {
         currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx)
         if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5, true)) {
@@ -283,12 +284,14 @@ function toggleElementDisplay(element, value, secondsToDelay) {
 }
 
 function progressStory(){
+  closeOpenMenus()
   storyTextIdx++
   render()
 }
 
 function playerChoiceResult(evt){
-  if (evt.target.id !== "player-choices"){
+  if (evt.target.id !== "player-choices") {
+    closeOpenMenus()
     storyTextIdx = 0
     let selectedChoice = evt.target
     let choiceObj = getScenarioChoiceByText(storyScenario, selectedChoice.textContent)
@@ -339,7 +342,6 @@ function playerChoiceResult(evt){
     } else {
       storyScenario = "Interview"
       currentTime = 0
-      console.log("Go to Interview");
       render()
     }
   }
@@ -347,7 +349,6 @@ function playerChoiceResult(evt){
 
 function updatePlayerSanityAmount(changeInSanity) {
   playerSanity = Math.max(0, Math.min(playerSanity + changeInSanity, maxPlayerSanity))
-  // render()
 }
 
 function createUniqueBoosterItem(itemName) {
@@ -387,7 +388,6 @@ function createUniqueCodeConcept(itemName) {
 
 function openBoosterList(){
   if (playerItems.length) {
-    console.log(sanityBoosterList);
     toggleElementDisplay(sanityBoosterList, "flex")
   } else {
     animateElement(sanityBoosters, "shakeX", 0, true)
@@ -399,6 +399,15 @@ function openCodeToolbox(){
     toggleElementDisplay(codeConceptList, "flex")
   } else {
     animateElement(codeConcepts, "shakeX", 0, true)
+  }
+}
+
+function closeOpenMenus(){
+  if (sanityBoosterList.style.display !== "none") {
+    sanityBoosterList.style.display = "none"
+  }
+  if (codeConceptList.style.display !== "none") {
+    codeConceptList.style.display = "none"
   }
 }
 

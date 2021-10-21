@@ -7,8 +7,8 @@ const storyScenarios = [
     choices: [
       { 
         text: "Review past projects",
-        sanityChange: -10,
-        hoursUsed: 1, 
+        sanityChange: -25,
+        hoursUsed: .5, 
         newStoryScenario: "Review projects"
       },
       { 
@@ -89,9 +89,9 @@ const storyScenarios = [
       },
       { 
         text: "Try a Mock Tech Interview problem", 
-        sanityChange: -20, 
-        hoursUsed: 1,
-        newStoryScenario: "Mock interview"
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview"
       }
     ],
     item: "codeConcept"
@@ -103,9 +103,9 @@ const storyScenarios = [
     audio: "./audio/Retro Magic 34.wav",
     choices: [
       { 
-        text: "Review past projects", 
-        sanityChange: -10, 
-        hoursUsed: 1,
+        text: "Review past projects",
+        sanityChange: -25,
+        hoursUsed: .5, 
         newStoryScenario: "Review projects"
       },
       { 
@@ -144,9 +144,9 @@ const storyScenarios = [
     audio: "./audio/Retro PowerUp 09.wav",
     choices: [
       { 
-        text: "Review past projects", 
-        sanityChange: -10, 
-        hoursUsed: 1,
+        text: "Review past projects",
+        sanityChange: -25,
+        hoursUsed: .5, 
         newStoryScenario: "Review projects"
       },
       { 
@@ -163,9 +163,9 @@ const storyScenarios = [
       },
       { 
         text: "Try a Mock Tech Interview problem", 
-        sanityChange: -20, 
-        hoursUsed: 1,
-        newStoryScenario: "Mock interview"
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview"
       }
     ],
     item: "codeConcept"
@@ -177,9 +177,9 @@ const storyScenarios = [
     audio: "./audio/Retro Event StereoUP 02.wav",
     choices: [
       { 
-        text: "Review past projects", 
-        sanityChange: -10, 
-        hoursUsed: 1,
+        text: "Review past projects",
+        sanityChange: -25,
+        hoursUsed: .5, 
         newStoryScenario: "Review projects"
       },
       { 
@@ -205,14 +205,14 @@ const storyScenarios = [
   },
   {
     scenario: "Search the pantry",
-    text: ["Can't fill your mind on an empty stomach.", "You rifle through the pantry to find a quick bite to eat.", "You spot some macadamia nut cookies. That gives you a quick boost.", "You grab a few more, to help you keep burning the midnight oil.", "Now that you've got some sustenance, you are ready to get back to it."],
+    text: ["Can't fill your mind on an empty stomach.", "You rifle through the pantry to find a quick bite to eat.", "You spot some macadamia nut cookies. That gives you a quick boost.", "You throw one in your pocket, just in case you need a little pick-me-up.", "Now that you've got some sustenance, you are ready to get back to it."],
     imgSrc: "./images/sceneArtPantry.svg",
     audio: "./audio/Retro Event StereoUP 02.wav",
     choices: [
       { 
-        text: "Review past projects", 
-        sanityChange: -10, 
-        hoursUsed: 1,
+        text: "Review past projects",
+        sanityChange: -25,
+        hoursUsed: .5, 
         newStoryScenario: "Review projects"
       },
       { 
@@ -233,11 +233,141 @@ const storyScenarios = [
         hoursUsed: .5,
         newStoryScenario: "Prep coffee"
       }
+    ],
+    item: "Cookie"
+  },
+  {
+    scenario: "Mock Interview",
+    text: ["You feel ready to try a practice round. You find a fresh question that you haven't tackled before.", "You settle in and begin reading the specs outloud.", "As you finish the spec list, you begin asking your mock interviewer some clarifying questions.", "You respond back to yourself with some more specs and try to throw yourself a curveball edgecase.", "You begin talking through your plan of attack, describing how you would first approach the problem.", "As you talk through the problem, you reach into your back pocket of design patterns you have recently seen. Which one will work best?"],
+    imgSrc: "./images/sceneArtMockInterview.svg",
+    audio: "./audio/Retro Electronic Burst StereoUP 04.wav",
+    choices: [
+      { 
+        text: "Toss in a reduce method", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 2",
+        codeConcept: "Reduce method"
+      },
+      { 
+        text: "Filter the array", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 2",
+        codeConcept: "Filter method"
+      },
+      { 
+        text: "Try throwing a map method in there", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 2",
+        codeConcept: "Map method"
+      },
+      { 
+        text: "For loop in a for loop", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 2",
+        codeConcept: "Nested for loop"
+      },
+      { 
+        text: "Initialize a large, hard coded array", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 2",
+        codeConcept: "Hard coded array"
+      },
+      { 
+        text: "Do some research to find solution", 
+        sanityChange: -20, 
+        hoursUsed: .5,
+        newStoryScenario: "Search online for a solution",
+        codeConcept: ""
+      }
     ]
   },
   {
-    scenario: "Mock interview",
-    text: ["You feel ready to try a practice round. You find a fresh question that you haven't tackled before.", "You settle in and begin reading the specs outloud.", "As you finish the spec list, you begin asking your mock interviewer some clarifying questions.", "You respond back to yourself with some more specs and try to throw yourself a curveball edgecase.", "You begin talking through your plan of attack, describing how you would first approach the problem.", "As you talk through the problem, you reach into your back pocket of design patterns you have recently seen. Which one will work best?", "It's a clunky approach, but it will hopefully get you where you want to go. You can clean up your function later.", "You begin coding it out, and you don't quite get it working.", "You talk through where you think you got off track, then rework the problem.", "Fortunately you get your brute force solution working and have passed some tests.", "Now the challenging part, your mock interviewer asks if you can optimize this solution further.", "You try to go for a logrithmic complexity and propose a refactored version of your initial attempt.", "You code it out, and your code passes the tests again.", "You feel relieved that you were able to use what you've learned so far to go through a mock problem.", "You're feeling tired, but perhaps you want to keep going, just in case you need some more ammunition for 8am."],
+    scenario: "Mock Interview 2",
+    text: ["It's a clunky approach, but it will hopefully get you where you want to go. You can clean up your function later.", "You begin coding it out, and you don't quite get it working.", "You talk through where you think you got off track. How should you rework the problem?"],
+    imgSrc: "./images/sceneArtMockInterview.svg",
+    audio: "./audio/Retro Electronic Burst StereoUP 04.wav",
+    choices: [
+      { 
+        text: "Handle the edge case with a different return statement", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 3",
+        codeConcept: "Handle edge cases"
+      },
+      { 
+        text: "Refactor the initial if statement", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 3",
+        codeConcept: "Refactor"
+      },
+      { 
+        text: "Include the last element in the loop condition", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 3",
+        codeConcept: "Iterate all elements"
+      },
+      { 
+        text: "Get some console logs in there to identify the issue", 
+        sanityChange: 0, 
+        hoursUsed: 0,
+        newStoryScenario: "Mock Interview 3",
+        codeConcept: "Console log"
+      },
+      { 
+        text: "Do some research to find solution", 
+        sanityChange: -20, 
+        hoursUsed: .5,
+        newStoryScenario: "Search online for a solution",
+        codeConcept: ""
+      }
+    ]
+  },
+  {
+    scenario: "Mock Interview 3",
+    text: ["Fortunately you get your brute force solution working and have passed some tests.", "Now the challenging part, your mock interviewer asks if you can optimize this solution further.", "You try to go for a logrithmic complexity and propose a refactored version of your initial attempt."],
+    imgSrc: "./images/sceneArtMockInterview.svg",
+    audio: "./audio/Retro Electronic Burst StereoUP 04.wav",
+    choices: [
+      { 
+        text: "Use a binary search tree", 
+        sanityChange: 0, 
+        hoursUsed: .5,
+        newStoryScenario: "Finish Mock interview",
+        codeConcept: "Binary search tree"
+      },
+      { 
+        text: "Refactor to a recursive function", 
+        sanityChange: 0, 
+        hoursUsed: .5,
+        newStoryScenario: "Finish Mock interview",
+        codeConcept: "Recursion"
+      },
+      { 
+        text: "Try to perform a merge sort", 
+        sanityChange: 0, 
+        hoursUsed: .5,
+        newStoryScenario: "Finish Mock interview",
+        codeConcept: "Merge sort"
+      },
+      { 
+        text: "Do some research to find solution", 
+        sanityChange: -20, 
+        hoursUsed: .5,
+        newStoryScenario: "Search online for a solution",
+        codeConcept: ""
+      }
+    ]
+  },
+  {
+    scenario: "Finish Mock interview",
+    text: ["You code it out, and your code passes the tests again.", "You feel relieved that you were able to use what you've learned so far to go through a mock problem.", "You're feeling tired, but perhaps you want to keep going, just in case you need some more ammunition for 8am."],
     imgSrc: "./images/sceneArtMockInterview.svg",
     audio: "./audio/Retro Electronic Burst StereoUP 04.wav",
     choices: [
@@ -316,7 +446,7 @@ const storyScenarios = [
   },
   {
     scenario: "Stare at ceiling",
-    text: ["If you fall asleep in 20 minutes, you will have {sleepTime20} to sleep.", "35 minutes pass, so you readjust your calculations and determine you will now have {sleepTime35} to sleep.", "As your mind keeps track of the time and total sleep time you would have if your mind wasn't keeping tabs of the time, you stare angrily at the ceiling.", "You wish your brain would stop thinking and relax, but there is too much activity rapidfiring to get you into the mindset of sleep.", "Finally, after about 2 hours of overthinking sleep, you drift unawares into an uneasy slumber.", "Suddenly, the alarm is blaring in your ear. The time has come."],
+    text: ["If you fall asleep in 20 minutes, you will have {sleepTime20} to sleep.", "35 minutes pass, so you readjust your calculations and determine you will now have {sleepTime35} to sleep.", "As your mind keeps track of the time and total sleep time you would have if your mind wasn't keeping tabs of the time, you stare angrily at the ceiling.", "You wish your brain would stop thinking and relax, but there is too much activity rapidfiring to get you into the mindset of sleep.", "Finally, after about an hour of overthinking sleep, you drift unawares into an uneasy slumber.", "Suddenly, the alarm is blaring in your ear. The time has come."],
     imgSrc: "./images/sceneArtStareCeiling.svg",
     audio: "./audio/Retro Owl 01.wav",
     choices: [
