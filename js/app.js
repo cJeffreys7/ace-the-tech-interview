@@ -48,9 +48,6 @@ const sanityIndicator = document.querySelector("#sanity-change-indicator")
 const sanityBoosters = document.querySelector("#sanity-boosters")
 const sanityBoosterList = document.querySelector("#booster-icon-list")
 const sanityBoosterIndicator = document.querySelector("#booster-change-indicator")
-// const sanityBoosterCarousel = document.querySelector(".carousel")
-// const nextSanityBoosterBtn = document.querySelector(".carousel-control-prev")
-// const prevSanityBoosterBtn = document.querySelector(".carousel-control-next")
 const codeConcepts = document.querySelector("#code-concepts")
 const codeConceptList = document.querySelector("#code-icon-list")
 const codeConceptIndicator = document.querySelector("#code-change-indicator")
@@ -79,10 +76,7 @@ resetBtn.addEventListener("click", init)
 sanityBoosters.addEventListener("click", openBoosterList)
 sanityBoosterList.addEventListener("click", useBoosterItem)
 codeConcepts.addEventListener("click", openCodeToolbox)
-// prevSanityBoosterBtn.addEventListener("click", getNextBoosterItem)
-// nextSanityBoosterBtn.addEventListener("click", getPreviousBoosterItem)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
-// window.addEventListener("resize", resizeText)
 studyingMusic.addEventListener("ended", () => {
   studyingMusic.currentTime = 0
   studyingMusic.play()
@@ -110,7 +104,7 @@ function tutorialInit(){
   progressBtns.style.display = "flex"
   statBar.className = sceneArt.className = ""
   studyingMusic.currentTime = 0
-  // studyingMusic.play()
+  studyingMusic.play()
   render()
 }
 
@@ -136,6 +130,36 @@ function render(){
     studyingMusic.pause()
   }
   sanityFill.style.height = `${(playerSanity/maxPlayerSanity) * 100}%`
+  renderClock()
+  // Low sanity alert animation
+  indicateIfLowSanity()
+  sceneArt.setAttribute("src", getSceneArt(storyScenario))
+  storyText.textContent = getStoryText(storyScenario, storyTextIdx)
+  // Special story text cases
+  if (storyText.textContent.includes("{")) {
+    storyText.textContent = formatSpecialCaseText()
+  } else {
+    previousTime = currentTime
+  }
+  if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
+    if (progressBtns.style.display !== "none") {
+      toggleElementDisplay(progressBtns, "none")
+    }
+    toggleElementDisplay(continueStoryBtn, "initial")
+    if (storyScenario.includes("Endpoint")) {
+      // Render endpoint and option to restart game
+      animateStoryEndPoint()
+    } else if (playerChoices.style.display === "none") {
+      // Show valid scenario choices
+      renderValidChoices()
+    }
+  // Show continue option for progressing through scenario
+  } else {
+    renderContinueOption()
+  }
+}
+
+function renderClock(){
   clockTime.style.transform = `rotate(-${currentTime*30}deg)`
   if (currentTime < 6) {
     timeFillRight.style.transform = "rotate(-180deg)"
@@ -144,7 +168,9 @@ function render(){
     timeFillRight.style.transform = `rotate(-${currentTime*30}deg)`
     timeFillLeft.style.transform = "rotate(0deg)"
   }
-  // Low sanity alert animation
+}
+
+function indicateIfLowSanity(){
   if (0 < playerSanity && playerSanity <= 20) {
     if (!lowSanityInterval) {
       animateElement(sanityMeter, "heartBeat", 0, true)
@@ -156,86 +182,74 @@ function render(){
       clearInterval(lowSanityInterval)
       lowSanityInterval = null
   }
-  sceneArt.setAttribute("src", getSceneArt(storyScenario))
-  storyText.textContent = getStoryText(storyScenario, storyTextIdx)
-  // Special story text cases
-  if (storyText.textContent.includes("{")) {
-    storyText.textContent = formatSpecialCaseText()
-  } else {
-    previousTime = currentTime
-  }
-  if (getDoesStoryNeedAChoice(storyScenario, storyTextIdx)) {
-    if (progressBtns.style.display !== "none"){
-      toggleElementDisplay(progressBtns, "none")
-    }
-    // Render endpoint and option to restart game
-    toggleElementDisplay(continueStoryBtn, "initial")
-    if (storyScenario.includes("Endpoint")){
-      studyingMusic.pause()
-      setTimeout(() => {
-        animateElement(statBar, "fadeOut")
-        animateElement(sceneArt, "fadeOut")
-        setTimeout(() => {
-          animateElement(resetBtn, "fadeIn")
-          toggleElementDisplay(resetBtn, "initial")
-        }, 2000)
-      }, 1000)
-      toggleElementDisplay(progressBtns, "flex")
-      // Show valid scenario choices
-    } else if (playerChoices.style.display === "none") {
+}
+
+function animateStoryEndPoint(){
+  studyingMusic.pause()
+  setTimeout(() => {
+    animateElement(statBar, "fadeOut")
+    animateElement(sceneArt, "fadeOut")
+    setTimeout(() => {
+      animateElement(resetBtn, "fadeIn")
       toggleElementDisplay(resetBtn, "initial")
-      toggleElementDisplay(playerChoices, "flex")
-      progressBtns.style.display = "none"
-      toggleElementDisplay(choice1, "none")
-      toggleElementDisplay(choice2, "none")
-      toggleElementDisplay(choice3, "none")
-      toggleElementDisplay(choice4, "none")
-      let currValidChoiceIdx = 0
-      if (storyScenario.includes("Interview")) {
-        currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx)
-        if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5, true)) {
+    }, 2000)
+  }, 1000)
+  toggleElementDisplay(progressBtns, "flex")
+}
+
+function renderValidChoices(){
+  toggleElementDisplay(resetBtn, "initial")
+  toggleElementDisplay(playerChoices, "flex")
+  progressBtns.style.display = "none"
+  toggleElementDisplay(choice1, "none")
+  toggleElementDisplay(choice2, "none")
+  toggleElementDisplay(choice3, "none")
+  toggleElementDisplay(choice4, "none")
+  let currValidChoiceIdx = 0
+  if (storyScenario.includes("Interview")) {
+    currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx)
+    if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5, true)) {
+      currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
+      if (setNextValidChoice(choice2, currValidChoiceIdx, 1, true)) {
+        currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
+        if (setNextValidChoice(choice3, currValidChoiceIdx, 1.5, true)) {
           currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
-          if (setNextValidChoice(choice2, currValidChoiceIdx, 1, true)) {
+          if (setNextValidChoice(choice4, currValidChoiceIdx, 2, true)) {
             currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
-            if (setNextValidChoice(choice3, currValidChoiceIdx, 1.5, true)) {
-              currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
-              if (setNextValidChoice(choice4, currValidChoiceIdx, 2, true)) {
-                currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
-              }
-            }
-          }
-        }
-      } else {
-        currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx)
-        if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5)) {
-          currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-          if (setNextValidChoice(choice2, currValidChoiceIdx, 1)) {
-            currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-            if (setNextValidChoice(choice3, currValidChoiceIdx, 1.5)) {
-              currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-              if (setNextValidChoice(choice4, currValidChoiceIdx, 2)) {
-                currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-              }
-            }
           }
         }
       }
     }
-  // Show continue option for progressing through scenario
   } else {
-    if (playerChoices.style.display !== "none") {
-      toggleElementDisplay(playerChoices, "flex")
-      toggleElementDisplay(progressBtns, "flex")
+    currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx)
+    if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5)) {
+      currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
+      if (setNextValidChoice(choice2, currValidChoiceIdx, 1)) {
+        currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
+        if (setNextValidChoice(choice3, currValidChoiceIdx, 1.5)) {
+          currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
+          if (setNextValidChoice(choice4, currValidChoiceIdx, 2)) {
+            currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
+          }
+        }
+      }
     }
-    if (continueStoryBtn.style.display !== "initial"){
-      toggleElementDisplay(continueStoryBtn, "initial")
-      animateElement(continueStoryBtn, "bounce")
-      sceneSound = new Audio(`${getSceneSound(storyScenario)}`)
-      sceneSound.play()
-    }
-    if (resetBtn.style.display !== "none"){
-      toggleElementDisplay(resetBtn, "none")
-    }
+  }
+}
+
+function renderContinueOption(){
+  if (playerChoices.style.display !== "none") {
+    toggleElementDisplay(playerChoices, "flex")
+    toggleElementDisplay(progressBtns, "flex")
+  }
+  if (continueStoryBtn.style.display !== "initial"){
+    toggleElementDisplay(continueStoryBtn, "initial")
+    animateElement(continueStoryBtn, "bounce")
+    sceneSound = new Audio(`${getSceneSound(storyScenario)}`)
+    sceneSound.play()
+  }
+  if (resetBtn.style.display !== "none"){
+    toggleElementDisplay(resetBtn, "none")
   }
 }
 
@@ -429,12 +443,14 @@ function createUniqueCodeConcept() {
 }
 
 function updateClockTimeAmount(timeChangeAmount) {
-  currentTime = Math.max(0, currentTime - timeChangeAmount)
-  clockIndicator.textContent = timeChangeAmount + (timeChangeAmount === 1 ? " hour" : " hours")
-  clockIndicator.style.color = timeChangeAmount < 0 ? "var(--indicator-positive)" : "var(--indicator-negative)"
-  toggleElementDisplay(clockIndicator, "initial")
-  animateElement(clockIndicator, "fadeOutDown", 0, true)
-  toggleElementDisplay(clockIndicator, "none", 1)
+  if (timeChangeAmount) {
+    currentTime = Math.max(0, currentTime - timeChangeAmount)
+    clockIndicator.textContent = timeChangeAmount + (timeChangeAmount === 1 ? " hour" : " hours")
+    clockIndicator.style.color = timeChangeAmount < 0 ? "var(--indicator-positive)" : "var(--indicator-negative)"
+    toggleElementDisplay(clockIndicator, "initial")
+    animateElement(clockIndicator, "fadeOutDown", 0, true)
+    toggleElementDisplay(clockIndicator, "none", 1)
+  }
 }
 
 function openBoosterList(){
@@ -461,21 +477,6 @@ function closeOpenMenus(){
     codeConceptList.style.display = "none"
   }
 }
-
-// function getNextBoosterItem(){
-//   nextSanityBoosterBtn.dataset.bsSlide = "prev"
-//   console.log(nextSanityBoosterBtn.dataset.bsSlide);
-//   // for (let i = 0; i < sanityBoosterList.children.length; i++) {
-//   //   if (sanityBoosterList.children.item(i).innerHTML.includes("active") && i !== sanityBoosterList.children.length - 1) {
-//   //     sanityBoosterList.children.item(i).innerHTML.replace("active", "")
-//   //     sanityBoosterList.children.item(i).innerHTML.replace
-//   //   }
-//   // }
-// }
-
-// function getPreviousBoosterItem(){
-
-// }
 
 function useBoosterItem(evt) {
   let selectedItem = evt.target
@@ -557,8 +558,3 @@ function animateElement(element, animationName, secondsToDelay, resetAnimation) 
     }, 1000);
   }, (secondsToDelay * 1000 || 0))
 }
-
-// function resizeText() {
-//   storyText.style.fontSize = `${(storyText.clientWidth/1000) * 2.3}rem`
-//   console.log("Inner width of textbox:", storyText.clientWidth);
-// }
