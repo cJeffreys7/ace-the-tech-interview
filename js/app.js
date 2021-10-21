@@ -22,7 +22,7 @@
 // // Implement coder toolbox mechanic
 // // Move storyTextArr, scenarioChoicesArr, sceneArtArr to data/storyScenarios.js and access data through exported getFunctions
 // // Improve placeholder story art
-// Visual feedback when health changes, adding or using food, adding or equipping weapons, or money changes
+// // Visual feedback when health changes, adding or using food, adding or equipping weapons, or money changes
 // Polish scene art
 
 /* ---------- Constants ---------- */
@@ -44,16 +44,20 @@ const gameScreen = document.querySelector("#game-screen")
 const statBar = document.querySelector("#stat-bar")
 const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
+const sanityIndicator = document.querySelector("#sanity-change-indicator")
 const sanityBoosters = document.querySelector("#sanity-boosters")
 const sanityBoosterList = document.querySelector("#booster-icon-list")
+const sanityBoosterIndicator = document.querySelector("#booster-change-indicator")
 // const sanityBoosterCarousel = document.querySelector(".carousel")
 // const nextSanityBoosterBtn = document.querySelector(".carousel-control-prev")
 // const prevSanityBoosterBtn = document.querySelector(".carousel-control-next")
 const codeConcepts = document.querySelector("#code-concepts")
 const codeConceptList = document.querySelector("#code-icon-list")
+const codeConceptIndicator = document.querySelector("#code-change-indicator")
 const timeFillLeft = document.querySelector(".left-progress")
 const timeFillRight = document.querySelector(".right-progress")
 const clockTime = document.querySelector("#clock-icon")
+const clockIndicator = document.querySelector("#clock-indicator")
 const sceneArt = document.querySelector("#scene-art")
 const storyText = document.querySelector("#story-text")
 const lightDarkBtn = document.querySelector("#light-dark-mode-icon")
@@ -106,7 +110,7 @@ function tutorialInit(){
   progressBtns.style.display = "flex"
   statBar.className = sceneArt.className = ""
   studyingMusic.currentTime = 0
-  studyingMusic.play()
+  // studyingMusic.play()
   render()
 }
 
@@ -119,6 +123,7 @@ function init(){
   playerCodeConcepts = []
   storyScenario = "Start"
   playerChoices.style.display = "none"
+  progressBtns.style.display = "flex"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
   studyingMusic.currentTime = 0
@@ -222,7 +227,6 @@ function render(){
       toggleElementDisplay(playerChoices, "flex")
       toggleElementDisplay(progressBtns, "flex")
     }
-    console.log(continueStoryBtn.style.display)
     if (continueStoryBtn.style.display !== "initial"){
       toggleElementDisplay(continueStoryBtn, "initial")
       animateElement(continueStoryBtn, "bounce")
@@ -322,7 +326,7 @@ function playerChoiceResult(evt){
         // Collect item from scenario
         if (scenarioItem) {
           if (scenarioItem === "codeConcept") {
-            createUniqueCodeConcept(scenarioItem)
+            createUniqueCodeConcept()
           } else {
             createUniqueBoosterItem(scenarioItem)
           }
@@ -351,7 +355,7 @@ function playerChoiceResult(evt){
             updatePlayerSanityAmount(45)
           }
         }
-        currentTime = Math.max(0, currentTime - timeChangeAmount)
+        updateClockTimeAmount(timeChangeAmount)
         if (playerSanity === 0) {
           storyScenario = "Endpoint - Stressed out"
           render()
@@ -371,7 +375,14 @@ function playerChoiceResult(evt){
 }
 
 function updatePlayerSanityAmount(changeInSanity) {
-  playerSanity = Math.max(0, Math.min(playerSanity + changeInSanity, maxPlayerSanity))
+  if (changeInSanity){
+    playerSanity = Math.max(0, Math.min(playerSanity + changeInSanity, maxPlayerSanity))
+    sanityIndicator.textContent = changeInSanity
+    sanityIndicator.style.color = changeInSanity > 0 ? "var(--indicator-positive)" : "var(--indicator-negative)"
+    toggleElementDisplay(sanityIndicator, "initial")
+    animateElement(sanityIndicator, "fadeOutDown", 0, true)
+    toggleElementDisplay(sanityIndicator, "none", 1)
+  }
 }
 
 function createUniqueBoosterItem(itemName) {
@@ -386,16 +397,19 @@ function createUniqueBoosterItem(itemName) {
     </div>`
     // add to class name for carousel ${playerItems.length === 1 ? "carousel-item active" : "carousel-item"}
     sanityBoosterList.appendChild(newBoosterItem)
+    sanityBoosterIndicator.textContent = newItem.name
+    sanityBoosterIndicator.style.color = "var(--indicator-positive)"
+    toggleElementDisplay(sanityBoosterIndicator, "initial")
+    animateElement(sanityBoosterIndicator, "fadeOutDown", 0, true)
+    toggleElementDisplay(sanityBoosterIndicator, "none", 1)
   }
 }
 
-function createUniqueCodeConcept(itemName) {
-  if (playerCodeConcepts.length < getItemsOfType(itemName).length) {
+function createUniqueCodeConcept() {
+  if (playerCodeConcepts.length < getItemsOfType("codeConcept").length) {
     let newCodeItem = null
     do {
-      newCodeItem = getItemsOfType(itemName)[Math.floor(Math.random() * (getItemsOfType(itemName).length - 1))]
-      console.log("Trying to learn:", newCodeItem)
-      console.log(playerCodeConcepts.some(e => e.name === newCodeItem.name) ? "Already known" : "New concept")
+      newCodeItem = getItemsOfType("codeConcept")[Math.floor(Math.random() * (getItemsOfType("codeConcept").length - 1))]
     } while (playerCodeConcepts.some(e => e.name === newCodeItem.name)) //playerCodeConcepts.includes(newCodeItem)
     playerCodeConcepts.push(newCodeItem)
     let newCodeConcept = document.createElement("div")
@@ -406,7 +420,21 @@ function createUniqueCodeConcept(itemName) {
     </div>`
     // add to class name for carousel ${playerItems.length === 1 ? "carousel-item active" : "carousel-item"}
     codeConceptList.appendChild(newCodeConcept)
+    codeConceptIndicator.textContent = newCodeItem.name
+    codeConceptIndicator.style.color = "var(--indicator-positive)"
+    toggleElementDisplay(codeConceptIndicator, "initial")
+    animateElement(codeConceptIndicator, "fadeOutDown", 0, true)
+    toggleElementDisplay(codeConceptIndicator, "none", 1)
   }
+}
+
+function updateClockTimeAmount(timeChangeAmount) {
+  currentTime = Math.max(0, currentTime - timeChangeAmount)
+  clockIndicator.textContent = timeChangeAmount + (timeChangeAmount === 1 ? " hour" : " hours")
+  clockIndicator.style.color = timeChangeAmount < 0 ? "var(--indicator-positive)" : "var(--indicator-negative)"
+  toggleElementDisplay(clockIndicator, "initial")
+  animateElement(clockIndicator, "fadeOutDown", 0, true)
+  toggleElementDisplay(clockIndicator, "none", 1)
 }
 
 function openBoosterList(){
@@ -456,6 +484,11 @@ function useBoosterItem(evt) {
     let itemIdx = playerItems.findIndex(e => e.name === selectedItem.id)
     playerItems.splice(itemIdx, 1)
     sanityBoosterList.children.item(itemIdx).remove()
+    sanityBoosterIndicator.textContent = selectedItem.id
+    sanityBoosterIndicator.style.color = "var(--indicator-negative)"
+    toggleElementDisplay(sanityBoosterIndicator, "initial")
+    animateElement(sanityBoosterIndicator, "fadeOutDown", 0, true)
+    toggleElementDisplay(sanityBoosterIndicator, "none", 1)
     if (!playerItems.length) {
       toggleElementDisplay(sanityBoosterList, "flex")
     }

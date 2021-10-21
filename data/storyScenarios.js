@@ -1,7 +1,7 @@
 const storyScenarios = [
   {
     scenario: "Tutorial",
-    text: ["You are beyond excited! You just finished a great conversation with a hiring manager.", "They are excited about your recent projects and think you would be a great fit within the company.", "However, before they offer you a position, you need to nail it in the technical interview.", "You knew this was going to happen, and you begin to sweat. You are a little out of practice.", "It's been a while since your coding boot camp. You've spent too much time working on styling and not enough time creating algorithms.", "That's ok! You know you need to brush up on everything you've learned and it will come flooding back to you.", "You look at the clock. It's 8pm.", "Your technical interview is at 8am tomorrow morning, so you have 12 hours to review everything you have learned."],
+    text: ["You are beyond excited! You just finished a great conversation with a hiring manager.", "They are excited about your recent projects and think you would be a great fit within the company.", "However, before they offer you a position, you need to nail it in the technical interview.", "You knew this was going to happen, and you begin to sweat. You are a little out of practice.", "It's been a while since your coding boot camp. You've spent too much time working on styling and not enough time creating algorithms.", "That's ok! You know you need to brush up on everything you've learned and it will come flooding back to you."],
     imgSrc: "./images/sceneArtStart.svg",
     audio: "./audio/Retro Event StereoUP 02.wav",
     choices: [
@@ -140,7 +140,7 @@ const storyScenarios = [
         newStoryScenario: "Start"
       },
       { 
-        text: "Can you explain the rules again?",
+        text: "Can you explain it again?",
         sanityChange: 0,
         hoursUsed: 0, 
         newStoryScenario: "Tutorial"

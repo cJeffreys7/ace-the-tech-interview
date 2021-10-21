@@ -39,6 +39,8 @@ body {
   --body-bg: #e0f8cf;
   --border: #071821;
   --time-bg: red;
+  --indicator-positive: #00E956;
+  --indicator-negative: #e0f8cf;
   /* Use a system font, if none are available use an available sans-sarif font */
   font-family: 'Lekton', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -127,7 +129,7 @@ h1 {
   ;
 }
 
-.stat-icon, .stat-icon-fill, .stat-fill-cover {
+.stat-icon, .stat-icon-fill, .stat-fill-cover, .change-indicator {
   height: 100%;
   grid-area: icon;
   z-index: 3;
@@ -141,6 +143,17 @@ h1 {
 .stat-icon-fill {
   filter: invert(45%) sepia(65%) saturate(5959%) hue-rotate(341deg) brightness(106%) contrast(107%);
   z-index: 1;
+}
+
+.change-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+}
+
+#code-change-indicator, #clock-indicator {
+  font-size: 1.8rem;
 }
 
 #circular{
