@@ -10,7 +10,7 @@ const items = [
     type: "booster",
     name: "Cookie",
     description: "Sweet, nutty deliciousness",
-    sanityBoost: 20,
+    sanityBoost: 40,
     icon: "./images/cookieItem.svg"
   },
   {

@@ -260,7 +260,6 @@ function formatSpecialCaseText(){
       formattedTime += 1
       formattedMinutes = (60 - formattedMinutes).toString()
     }
-    console.log("format time");
     let formattedHours = Math.floor(formattedTime)
     formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
     // Calculate amount of time to sleep and return hours and minutes
@@ -270,8 +269,6 @@ function formatSpecialCaseText(){
     let formattedMinutes = Math.ceil((totalSleepTime % 1) * 60)
     if (formattedMinutes === 0) {
       formattedMinutes = "00"
-    } else {
-      totalSleepTime -= 1
     }
     let formattedHours = Math.floor(totalSleepTime)
     formattedText = storyText.textContent.replace(regex, `${formattedHours} hours and ${formattedMinutes} minutes`)
@@ -324,24 +321,24 @@ function playerChoiceResult(evt){
     storyTextIdx = 0
     let selectedChoice = evt.target
     let choiceObj = getScenarioChoiceByText(storyScenario, selectedChoice.textContent)
-    if (choiceObj.newStoryScenario === "Start") {
-      init()
-    } else if (choiceObj.newStoryScenario === "Tutorial") {
-      tutorialInit()
-    } else {
-      if (choiceObj) {
-        let scenarioItem = getScenarioItem(choiceObj.newStoryScenario)
-        // Collect item from scenario
-        if (scenarioItem) {
-          if (scenarioItem === "codeConcept") {
-            createUniqueCodeConcept()
-          } else {
-            createUniqueBoosterItem(scenarioItem)
+    let wakeUsingSpecifiedTime = false
+    if (selectedChoice.textContent !== "Go to interview") {
+      if (choiceObj.newStoryScenario === "Start") {
+        init()
+      } else if (choiceObj.newStoryScenario === "Tutorial") {
+        tutorialInit()
+      } else {
+        if (choiceObj) {
+          let scenarioItem = getScenarioItem(choiceObj.newStoryScenario)
+          // Collect item from scenario
+          if (scenarioItem) {
+            if (scenarioItem === "codeConcept") {
+              createUniqueCodeConcept()
+            } else {
+              createUniqueBoosterItem(scenarioItem)
+            }
           }
         }
-      }
-      let wakeUsingSpecifiedTime = false
-      if (selectedChoice.textContent !== "Go to interview") {
         let sanityChangeAmount = choiceObj.sanityChange
         let timeChangeAmount = choiceObj.hoursUsed
         updatePlayerSanityAmount(sanityChangeAmount)
@@ -373,14 +370,15 @@ function playerChoiceResult(evt){
           storyScenario = choiceObj.newStoryScenario
           render()
         }
-      } else {
-        storyScenario = "Interview"
-        currentTime = 0
-        render()
       }
+    } else {
+      storyScenario = "Interview"
+      currentTime = 0
+      render()
     }
   }
 }
+
 
 function updatePlayerSanityAmount(changeInSanity) {
   if (changeInSanity){
@@ -403,10 +401,9 @@ function createUniqueBoosterItem(itemName) {
       <img class="booster-item" id="${newItem.name}" src="${newItem.icon}">
         <span>${newItem.name}</span>
     </div>`
-    // add to class name for carousel ${playerItems.length === 1 ? "carousel-item active" : "carousel-item"}
     sanityBoosterList.appendChild(newBoosterItem)
-    sanityBoosterIndicator.textContent = newItem.name
-    sanityBoosterIndicator.style.color = "var(--indicator-positive)"
+    sanityBoosterIndicator.src = newItem.icon
+    sanityBoosterIndicator.style.filter = ""
     toggleElementDisplay(sanityBoosterIndicator, "initial")
     animateElement(sanityBoosterIndicator, "fadeOutDown", 0, true)
     toggleElementDisplay(sanityBoosterIndicator, "none", 1)
@@ -418,7 +415,7 @@ function createUniqueCodeConcept() {
     let newCodeItem = null
     do {
       newCodeItem = getItemsOfType("codeConcept")[Math.floor(Math.random() * (getItemsOfType("codeConcept").length - 1))]
-    } while (playerCodeConcepts.some(e => e.name === newCodeItem.name)) //playerCodeConcepts.includes(newCodeItem)
+    } while (playerCodeConcepts.some(e => e.name === newCodeItem.name))
     playerCodeConcepts.push(newCodeItem)
     let newCodeConcept = document.createElement("div")
     newCodeConcept.innerHTML = `
@@ -426,7 +423,6 @@ function createUniqueCodeConcept() {
       <img class="booster-item" id="${newCodeItem.name}" src="./images/binary-code.svg">
         <span>${newCodeItem.name}</span>
     </div>`
-    // add to class name for carousel ${playerItems.length === 1 ? "carousel-item active" : "carousel-item"}
     codeConceptList.appendChild(newCodeConcept)
     codeConceptIndicator.textContent = newCodeItem.name
     codeConceptIndicator.style.color = "var(--indicator-positive)"
@@ -479,8 +475,8 @@ function useBoosterItem(evt) {
     let itemIdx = playerItems.findIndex(e => e.name === selectedItem.id)
     playerItems.splice(itemIdx, 1)
     sanityBoosterList.children.item(itemIdx).remove()
-    sanityBoosterIndicator.textContent = selectedItem.id
-    sanityBoosterIndicator.style.color = "var(--indicator-negative)"
+    sanityBoosterIndicator.src = getItemByName(selectedItem.id).icon
+    sanityBoosterIndicator.style.filter = "invert(45%) sepia(65%) saturate(5959%) hue-rotate(341deg) brightness(106%) contrast(107%)"
     toggleElementDisplay(sanityBoosterIndicator, "initial")
     animateElement(sanityBoosterIndicator, "fadeOutDown", 0, true)
     toggleElementDisplay(sanityBoosterIndicator, "none", 1)
@@ -519,14 +515,14 @@ function getValidCodeChoiceIdx(elementId) {
 }
 
 function calculateRemainingTimeFromChoiceText(choiceTime){
-    let endMinutes = 0
-    let endHour = parseInt(choiceTime.slice(0,1))
-    if (choiceTime.includes(":")) {
-      let minutesIdx = choiceTime.indexOf(":")
-      endMinutes = parseInt(choiceTime.slice(minutesIdx + 1, minutesIdx + 3))
-    }
-    let endTime = endHour + (endMinutes/60)
-    return (endTime - convertDecimalTimeTo12HourInt(currentTime, 8)) < 0 ? endTime + (12 - convertDecimalTimeTo12HourInt(currentTime, 8)) : endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
+  let endMinutes = 0
+  let endHour = parseInt(choiceTime.slice(0,1))
+  if (choiceTime.includes(":")) {
+    let minutesIdx = choiceTime.indexOf(":")
+    endMinutes = parseInt(choiceTime.slice(minutesIdx + 1, minutesIdx + 3))
+  }
+  let endTime = endHour + (endMinutes/60)
+  return (endTime - convertDecimalTimeTo12HourInt(currentTime, 8)) < 0 ? endTime + (12 - convertDecimalTimeTo12HourInt(currentTime, 8)) : endTime - convertDecimalTimeTo12HourInt(currentTime, 8)
 }
 
 function toggleLightDarkMode() {

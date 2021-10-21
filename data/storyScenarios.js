@@ -462,7 +462,7 @@ const storyScenarios = [
         codeConcept: "Iterate all elements"
       },
       { 
-        text: "Get some console logs in there to identify the issue", 
+        text: "Console log all the things!", 
         sanityChange: 0, 
         hoursUsed: 0,
         newStoryScenario: "Mock Interview 3",
@@ -669,12 +669,6 @@ const storyScenarios = [
         newStoryScenario: "Review"
       },
       { 
-        text: "Get dressed", 
-        sanityChange: 5, 
-        hoursUsed: .5,
-        newStoryScenario: "Dress"
-      }, 
-      { 
         text: "Do a 30 minute workout", 
         sanityChange: 30, 
         hoursUsed: .5,
@@ -706,12 +700,6 @@ const storyScenarios = [
         hoursUsed: .5,
         newStoryScenario: "Review"
       },
-      { 
-        text: "Get dressed", 
-        sanityChange: 5, 
-        hoursUsed: .5,
-        newStoryScenario: "Dress"
-      }, 
       { 
         text: "Do a 30 minute workout", 
         sanityChange: 30, 
@@ -959,7 +947,7 @@ const storyScenarios = [
         codeConcept: "Iterate all elements"
       },
       { 
-        text: "Get some console logs in there to identify the issue", 
+        text: "Console log all the things!", 
         sanityChange: -35, 
         hoursUsed: 0,
         newStoryScenario: "Interview part 3",
@@ -982,28 +970,28 @@ const storyScenarios = [
     choices: [
       { 
         text: "Try to work in a bucket sort", 
-        sanityChange: -5, 
+        sanityChange: -10, 
         hoursUsed: 0,
         newStoryScenario: "Interview part 4",
         codeConcept: "Bucket sort"
       },
       { 
         text: "Refactor to a recursive function", 
-        sanityChange: -15, 
+        sanityChange: -20, 
         hoursUsed: 0,
         newStoryScenario: "Interview part 4",
         codeConcept: "Recursion"
       },
       { 
         text: "Try to perform a merge sort", 
-        sanityChange: -20, 
+        sanityChange: -25, 
         hoursUsed: 0,
         newStoryScenario: "Interview part 4",
         codeConcept: "Merge sort"
       },
       { 
         text: "Try a bubble sort", 
-        sanityChange: -30, 
+        sanityChange: -35, 
         hoursUsed: 0,
         newStoryScenario: "Interview part 4",
         codeConcept: "Bubble sort"
@@ -1025,28 +1013,28 @@ const storyScenarios = [
     choices: [
       { 
         text: "Implement a hash table", 
-        sanityChange: -5, 
+        sanityChange: -10, 
         hoursUsed: 0,
         newStoryScenario: "Endpoint - Pass interview",
         codeConcept: "Hash table"
       },
       { 
         text: "Rework to use a counting sort", 
-        sanityChange: -15, 
+        sanityChange: -20, 
         hoursUsed: 0,
         newStoryScenario: "Endpoint - Pass interview",
         codeConcept: "Counting sort"
       },
       { 
         text: "Create a radix sort", 
-        sanityChange: -20, 
+        sanityChange: -25, 
         hoursUsed: 0,
         newStoryScenario: "Endpoint - Pass interview",
         codeConcept: "Radix sort"
       },
       { 
         text: "Use a binary search tree", 
-        sanityChange: -30, 
+        sanityChange: -35, 
         hoursUsed: 0,
         newStoryScenario: "Endpoint - Pass interview",
         codeConcept: "Binary search tree"
