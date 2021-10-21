@@ -91,7 +91,23 @@ checkDarkPref()
 function viewGameScreen(){
   toggleElementDisplay(gameScreen, "contents")
   toggleElementDisplay(titleScreen, "none")
-  init()
+  tutorialInit()
+}
+
+function tutorialInit(){
+  maxPlayerSanity = 100
+  playerSanity = 80
+  storyTextIdx = 0
+  currentTime = 12
+  playerItems = []
+  playerCodeConcepts = []
+  storyScenario = "Tutorial"
+  playerChoices.style.display = "none"
+  progressBtns.style.display = "flex"
+  statBar.className = sceneArt.className = ""
+  studyingMusic.currentTime = 0
+  studyingMusic.play()
+  render()
 }
 
 function init(){
@@ -107,7 +123,6 @@ function init(){
   statBar.className = sceneArt.className = ""
   studyingMusic.currentTime = 0
   studyingMusic.play()
-  checkDarkPref()
   render()
 }
 
@@ -171,7 +186,6 @@ function render(){
       toggleElementDisplay(choice3, "none")
       toggleElementDisplay(choice4, "none")
       let currValidChoiceIdx = 0
-      console.log("Show interview choices:", storyScenario.includes("Interview"))
       if (storyScenario.includes("Interview")) {
         currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx)
         if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5, true)) {
@@ -208,6 +222,7 @@ function render(){
       toggleElementDisplay(playerChoices, "flex")
       toggleElementDisplay(progressBtns, "flex")
     }
+    console.log(continueStoryBtn.style.display)
     if (continueStoryBtn.style.display !== "initial"){
       toggleElementDisplay(continueStoryBtn, "initial")
       animateElement(continueStoryBtn, "bounce")
@@ -265,6 +280,8 @@ function setNextValidChoice(button, startingChoiceIdx, animDelay, inInterview){
     animateElement(button, "slideInRight", 0)
     toggleElementDisplay(button, "initial", 0)
     return false
+  } else if (storyScenario.includes("Tutorial")) {
+    return false
   } else {
     button.textContent = "Go to interview"
     animateElement(button, "slideInRight", 0)
@@ -295,54 +312,60 @@ function playerChoiceResult(evt){
     storyTextIdx = 0
     let selectedChoice = evt.target
     let choiceObj = getScenarioChoiceByText(storyScenario, selectedChoice.textContent)
-    if (choiceObj) {
-      let scenarioItem = getScenarioItem(choiceObj.newStoryScenario)
-      // Collect item from scenario
-      if (scenarioItem) {
-        if (scenarioItem === "codeConcept") {
-          createUniqueCodeConcept(scenarioItem)
-        } else {
-          createUniqueBoosterItem(scenarioItem)
-        }
-      }
-    }
-    let wakeUsingSpecifiedTime = false
-    if (selectedChoice.textContent !== "Go to interview") {
-      let sanityChangeAmount = choiceObj.sanityChange
-      let timeChangeAmount = choiceObj.hoursUsed
-      updatePlayerSanityAmount(sanityChangeAmount)
-      // Special case calculate hoursUsed from wake up time
-      if (isNaN(timeChangeAmount)) {
-        timeChangeAmount = calculateRemainingTimeFromChoiceText(timeChangeAmount)
-        // Update sanity and scenario from hours slept
-        if (timeChangeAmount < 2.5) {
-          storyScenario = "Endpoint - Sleep in"
-          wakeUsingSpecifiedTime = true
-          updatePlayerSanityAmount(100)
-        } else if (timeChangeAmount < 5) {
-          storyScenario = "Stare at ceiling"
-          wakeUsingSpecifiedTime = true
-          updatePlayerSanityAmount(25)
-        } else {
-          storyScenario = "Wake well rested"
-          wakeUsingSpecifiedTime = true
-          updatePlayerSanityAmount(45)
-        }
-      }
-      currentTime = Math.max(0, currentTime - timeChangeAmount)
-      if (playerSanity === 0) {
-        storyScenario = "Endpoint - Stressed out"
-        render()
-      } else if (wakeUsingSpecifiedTime) {
-        render()
-      } else {
-        storyScenario = choiceObj.newStoryScenario
-        render()
-      }
+    if (choiceObj.newStoryScenario === "Start") {
+      init()
+    } else if (choiceObj.newStoryScenario === "Tutorial") {
+      tutorialInit()
     } else {
-      storyScenario = "Interview"
-      currentTime = 0
-      render()
+      if (choiceObj) {
+        let scenarioItem = getScenarioItem(choiceObj.newStoryScenario)
+        // Collect item from scenario
+        if (scenarioItem) {
+          if (scenarioItem === "codeConcept") {
+            createUniqueCodeConcept(scenarioItem)
+          } else {
+            createUniqueBoosterItem(scenarioItem)
+          }
+        }
+      }
+      let wakeUsingSpecifiedTime = false
+      if (selectedChoice.textContent !== "Go to interview") {
+        let sanityChangeAmount = choiceObj.sanityChange
+        let timeChangeAmount = choiceObj.hoursUsed
+        updatePlayerSanityAmount(sanityChangeAmount)
+        // Special case calculate hoursUsed from wake up time
+        if (isNaN(timeChangeAmount)) {
+          timeChangeAmount = calculateRemainingTimeFromChoiceText(timeChangeAmount)
+          // Update sanity and scenario from hours slept
+          if (timeChangeAmount < 2.5) {
+            storyScenario = "Endpoint - Sleep in"
+            wakeUsingSpecifiedTime = true
+            updatePlayerSanityAmount(100)
+          } else if (timeChangeAmount < 5) {
+            storyScenario = "Stare at ceiling"
+            wakeUsingSpecifiedTime = true
+            updatePlayerSanityAmount(25)
+          } else {
+            storyScenario = "Wake well rested"
+            wakeUsingSpecifiedTime = true
+            updatePlayerSanityAmount(45)
+          }
+        }
+        currentTime = Math.max(0, currentTime - timeChangeAmount)
+        if (playerSanity === 0) {
+          storyScenario = "Endpoint - Stressed out"
+          render()
+        } else if (wakeUsingSpecifiedTime) {
+          render()
+        } else {
+          storyScenario = choiceObj.newStoryScenario
+          render()
+        }
+      } else {
+        storyScenario = "Interview"
+        currentTime = 0
+        render()
+      }
     }
   }
 }

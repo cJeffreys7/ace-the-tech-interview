@@ -52,7 +52,7 @@
 * Circular progress bar by [Aphinya Dechalert](https://www.dottedsquirrel.com/circular-progress-css/)
 ## Next Steps:
 
-- [ ] Implement stat bar tutorial
+- [x] Implement stat bar tutorial
 - [ ] Implement visual feedback when sanity changes, adding or using Sanity Boosters, adding or utilizing Coder Toolbox items, and Time changes
 - [ ] Transition animation for Sanity Booster and Coder Toolbox submenus
 - [ ] Carousel for offscreen items in Sanity Booster and Coder Toolbox submenus

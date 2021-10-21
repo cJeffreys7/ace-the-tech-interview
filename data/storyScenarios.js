@@ -1,7 +1,155 @@
 const storyScenarios = [
   {
+    scenario: "Tutorial",
+    text: ["You are beyond excited! You just finished a great conversation with a hiring manager.", "They are excited about your recent projects and think you would be a great fit within the company.", "However, before they offer you a position, you need to nail it in the technical interview.", "You knew this was going to happen, and you begin to sweat. You are a little out of practice.", "It's been a while since your coding boot camp. You've spent too much time working on styling and not enough time creating algorithms.", "That's ok! You know you need to brush up on everything you've learned and it will come flooding back to you.", "You look at the clock. It's 8pm.", "Your technical interview is at 8am tomorrow morning, so you have 12 hours to review everything you have learned."],
+    imgSrc: "./images/sceneArtStart.svg",
+    audio: "./audio/Retro Event StereoUP 02.wav",
+    choices: [
+      { 
+        text: "So, what do I do?",
+        sanityChange: 0,
+        hoursUsed: 1, 
+        newStoryScenario: "Tutorial 2"
+      },
+      { 
+        text: "Let's go!",
+        sanityChange: 0,
+        hoursUsed: 0, 
+        newStoryScenario: "Start"
+      }
+    ]
+  },
+  {
+    scenario: "Tutorial 2",
+    text: ["You will be presented with choices that can either help or hurt you as you study for your technical interview in the morning.", "Choices can impact your sanity by pushing your mind to its limits, or giving you a much needed break."],
+    imgSrc: "./images/sceneArtStart.svg",
+    audio: "./audio/Retro Event StereoUP 02.wav",
+    choices: [
+      { 
+        text: "Sounds stressful!",
+        sanityChange: -70,
+        hoursUsed: 1, 
+        newStoryScenario: "Tutorial 3"
+      },
+      { 
+        text: "Yeah, yeah. Let's go already!",
+        sanityChange: 0,
+        hoursUsed: 0, 
+        newStoryScenario: "Start"
+      }
+    ]
+  },
+  {
+    scenario: "Tutorial 3",
+    text: ["Watch your sanity meter! It will help you determine if it is time to take a break, or crunch some more programming knowledge.", "Along the way you may pick up some items that can boost your sanity and can be used at any time."],
+    imgSrc: "./images/sceneArtStart.svg",
+    audio: "./audio/Retro Event StereoUP 02.wav",
+    choices: [
+      { 
+        text: "Give me some coffee!",
+        sanityChange: 0,
+        hoursUsed: 1, 
+        newStoryScenario: "Tutorial 4 coffee"
+      },
+      { 
+        text: "Give me a cookie!",
+        sanityChange: 0,
+        hoursUsed: 1, 
+        newStoryScenario: "Tutorial 4 cookie"
+      },
+      { 
+        text: "I'm ready to go!",
+        sanityChange: 0,
+        hoursUsed: 0, 
+        newStoryScenario: "Start"
+      }
+    ]
+  },
+  {
+    scenario: "Tutorial 4 coffee",
+    text: ["You can access your sanity boosters if you have any by pressing the party hat button.", "These sanity boosters may be the only thing that can help you keep your cool during crunch time, so make sure to use them wisely!"],
+    imgSrc: "./images/sceneArtStart.svg",
+    audio: "./audio/Retro Event StereoUP 02.wav",
+    choices: [
+      { 
+        text: "So how do I study?",
+        sanityChange: 0,
+        hoursUsed: 1, 
+        newStoryScenario: "Tutorial 5"
+      },
+      { 
+        text: "Let's do this!",
+        sanityChange: 0,
+        hoursUsed: 0, 
+        newStoryScenario: "Start"
+      }
+    ],
+    item: "Coffee" 
+  },
+  {
+    scenario: "Tutorial 4 cookie",
+    text: ["You can access your sanity boosters if you have any by pressing the party hat button.", "These sanity boosters may be the only thing that can help you keep your cool during crunch time, so make sure to use them wisely!"],
+    imgSrc: "./images/sceneArtStart.svg",
+    audio: "./audio/Retro Event StereoUP 02.wav",
+    choices: [
+      { 
+        text: "So how do I study?",
+        sanityChange: 0,
+        hoursUsed: 1, 
+        newStoryScenario: "Tutorial 5"
+      },
+      { 
+        text: "Let's do this!",
+        sanityChange: 0,
+        hoursUsed: 0, 
+        newStoryScenario: "Start"
+      }
+    ],
+    item: "Cookie" 
+  },
+  {
+    scenario: "Tutorial 5",
+    text: ["Each time you review programming concepts, a new programming skill will be added to your coding toolbox!", "Absorb as many as you can, because you never know what you will need in order to pass the technical assessment."],
+    imgSrc: "./images/sceneArtStart.svg",
+    audio: "./audio/Retro Event StereoUP 02.wav",
+    choices: [
+      { 
+        text: "So how long do I have?",
+        sanityChange: 0,
+        hoursUsed: 1, 
+        newStoryScenario: "Tutorial 6"
+      },
+      { 
+        text: "I'm ready now!",
+        sanityChange: 0,
+        hoursUsed: 0, 
+        newStoryScenario: "Start"
+      }
+    ]
+  },
+  {
+    scenario: "Tutorial 6",
+    text: ["Each choice you make will cost you time, so make sure you are focusing on what is really important.", "Watch the clock as the hours dwindle down to evaluate your decisions."],
+    imgSrc: "./images/sceneArtStart.svg",
+    audio: "./audio/Retro Event StereoUP 02.wav",
+    choices: [
+      { 
+        text: "I'm ready!",
+        sanityChange: 0,
+        hoursUsed: 0, 
+        newStoryScenario: "Start"
+      },
+      { 
+        text: "Can you explain the rules again?",
+        sanityChange: 0,
+        hoursUsed: 0, 
+        newStoryScenario: "Tutorial"
+      }
+    ]
+  },
+  {
     scenario: "Start",
-    text: ["You are beyond excited! You just finished a great conversation with a hiring manager.", "They are excited about your recent projects and think you would be a great fit within the company.", "However, before they offer you a position, you need to nail it in the technical interview.", "You knew this was going to happen, and you begin to sweat. You are a little out of practice.", "It's been a while since your coding boot camp. You've spent too much time working on styling and not enough time creating algorithms.", "That's ok! You know you need to brush up on everything you've learned and it will come flooding back to you.", "You look at the clock. It's 8pm.", "Your technical interview is at 8am tomorrow morning, so you have 12 hours to review everything you have learned.", "It's going to be a long night. Where should you start?"],
+    text: ["You look at the clock. It's 8pm.", "Your technical interview is at 8am tomorrow morning, so you have 12 hours to review everything you have learned.", "It's going to be a long night. Where should you start?"],
     imgSrc: "./images/sceneArtStart.svg",
     audio: "./audio/Retro Event StereoUP 02.wav",
     choices: [

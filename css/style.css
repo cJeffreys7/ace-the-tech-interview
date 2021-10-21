@@ -327,4 +327,8 @@ h1 {
     margin-left: 12px;
     height: 56px;
   }
+
+  #start-button {
+    flex-grow: 0;
+  }
 }
