@@ -93,16 +93,10 @@ function viewGameScreen(){
 }
 
 function tutorialInit(){
-  maxPlayerSanity = 100
-  playerSanity = 80
-  storyTextIdx = 0
-  currentTime = 12
-  playerItems = []
-  playerCodeConcepts = []
+  init()
   storyScenario = "Tutorial"
-  playerChoices.style.display = "none"
-  progressBtns.style.display = "flex"
-  statBar.className = sceneArt.className = ""
+  resetBtn.style.display = "none"
+  toggleElementDisplay(continueStoryBtn, "flex")
   studyingMusic.currentTime = 0
   studyingMusic.play()
   render()
