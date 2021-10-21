@@ -200,11 +200,11 @@ h1 {
   width: 95%;
   height: 150px;
   padding: 6px;
+  overflow: hidden;
 }
 
 #scene-art {
-  height: 100%;
-  flex-grow: 1;
+  height: 250%;
 }
 
 #story-text {
@@ -311,11 +311,11 @@ h1 {
   #scene-art-section {
     grid-area: scene-art;
     margin-left: 12px;
+    height: 100%;
   }
 
   #scene-art {
-    height: 560px;
-    flex-grow: 1;
+    height: 125%;
   }
 
   #story-text {
