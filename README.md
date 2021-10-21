@@ -35,7 +35,7 @@
 * Animate.css
 * Google Fonts
 
-## Wireframe
+## Wireframe:
 
 ![Main Screen Wireframe](/images/WireframeUserInteractions.png)
 
@@ -43,7 +43,7 @@
 
 ![Reach Endpoint](/images/WireframeEndpoint.png)
 
-## Attributions
+## Attributions:
 
 * Icons from [Flaticon](https://www.flaticon.com/): Vectors created by [Smashicons](https://smashicons.com/), [Freepik](https://www.freepik.com/), dmitri13, Darius Dan, and Good Ware
 * Sprites by [Pixel Pete](https://petermilko.itch.io/pixel-petes-art-assets)
@@ -52,12 +52,12 @@
 * Circular progress bar by [Aphinya Dechalert](https://www.dottedsquirrel.com/circular-progress-css/)
 ## Next Steps:
 
-- [] Implement stat bar tutorial
-- [] Implement visual feedback when sanity changes, adding or using Sanity Boosters, adding or utilizing Coder Toolbox items, and Time changes
-- [] Transition animation for Sanity Booster and Coder Toolbox submenus
-- [] Carousel for offscreen items in Sanity Booster and Coder Toolbox submenus
-- [] Sounds that can be triggered in the middle of scenarios and not just at the start of a new scenario
-- [] Different music on reaching Endpoint
-- [] Player stats on reaching Endpoint
-- [] Polish scene art
-- [] Additional styling passes
+- [ ] Implement stat bar tutorial
+- [ ] Implement visual feedback when sanity changes, adding or using Sanity Boosters, adding or utilizing Coder Toolbox items, and Time changes
+- [ ] Transition animation for Sanity Booster and Coder Toolbox submenus
+- [ ] Carousel for offscreen items in Sanity Booster and Coder Toolbox submenus
+- [ ] Sounds that can be triggered in the middle of scenarios and not just at the start of a new scenario
+- [ ] Different music on reaching Endpoint
+- [ ] Player stats on reaching Endpoint
+- [ ] Polish scene art
+- [ ] Additional styling passes
