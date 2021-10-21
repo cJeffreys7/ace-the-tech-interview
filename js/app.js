@@ -101,6 +101,11 @@ function init(){
   currentTime = 12
   playerItems = []
   playerCodeConcepts = []
+  createUniqueCodeConcept("codeConcept")
+  createUniqueCodeConcept("codeConcept")
+  createUniqueCodeConcept("codeConcept")
+  createUniqueCodeConcept("codeConcept")
+  createUniqueCodeConcept("codeConcept")
   storyScenario = "Start"
   playerChoices.style.display = "none"
   toggleElementDisplay(resetBtn, "initial")
