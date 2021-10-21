@@ -29,7 +29,6 @@
 
 ### - Post MVP:
 ####    - Additional styling passes
-####    - Implement Coder Toolbox to defeat tough code problems throughout game with programming concepts
 ####    - Implement visual feedback when sanity changes, adding or using Sanity Boosters, adding or utilizing Coder Toolbox items, and Time changes
 ####    - Polish scene art
 ####    - Implement stat bar tutorial

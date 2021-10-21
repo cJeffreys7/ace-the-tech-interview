@@ -19,7 +19,7 @@
 // // Flush out story details to create interesting scenarios
 // // Implement time mechanic
 // // Implement sanity booster mechanic
-// Implement coder toolbox mechanic
+// // Implement coder toolbox mechanic
 // // Move storyTextArr, scenarioChoicesArr, sceneArtArr to data/storyScenarios.js and access data through exported getFunctions
 // // Improve placeholder story art
 // Visual feedback when health changes, adding or using food, adding or equipping weapons, or money changes
@@ -170,15 +170,32 @@ function render(){
       toggleElementDisplay(choice2, "none")
       toggleElementDisplay(choice3, "none")
       toggleElementDisplay(choice4, "none")
-      let currValidChoiceIdx = getValidTimeChoiceIdx(0)
-      if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5)) {
-        currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-        if (setNextValidChoice(choice2, currValidChoiceIdx, 1)) {
+      let currValidChoiceIdx = 0
+      if (storyScenario.includes("Interview")) {
+        currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx)
+        if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5, true)) {
+          currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
+          if (setNextValidChoice(choice2, currValidChoiceIdx, 1, true)) {
+            currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
+            if (setNextValidChoice(choice3, currValidChoiceIdx, 1.5, true)) {
+              currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
+              if (setNextValidChoice(choice4, currValidChoiceIdx, 2, true)) {
+                currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx + 1)
+              }
+            }
+          }
+        }
+      } else {
+        currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx)
+        if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5)) {
           currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-          if (setNextValidChoice(choice3, currValidChoiceIdx, 1.5)) {
+          if (setNextValidChoice(choice2, currValidChoiceIdx, 1)) {
             currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
-            if (setNextValidChoice(choice4, currValidChoiceIdx, 2)) {
+            if (setNextValidChoice(choice3, currValidChoiceIdx, 1.5)) {
               currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
+              if (setNextValidChoice(choice4, currValidChoiceIdx, 2)) {
+                currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
+              }
             }
           }
         }
@@ -234,12 +251,19 @@ function formatSpecialCaseText(){
   return formattedText
 }
 
-function setNextValidChoice(button, startingChoiceIdx, animDelay){
+function setNextValidChoice(button, startingChoiceIdx, animDelay, inInterview){
   if (Number.isInteger(startingChoiceIdx)) {
     button.textContent = getScenarioChoiceById(storyScenario, startingChoiceIdx).text
     animateElement(button, "slideInRight", animDelay)
     toggleElementDisplay(button, "initial", animDelay)
     return true
+  } else if (inInterview) {
+    // get last choice in interview options
+    let lastChoice = getScenarioChoiceById(storyScenario, (getTotalScenarioChoices(storyScenario) - 1))
+    button.textContent = lastChoice.text
+    animateElement(button, "slideInRight", 0)
+    toggleElementDisplay(button, "initial", 0)
+    return false
   } else {
     button.textContent = "Go to interview"
     animateElement(button, "slideInRight", 0)
@@ -274,7 +298,6 @@ function playerChoiceResult(evt){
       if (scenarioItem) {
         if (scenarioItem === "codeConcept") {
           createUniqueCodeConcept(scenarioItem)
-          console.log("Added new code concept")
         } else {
           createUniqueBoosterItem(scenarioItem)
         }
@@ -347,7 +370,9 @@ function createUniqueCodeConcept(itemName) {
     let newCodeItem = null
     do {
       newCodeItem = getItemsOfType(itemName)[Math.floor(Math.random() * (getItemsOfType(itemName).length - 1))]
-    } while (playerCodeConcepts.includes(newCodeItem))
+      console.log("Trying to learn:", newCodeItem)
+      console.log(playerCodeConcepts.some(e => e.name === newCodeItem.name) ? "Already known" : "New concept")
+    } while (playerCodeConcepts.some(e => e.name === newCodeItem.name)) //playerCodeConcepts.includes(newCodeItem)
     playerCodeConcepts.push(newCodeItem)
     let newCodeConcept = document.createElement("div")
     newCodeConcept.innerHTML = `
@@ -371,7 +396,6 @@ function openBoosterList(){
 
 function openCodeToolbox(){
   if (playerCodeConcepts.length) {
-    console.log(codeConceptList);
     toggleElementDisplay(codeConceptList, "flex")
   } else {
     animateElement(codeConcepts, "shakeX", 0, true)
@@ -418,6 +442,16 @@ function getValidTimeChoiceIdx(elementId) {
       choiceTimeRequired = calculateRemainingTimeFromChoiceText(choiceTimeRequired)
     }
     if (choiceTimeRequired < currentTime || choiceTimeRequired === 0) {
+      return i
+    }
+  }
+  return null
+}
+
+function getValidCodeChoiceIdx(elementId) {
+  for (let i = elementId; i < getTotalScenarioChoices(storyScenario); i++) {
+    let conceptRequired = getScenarioChoiceById(storyScenario, i).codeConcept
+    if (playerCodeConcepts.some(e => e.name === conceptRequired)) {
       return i
     }
   }

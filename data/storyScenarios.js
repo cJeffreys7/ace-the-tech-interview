@@ -237,7 +237,7 @@ const storyScenarios = [
   },
   {
     scenario: "Mock interview",
-    text: ["You feel ready to try a practice round. You find a fresh question that you haven't tackled before.", "You settle in and begin reading the specs outloud.", "As you finish the spec list, you begin asking your mock interviewer some clarifying questions.", "You respond back to yourself with some more specs and try to throw yourself a curveball edgecase.", "You begin talking through your plan of attack, describing how you would first approach the problem.", "As you talk through the problem, you reach into your back pocket of design patterns you have recently seen and use the tried and true for loop.", "It's a clunky approach, but it will hopefully get you where you want to go. You can clean up your function later.", "You begin coding it out, and you don't quite get it working.", "You talk through where you think you got off track, then rework the problem.", "Fortunately you get your brute force solution working and have passed some tests.", "Now the challenging part, your mock interviewer asks if you can optimize this solution further.", "You try to go for a logrithmic complexity and propose a refactored version of your initial attempt.", "You code it out, and your code passes the tests again.", "You feel relieved that you were able to use what you've learned so far to go through a mock problem.", "You're feeling tired, but perhaps you want to keep going, just in case you need some more ammunition for 8am."],
+    text: ["You feel ready to try a practice round. You find a fresh question that you haven't tackled before.", "You settle in and begin reading the specs outloud.", "As you finish the spec list, you begin asking your mock interviewer some clarifying questions.", "You respond back to yourself with some more specs and try to throw yourself a curveball edgecase.", "You begin talking through your plan of attack, describing how you would first approach the problem.", "As you talk through the problem, you reach into your back pocket of design patterns you have recently seen. Which one will work best?", "It's a clunky approach, but it will hopefully get you where you want to go. You can clean up your function later.", "You begin coding it out, and you don't quite get it working.", "You talk through where you think you got off track, then rework the problem.", "Fortunately you get your brute force solution working and have passed some tests.", "Now the challenging part, your mock interviewer asks if you can optimize this solution further.", "You try to go for a logrithmic complexity and propose a refactored version of your initial attempt.", "You code it out, and your code passes the tests again.", "You feel relieved that you were able to use what you've learned so far to go through a mock problem.", "You're feeling tired, but perhaps you want to keep going, just in case you need some more ammunition for 8am."],
     imgSrc: "./images/sceneArtMockInterview.svg",
     audio: "./audio/Retro Electronic Burst StereoUP 04.wav",
     choices: [
@@ -261,7 +261,7 @@ const storyScenarios = [
       },
       { 
         text: "Get ready for bed", 
-        sanityChange: 20, 
+        sanityChange: 0, 
         hoursUsed: 0,
         newStoryScenario: "Sleep prep"
       }
@@ -610,40 +610,46 @@ const storyScenarios = [
     audio: "./audio/Retro Electronic Burst StereoUP 04.wav",
     choices: [
       { 
-        text: "For loop in a for loop", 
-        sanityChange: -30, 
+        text: "Toss in a reduce method", 
+        sanityChange: -5, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 2"
-      },
-      { 
-        text: "Initialize a large, hard coded array", 
-        sanityChange: -40, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview part 2"
-      },
-      { 
-        text: "Try throwing a map method in there", 
-        sanityChange: -15, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview part 2"
+        newStoryScenario: "Interview part 2",
+        codeConcept: "Reduce method"
       },
       { 
         text: "Filter the array", 
         sanityChange: -10, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 2"
+        newStoryScenario: "Interview part 2",
+        codeConcept: "Filter method"
       },
       { 
-        text: "Toss in a reduce method", 
-        sanityChange: -5, 
+        text: "Try throwing a map method in there", 
+        sanityChange: -15, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 2"
+        newStoryScenario: "Interview part 2",
+        codeConcept: "Map method"
+      },
+      { 
+        text: "For loop in a for loop", 
+        sanityChange: -30, 
+        hoursUsed: 0,
+        newStoryScenario: "Interview part 2",
+        codeConcept: "Nested for loop"
+      },
+      { 
+        text: "Initialize a large, hard coded array", 
+        sanityChange: -40, 
+        hoursUsed: 0,
+        newStoryScenario: "Interview part 2",
+        codeConcept: "Hard coded array"
       },
       { 
         text: "Stare at the screen for 30 minutes", 
         sanityChange: 0, 
         hoursUsed: 0,
-        newStoryScenario: "Endpoint - Fail interview"
+        newStoryScenario: "Endpoint - Fail interview",
+        codeConcept: ""
       }
     ]
   },
@@ -654,34 +660,39 @@ const storyScenarios = [
     audio: "./audio/Retro Event UI 13.wav",
     choices: [
       { 
+        text: "Handle the edge case with a different return statement", 
+        sanityChange: -5, 
+        hoursUsed: 0,
+        newStoryScenario: "Interview part 3",
+        codeConcept: "Handle edge cases"
+      },
+      { 
         text: "Refactor the initial if statement", 
         sanityChange: -20, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 3"
+        newStoryScenario: "Interview part 3",
+        codeConcept: "Refactor"
       },
       { 
         text: "Include the last element in the loop condition", 
         sanityChange: -25, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 3"
+        newStoryScenario: "Interview part 3",
+        codeConcept: "Iterate all elements"
       },
       { 
         text: "Get some console logs in there to identify the issue", 
         sanityChange: -35, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 3"
-      },
-      { 
-        text: "Handle the edge case by refactoring the return statement", 
-        sanityChange: -5, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview part 3"
+        newStoryScenario: "Interview part 3",
+        codeConcept: "Console log"
       },
       { 
         text: "Stare at the screen for 20 minutes", 
         sanityChange: 0, 
         hoursUsed: 0,
-        newStoryScenario: "Endpoint - Fail interview"
+        newStoryScenario: "Endpoint - Fail interview",
+        codeConcept: ""
       }
     ]
   },
@@ -692,34 +703,39 @@ const storyScenarios = [
     audio: "./audio/Retro Event Acute 11.wav",
     choices: [
       { 
-        text: "Try a bubble sort", 
-        sanityChange: -30, 
+        text: "Try to work in a bucket sort", 
+        sanityChange: -5, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 4"
-      },
-      { 
-        text: "Try to perform a merge sort", 
-        sanityChange: -20, 
-        hoursUsed: 0,
-        newStoryScenario: "Interview part 4"
+        newStoryScenario: "Interview part 4",
+        codeConcept: "Bucket sort"
       },
       { 
         text: "Refactor to a recursive function", 
         sanityChange: -15, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 4"
+        newStoryScenario: "Interview part 4",
+        codeConcept: "Recursion"
       },
       { 
-        text: "Try to work in a bucket sort", 
-        sanityChange: -5, 
+        text: "Try to perform a merge sort", 
+        sanityChange: -20, 
         hoursUsed: 0,
-        newStoryScenario: "Interview part 4"
+        newStoryScenario: "Interview part 4",
+        codeConcept: "Merge sort"
+      },
+      { 
+        text: "Try a bubble sort", 
+        sanityChange: -30, 
+        hoursUsed: 0,
+        newStoryScenario: "Interview part 4",
+        codeConcept: "Bubble sort"
       },
       { 
         text: "Stare at the screen for 15 minutes", 
         sanityChange: 0, 
         hoursUsed: 0,
-        newStoryScenario: "Endpoint - Fail interview"
+        newStoryScenario: "Endpoint - Fail interview",
+        codeConcept: ""
       }
     ]
   },
@@ -730,28 +746,32 @@ const storyScenarios = [
     audio: "./audio/Retro Event Acute 08.wav",
     choices: [
       { 
-        text: "Use a binary search tree", 
-        sanityChange: -30, 
+        text: "Implement a hash table", 
+        sanityChange: -5, 
         hoursUsed: 0,
-        newStoryScenario: "Endpoint - Pass interview"
-      },
-      { 
-        text: "Create a radix sort", 
-        sanityChange: -20, 
-        hoursUsed: 0,
-        newStoryScenario: "Endpoint - Pass interview"
+        newStoryScenario: "Endpoint - Pass interview",
+        codeConcept: "Hash table"
       },
       { 
         text: "Rework to use a counting sort", 
         sanityChange: -15, 
         hoursUsed: 0,
-        newStoryScenario: "Endpoint - Pass interview"
+        newStoryScenario: "Endpoint - Pass interview",
+        codeConcept: "Counting sort"
       },
       { 
-        text: "Implement a hash table", 
-        sanityChange: -5, 
+        text: "Create a radix sort", 
+        sanityChange: -20, 
         hoursUsed: 0,
-        newStoryScenario: "Endpoint - Pass interview"
+        newStoryScenario: "Endpoint - Pass interview",
+        codeConcept: "Radix sort"
+      },
+      { 
+        text: "Use a binary search tree", 
+        sanityChange: -30, 
+        hoursUsed: 0,
+        newStoryScenario: "Endpoint - Pass interview",
+        codeConcept: "Binary search tree"
       },
       { 
         text: "It's impossible, it can't run faster than this!", 
@@ -781,7 +801,7 @@ const storyScenarios = [
   },
   {
     scenario: "Endpoint - Stressed out",
-    text: ["Your brain shuts down.", "You can feel your mind short-circuiting.", "You pushed yourself too hard and now you can't function anymore.", "Any hopes of passing this tech interview are gone.", "Weeks later you are able to get another tech interview lined up.", "Maybe you can pace yourself differently next time?"],
+    text: ["Your brain shuts down.", "You can feel your mind short-circuiting.", "You pushed yourself too hard and now you can't function anymore.", "Any hopes of passing this tech interview are gone.", "Weeks later you are able to get another tech interview lined up.", "Maybe you can pace yourself differently this time?"],
     imgSrc: "./images/sceneArtStressedOut.svg",
     audio: "./audio/Retro Turn Off 12.wav",
     choices: [
