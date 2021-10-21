@@ -73,9 +73,9 @@ continueStoryBtn.addEventListener("click", progressStory)
 playerChoices.addEventListener("click", playerChoiceResult)
 startBtn.addEventListener("click", viewGameScreen)
 resetBtn.addEventListener("click", init)
-sanityBoosters.addEventListener("click", openBoosterList)
+sanityBoosters.addEventListener("click", toggleBoosterList)
 sanityBoosterList.addEventListener("click", useBoosterItem)
-codeConcepts.addEventListener("click", openCodeToolbox)
+codeConcepts.addEventListener("click", toggleCodeToolbox)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
 studyingMusic.addEventListener("ended", () => {
   studyingMusic.currentTime = 0
@@ -109,8 +109,17 @@ function init(){
   currentTime = 12
   playerItems = []
   playerCodeConcepts = []
+  createUniqueCodeConcept()
+  createUniqueCodeConcept()
+  createUniqueCodeConcept()
+  createUniqueCodeConcept()
+  createUniqueCodeConcept()
+  createUniqueCodeConcept()
+  createUniqueCodeConcept()
+  createUniqueCodeConcept()
+  createUniqueBoosterItem("Coffee")
   storyScenario = "Start"
-  playerChoices.style.display = "none"
+  playerChoices.style.display = codeConceptList.style.display = sanityBoosterList.style.display = "none"
   progressBtns.style.display = "flex"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
@@ -443,44 +452,54 @@ function updateClockTimeAmount(timeChangeAmount) {
   }
 }
 
-function openBoosterList(){
+function toggleBoosterList(){
   if (playerItems.length) {
-    let fadeInAnim, fadeOutAnim
-    if (window.innerWidth < 768) {
-      fadeInAnim = "fadeInDown"
-      fadeOutAnim = "fadeOutUp"
-    } else {
-      fadeInAnim = "fadeInLeft"
-      fadeOutAnim = "fadeOutLeft"
-    }
-    if (sanityBoosterList.style.display !== "none") {
-      animateElement(sanityBoosterList, fadeOutAnim, 0, true)
-      toggleElementDisplay(sanityBoosterList, "none", 1)
-    } else {
-      toggleElementDisplay(sanityBoosterList, "flex")
-      animateElement(sanityBoosterList, fadeInAnim, 0, true)
+    if (!sanityBoosterList.className) {
+      if (codeConceptList.style.display !== "none") {
+        toggleCodeToolbox()
+      }
+      let fadeInAnim, fadeOutAnim
+      if (window.innerWidth < 768) {
+        fadeInAnim = "fadeInDown"
+        fadeOutAnim = "fadeOutUp"
+      } else {
+        fadeInAnim = "fadeInLeft"
+        fadeOutAnim = "fadeOutLeft"
+      }
+      if (sanityBoosterList.style.display !== "none") {
+        animateElement(sanityBoosterList, fadeOutAnim, 0, true)
+        toggleElementDisplay(sanityBoosterList, "none", 1)
+      } else {
+        toggleElementDisplay(sanityBoosterList, "flex")
+        animateElement(sanityBoosterList, fadeInAnim, 0, true)
+      }
     }
   } else {
     animateElement(sanityBoosters, "shakeX", 0, true)
   }
 }
 
-function openCodeToolbox(){
+function toggleCodeToolbox(){
   if (playerCodeConcepts.length) {
-    let fadeInAnim, fadeOutAnim
-    if (window.innerWidth < 768) {
-      fadeInAnim = "fadeInDown"
-      fadeOutAnim = "fadeOutUp"
-    } else {
-      fadeInAnim = "fadeInLeft"
-      fadeOutAnim = "fadeOutLeft"
-    }
-    if (codeConceptList.style.display !== "none") {
-      animateElement(codeConceptList, fadeOutAnim, 0, true)
-      toggleElementDisplay(codeConceptList, "none", 1)
-    } else {
-      toggleElementDisplay(codeConceptList, "flex")
-      animateElement(codeConceptList, fadeInAnim, 0, true)
+    if (!codeConceptList.className) {
+      if (sanityBoosterList.style.display !== "none") {
+        toggleBoosterList()
+      }
+      let fadeInAnim, fadeOutAnim
+      if (window.innerWidth < 768) {
+        fadeInAnim = "fadeInDown"
+        fadeOutAnim = "fadeOutUp"
+      } else {
+        fadeInAnim = "fadeInLeft"
+        fadeOutAnim = "fadeOutLeft"
+      }
+      if (codeConceptList.style.display !== "none") {
+        animateElement(codeConceptList, fadeOutAnim, 0, true)
+        toggleElementDisplay(codeConceptList, "none", 1)
+      } else {
+        toggleElementDisplay(codeConceptList, "flex")
+        animateElement(codeConceptList, fadeInAnim, 0, true)
+      }
     }
   } else {
     animateElement(codeConcepts, "shakeX", 0, true)
@@ -489,10 +508,10 @@ function openCodeToolbox(){
 
 function closeOpenMenus(){
   if (sanityBoosterList.style.display !== "none") {
-    sanityBoosterList.style.display = "none"
+    toggleBoosterList()
   }
   if (codeConceptList.style.display !== "none") {
-    codeConceptList.style.display = "none"
+    toggleCodeToolbox()
   }
 }
 
