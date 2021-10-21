@@ -42,7 +42,7 @@ body {
   /* Use a system font, if none are available use an available sans-sarif font */
   font-family: 'Lekton', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  margin: 18px 0px 0px;
+  margin: 8px 0px 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,6 +72,7 @@ body.dark {
 h1 {
   font-size: 4rem;
   color: var(--choice-txt-color);
+  text-align: center;
 }
 
 #game-screen {
@@ -101,7 +102,6 @@ h1 {
 #booster-icon-list, #code-icon-list {
   display: none;
   justify-content: flex-start;
-  /* width: 80px; */
   width: fit-content;
 }
 
@@ -185,8 +185,8 @@ h1 {
   justify-content: center;
   align-items: center;
   width: 95%;
-  height: 300px;
-  padding: 12px;
+  height: 150px;
+  padding: 6px;
 }
 
 #scene-art {
@@ -202,9 +202,8 @@ h1 {
   width: 95%;
   height: 138px;
   padding: 12px;
-  margin: 12px 12px 0px;
-  /* font-size: 2.4rem; */
-  font-size: 4.5vw;
+  margin: 8px 12px 4px;
+  font-size: 4vw;
   text-align: center;
   color: var(--choice-txt-color);
   background-color: var(--story-txt-bg);
@@ -216,7 +215,6 @@ h1 {
   justify-content: center;
   align-items: center;
   margin-top: 12px;
-  height: 228px;
   width: 95%;
 }
 
@@ -231,8 +229,8 @@ h1 {
 .choice-btn, .progress-btn {
   display: initial;
   width: 100%;
-  height: 57px;
-  margin: 12px 0px 0px;
+  height: 36px;
+  margin: 6px 0px 0px;
   font-size: 1.8rem;
   border-radius: 40px;
   border: var(--choice-bg) 1px solid;
@@ -303,7 +301,7 @@ h1 {
   }
 
   #scene-art {
-    height: 150%;
+    height: 560px;
     flex-grow: 1;
   }
 
@@ -319,11 +317,14 @@ h1 {
   #player-choices {
     flex-wrap: wrap;
     flex-direction: row;
+    justify-content: stretch;
+    align-items: stretch;
   }
 
-  .choice-btn {
+  .choice-btn, .progress-btn {
     width: 48%;
     flex-grow: 2;
     margin-left: 12px;
+    height: 56px;
   }
 }

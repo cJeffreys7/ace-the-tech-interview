@@ -1,13 +1,5 @@
-<div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-<div>Icons made by <a href="https://www.flaticon.com/authors/dmitri13" title="dmitri13">dmitri13</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-<div>Icons made by <a href="https://www.flaticon.com/authors/darius-dan" title="Darius Dan">Darius Dan</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-<div>Icons made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-
-Sprites by Pixel Pete at https://petermilko.itch.io/pixel-petes-art-assets
-
-SFX by Kronbits at https://kronbits.itch.io/freesfx
-
-Crash Landing.mp3 by DOS-88 at https://dos88.itch.io/dos-88-music-library
-
-Circular progress bar by Aphinya Dechalert at https://www.dottedsquirrel.com/circular-progress-css/
+* Icons from [Flaticon](https://www.flaticon.com/): Vectors created by [Smashicons](https://smashicons.com/), [Freepik](https://www.freepik.com/), [dmitri13](https://www.flaticon.com/authors/dmitri13), [Darius Dan](https://www.flaticon.com/authors/darius-dan), and [Good Ware](https://www.flaticon.com/authors/good-ware)
+* Sprites by [Pixel Pete](https://petermilko.itch.io/pixel-petes-art-assets)
+* Sounds by [Kronbits](https://kronbits.itch.io/freesfx)
+* Music by [DOS-88](https://dos88.itch.io/dos-88-music-library)
+* Circular progress bar by [Aphinya Dechalert](https://www.dottedsquirrel.com/circular-progress-css/)
