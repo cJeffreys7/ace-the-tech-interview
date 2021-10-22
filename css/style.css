@@ -288,7 +288,7 @@ h1 {
     width: 70px;
   }
 
-  #stat-bar-menu, #booster-icon-list, #code-icon-list  {
+  #stat-bar-menu, #sanity-status, #booster-icon-list, #code-icon-list, #time-status  {
     position: absolute;
     display: flex;
     justify-content: space-evenly;
@@ -298,7 +298,7 @@ h1 {
     width: 80px;
   }
 
-  #booster-icon-list, #code-icon-list {
+  #sanity-status, #booster-icon-list, #code-icon-list, #time-status {
     display: none;
     justify-content: flex-start;
     position: absolute;
@@ -307,6 +307,10 @@ h1 {
     height: fit-content;
     max-height: 572px;
     overflow: hidden;
+  }
+
+  #sanity-status, #time-status {
+    font-size: 1.6rem;
   }
 
   .booster-item-container {

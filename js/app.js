@@ -462,18 +462,18 @@ function toggleSanityStatus(){
   if (playerSanity <= 75) {
     if (playerSanity <= 50) {
       if (playerSanity <= 20) {
-        sanityStatus.textContent = "Sanity Level: CRITICAL!"
+        sanityStatus.textContent = "CRITICAL!"
         sanityStatus.style.color = "var(--time-bg)"
       } else {
-        sanityStatus.textContent = "Sanity Level: Stressed"
+        sanityStatus.textContent = "Stressed"
         sanityStatus.style.color = "var(--indicator-negative)"
       }
     } else {
-      sanityStatus.textContent = "Sanity Level: Anxious"
+      sanityStatus.textContent = "Anxious"
       sanityStatus.style.color = "var(--indicator-negative)"
     }
   } else {
-    sanityStatus.textContent = "Sanity Level: OK"
+    sanityStatus.textContent = "OK"
     sanityStatus.style.color = "var(--indicator-positive)"
   }
   closeOpenMenus(sanityStatus)
@@ -491,7 +491,7 @@ function toggleCodeToolbox(){
 }
 
 function toggleClockStatus() {
-  clockStatus.textContent = `Time remaining: ${formatRemainingTime(previousTime, currentTime)}`
+  clockStatus.textContent = `${formatTime(currentTime)}`
   closeOpenMenus(clockStatus)
   toggleSubMenu(clockStatus, null, clockTime)
 }
