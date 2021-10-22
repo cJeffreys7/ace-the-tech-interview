@@ -45,6 +45,7 @@ const statBar = document.querySelector("#stat-bar")
 const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
 const sanityIndicator = document.querySelector("#sanity-change-indicator")
+const sanityStatus = document.querySelector("#sanity-status")
 const sanityBoosters = document.querySelector("#sanity-boosters")
 const sanityBoosterImg = document.querySelector("#sanity-booster-img")
 const sanityBoosterList = document.querySelector("#booster-icon-list")
@@ -56,6 +57,7 @@ const codeConceptIndicator = document.querySelector("#code-change-indicator")
 const timeFillLeft = document.querySelector(".left-progress")
 const timeFillRight = document.querySelector(".right-progress")
 const clockTime = document.querySelector("#clock-icon")
+const clockStatus = document.querySelector("#time-status")
 const sceneArt = document.querySelector("#scene-art")
 const storyText = document.querySelector("#story-text")
 const lightDarkBtn = document.querySelector("#light-dark-mode-icon")
@@ -74,9 +76,11 @@ continueStoryBtn.addEventListener("click", progressStory)
 playerChoices.addEventListener("click", playerChoiceResult)
 startBtn.addEventListener("click", viewGameScreen)
 resetBtn.addEventListener("click", init)
+sanityMeter.addEventListener("click", toggleSanityStatus)
 sanityBoosters.addEventListener("click", toggleBoosterList)
 sanityBoosterList.addEventListener("click", useBoosterItem)
 codeConcepts.addEventListener("click", toggleCodeToolbox)
+clockTime.addEventListener("click", toggleClockStatus)
 lightDarkBtn.addEventListener("click", toggleLightDarkMode)
 studyingMusic.addEventListener("ended", () => {
   studyingMusic.currentTime = 0
@@ -108,10 +112,11 @@ function init(){
   playerSanity = 80
   storyTextIdx = 0
   currentTime = 12
+  previousTime = 24
   playerItems = []
   playerCodeConcepts = []
   storyScenario = "Start"
-  playerChoices.style.display = codeConceptList.style.display = sanityBoosterList.style.display = "none"
+  sanityStatus.style.display = sanityBoosterList.style.display = codeConceptList.style.display = clockStatus.style.display =  playerChoices.style.display =  "none"
   progressBtns.style.display = "flex"
   toggleElementDisplay(resetBtn, "initial")
   statBar.className = sceneArt.className = ""
@@ -253,7 +258,34 @@ function formatSpecialCaseText(){
   const regex = new RegExp ("\{(.*?)\}")
   const timeMatches = storyText.textContent.match(regex)
   if (timeMatches.some(e => e === "currentTime")) {
-    let formattedTime = currentTime
+    // let formattedTime = currentTime
+    // let formattedMinutes = Math.floor((formattedTime % 1) * 60).toString()
+    // if (formattedMinutes === "0") {
+    //   formattedMinutes = "00"
+    // } else {
+    //   formattedTime += 1
+    //   formattedMinutes = (60 - formattedMinutes).toString()
+    // }
+    // let formattedHours = Math.floor(formattedTime)
+    formattedText = storyText.textContent.replace(regex, formatTime(currentTime))
+    // formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
+    // Calculate amount of time to sleep and return hours and minutes
+  } else if (timeMatches.some(e => e.includes("sleepTime"))) {
+    let timeChangeAmount = timeMatches[1].slice(-2, timeMatches[1].length)
+    formattedText = storyText.textContent.replace(regex, formatRemainingTime(previousTime, currentTime, timeChangeAmount))
+    // let totalSleepTime = previousTime - currentTime - timeChangeAmount/60
+    // let formattedMinutes = Math.ceil((totalSleepTime % 1) * 60)
+    // if (formattedMinutes === 0) {
+    //   formattedMinutes = "00"
+    // }
+    // let formattedHours = Math.floor(totalSleepTime)
+    // formattedText = storyText.textContent.replace(regex, `${formattedHours} hours and ${formattedMinutes} minutes`)
+  }
+  return formattedText
+}
+
+function formatTime(decimalTime) {
+  let formattedTime = decimalTime
     let formattedMinutes = Math.floor((formattedTime % 1) * 60).toString()
     if (formattedMinutes === "0") {
       formattedMinutes = "00"
@@ -262,19 +294,17 @@ function formatSpecialCaseText(){
       formattedMinutes = (60 - formattedMinutes).toString()
     }
     let formattedHours = Math.floor(formattedTime)
-    formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
-    // Calculate amount of time to sleep and return hours and minutes
-  } else if (timeMatches.some(e => e.includes("sleepTime"))) {
-    let timeChangeAmount = timeMatches[1].slice(-2, timeMatches[1].length)
-    let totalSleepTime = previousTime - currentTime - timeChangeAmount/60
-    let formattedMinutes = Math.ceil((totalSleepTime % 1) * 60)
-    if (formattedMinutes === 0) {
-      formattedMinutes = "00"
-    }
-    let formattedHours = Math.floor(totalSleepTime)
-    formattedText = storyText.textContent.replace(regex, `${formattedHours} hours and ${formattedMinutes} minutes`)
+    return `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${decimalTime <= 8 ? "am" : "pm"}`
+}
+
+function formatRemainingTime(previousTime, currentTime, timeChangeAmount) {
+  let decimalTimeRemaining = (previousTime === currentTime ? currentTime * 2 : previousTime) - currentTime - (timeChangeAmount/60 || 0)
+  let formattedMinutes = Math.ceil((decimalTimeRemaining % 1) * 60)
+  if (formattedMinutes === 0) {
+    formattedMinutes = null
   }
-  return formattedText
+  let formattedHours = Math.floor(decimalTimeRemaining)
+  return `${formattedHours} hours ${(!formattedMinutes) ? `` : `and ${formattedMinutes} minutes`}`
 }
 
 function setNextValidChoice(button, startingChoiceIdx, animDelay, inInterview){
@@ -446,39 +476,62 @@ function updateClockTimeAmount(timeChangeAmount) {
   }
 }
 
-function toggleBoosterList(){
-  if (playerItems.length) {
-    if (!sanityBoosterList.className) {
-      if (codeConceptList.style.display !== "none") {
-        toggleCodeToolbox()
-      }
-      let fadeInAnim, fadeOutAnim
-      if (window.innerWidth < 768) {
-        fadeInAnim = "fadeInDown"
-        fadeOutAnim = "fadeOutUp"
+function toggleSanityStatus(){
+  if (playerSanity <= 75) {
+    if (playerSanity <= 50) {
+      if (playerSanity <= 20) {
+        sanityStatus.textContent = "Sanity Level: CRITICAL!"
+        sanityStatus.style.color = "var(--time-bg)"
       } else {
-        fadeInAnim = "fadeInLeft"
-        fadeOutAnim = "fadeOutLeft"
+        sanityStatus.textContent = "Sanity Level: Stressed"
+        sanityStatus.style.color = "var(--indicator-negative)"
       }
-      if (sanityBoosterList.style.display !== "none") {
-        animateElement(sanityBoosterList, fadeOutAnim, 0, true)
-        toggleElementDisplay(sanityBoosterList, "none", 1)
-      } else {
-        toggleElementDisplay(sanityBoosterList, "flex")
-        animateElement(sanityBoosterList, fadeInAnim, 0, true)
-      }
+    } else {
+      sanityStatus.textContent = "Sanity Level: Anxious"
+      sanityStatus.style.color = "var(--indicator-negative)"
     }
   } else {
-    animateElement(sanityBoosters, "shakeX", 0, true)
+    sanityStatus.textContent = "Sanity Level: OK"
+    sanityStatus.style.color = "var(--indicator-positive)"
   }
+  closeOpenMenus(sanityStatus)
+  toggleSubMenu(sanityStatus, null, sanityMeter)
+}
+
+function toggleBoosterList(){
+  closeOpenMenus(sanityBoosterList)
+  toggleSubMenu(sanityBoosterList, playerItems, sanityBoosters)
 }
 
 function toggleCodeToolbox(){
-  if (playerCodeConcepts.length) {
-    if (!codeConceptList.className) {
-      if (sanityBoosterList.style.display !== "none") {
-        toggleBoosterList()
-      }
+  closeOpenMenus(codeConceptList)
+  toggleSubMenu(codeConceptList, playerCodeConcepts, codeConcepts)
+}
+
+function toggleClockStatus() {
+  clockStatus.textContent = `Time remaining: ${formatRemainingTime(previousTime, currentTime)}`
+  closeOpenMenus(clockStatus)
+  toggleSubMenu(clockStatus, null, clockTime)
+}
+
+function closeOpenMenus(selectedMenu){
+  if (selectedMenu !== sanityStatus && sanityStatus.style.display !== "none") {
+    toggleSubMenu(sanityStatus, null, sanityMeter)
+  }
+  if (selectedMenu !== sanityBoosterList && sanityBoosterList.style.display !== "none") {
+    toggleSubMenu(sanityBoosterList, playerItems, sanityBoosters)
+  }
+  if (selectedMenu !== codeConceptList && codeConceptList.style.display !== "none") {
+    toggleSubMenu(codeConceptList, playerCodeConcepts, codeConcepts)
+  }
+  if (selectedMenu !== clockStatus && clockStatus.style.display !== "none") {
+    toggleSubMenu(clockStatus, null, clockTime)
+  }
+}
+
+function toggleSubMenu(menuElement, subMenuArray, iconElement) {
+  if (!subMenuArray || subMenuArray.length) {
+    if (!menuElement.className) {
       let fadeInAnim, fadeOutAnim
       if (window.innerWidth < 768) {
         fadeInAnim = "fadeInDown"
@@ -487,25 +540,16 @@ function toggleCodeToolbox(){
         fadeInAnim = "fadeInLeft"
         fadeOutAnim = "fadeOutLeft"
       }
-      if (codeConceptList.style.display !== "none") {
-        animateElement(codeConceptList, fadeOutAnim, 0, true)
-        toggleElementDisplay(codeConceptList, "none", 1)
+      if (menuElement.style.display !== "none") {
+        animateElement(menuElement, fadeOutAnim, 0, true)
+        toggleElementDisplay(menuElement, "none", 1)
       } else {
-        toggleElementDisplay(codeConceptList, "flex")
-        animateElement(codeConceptList, fadeInAnim, 0, true)
+        toggleElementDisplay(menuElement, "flex")
+        animateElement(menuElement, fadeInAnim, 0, true)
       }
     }
   } else {
-    animateElement(codeConcepts, "shakeX", 0, true)
-  }
-}
-
-function closeOpenMenus(){
-  if (sanityBoosterList.style.display !== "none") {
-    toggleBoosterList()
-  }
-  if (codeConceptList.style.display !== "none") {
-    toggleCodeToolbox()
+    animateElement(iconElement, "shakeX", 0, true)
   }
 }
 

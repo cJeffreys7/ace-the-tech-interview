@@ -89,7 +89,7 @@ h1 {
   flex-direction: column;
 }
 
-#stat-bar-menu, #booster-icon-list, #code-icon-list {
+#stat-bar-menu, #sanity-status, #booster-icon-list, #code-icon-list, #time-status {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -101,12 +101,17 @@ h1 {
   margin: 12px;
 }
 
-#booster-icon-list, #code-icon-list {
+#sanity-status, #booster-icon-list, #code-icon-list, #time-status {
   display: none;
   justify-content: flex-start;
   width: fit-content;
   max-width: 100%;
   overflow: hidden;
+}
+
+#sanity-status, #time-status {
+  font-size: 2.4rem;
+  padding: 12px;
 }
 
 .booster-item-container {
