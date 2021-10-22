@@ -12,19 +12,19 @@
 
 ### As you play, you will be presented with choices that can either help you or hurt you as you study for your technical interview in the morning. Choices can impact your sanity by pushing your mind to its limits, or giving you a much needed break. Watch your sanity meter to determine if it is time to take a break, or crunch some more programming knowledge.
 
-<img src="/images/SanityMeter.png">
+<img src="./images/SanityMeter.png">
 
 ### Along the way you may pick up some items that can boost your sanity that can be used at any time. These sanity boosters may be the only thing that can help you keep your cool during crunch time, so make sure to use them wisely!
 
-<img src="/images/SanityBoosters.png">
+<img src="./images/SanityBoosters.png">
 
 ### Each time you review programming concepts, a new programming skill will be added to your coding toolbox. This is important because you never know what you will need in order to pass the technical assessment.
 
-<img src="images/CodingToolbox.png">
+<img src="./images/CodingToolbox.png">
 
 ### Choices cost you time, so make sure you are focusing on what is really important. Watch the clock as the hours dwindle down to evaluate your decisions. Will you choose to sleep, using valuable hours to regain sanity, or push through the night, taking every minute you can to study up?
 
-<img src="images/ClockCountdown.png">
+<img src="./images/ClockCountdown.png">
 
 ## Technologies Used:
 
