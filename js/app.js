@@ -46,9 +46,11 @@ const sanityMeter = document.querySelector("#sanity-meter")
 const sanityFill = document.querySelector("#brain-fill")
 const sanityIndicator = document.querySelector("#sanity-change-indicator")
 const sanityBoosters = document.querySelector("#sanity-boosters")
+const sanityBoosterImg = document.querySelector("#sanity-booster-img")
 const sanityBoosterList = document.querySelector("#booster-icon-list")
 const sanityBoosterIndicator = document.querySelector("#booster-change-indicator")
 const codeConcepts = document.querySelector("#code-concepts")
+const codeConceptImg = document.querySelector("#code-concepts-img")
 const codeConceptList = document.querySelector("#code-icon-list")
 const codeConceptIndicator = document.querySelector("#code-change-indicator")
 const timeFillLeft = document.querySelector(".left-progress")
@@ -109,15 +111,6 @@ function init(){
   currentTime = 12
   playerItems = []
   playerCodeConcepts = []
-  createUniqueCodeConcept()
-  createUniqueCodeConcept()
-  createUniqueCodeConcept()
-  createUniqueCodeConcept()
-  createUniqueCodeConcept()
-  createUniqueCodeConcept()
-  createUniqueCodeConcept()
-  createUniqueCodeConcept()
-  createUniqueBoosterItem("Coffee")
   storyScenario = "Start"
   playerChoices.style.display = codeConceptList.style.display = sanityBoosterList.style.display = "none"
   progressBtns.style.display = "flex"
@@ -401,6 +394,10 @@ function updatePlayerSanityAmount(changeInSanity) {
 }
 
 function createUniqueBoosterItem(itemName) {
+  if (!playerItems.length) {
+    sanityBoosterImg.src = "./images/confetti.svg"
+    animateElement(sanityBoosterImg, "bounce", 0, true)
+  }
   let newItem = getItemByName(itemName)
   if (!playerItems.includes(newItem)) {
     playerItems.push(newItem)
@@ -420,6 +417,10 @@ function createUniqueBoosterItem(itemName) {
 }
 
 function createUniqueCodeConcept() {
+  if (!playerCodeConcepts.length) {
+    codeConceptImg.src = "./images/binary-code.svg"
+    animateElement(codeConceptImg, "bounce", 0, true)
+  }
   if (playerCodeConcepts.length < getItemsOfType("codeConcept").length) {
     let newCodeItem = null
     do {
@@ -444,11 +445,11 @@ function createUniqueCodeConcept() {
 function updateClockTimeAmount(timeChangeAmount) {
   if (timeChangeAmount) {
     currentTime = Math.max(0, currentTime - timeChangeAmount)
-    clockIndicator.textContent = timeChangeAmount + (timeChangeAmount === 1 ? " hour" : " hours")
-    clockIndicator.style.color = timeChangeAmount < 0 ? "var(--indicator-positive)" : "var(--indicator-negative)"
-    toggleElementDisplay(clockIndicator, "initial")
-    animateElement(clockIndicator, "fadeOutDown", 0, true)
-    toggleElementDisplay(clockIndicator, "none", 1)
+    // clockIndicator.textContent = timeChangeAmount + (timeChangeAmount === 1 ? " hour" : " hours")
+    // clockIndicator.style.color = timeChangeAmount < 0 ? "var(--indicator-positive)" : "var(--indicator-negative)"
+    // toggleElementDisplay(clockIndicator, "initial")
+    // animateElement(clockIndicator, "fadeOutDown", 0, true)
+    // toggleElementDisplay(clockIndicator, "none", 1)
   }
 }
 
@@ -528,6 +529,7 @@ function useBoosterItem(evt) {
     animateElement(sanityBoosterIndicator, "fadeOutDown", 0, true)
     toggleElementDisplay(sanityBoosterIndicator, "none", 1)
     if (!playerItems.length) {
+      sanityBoosterImg.src = "./images/confetti-empty.svg"
       toggleElementDisplay(sanityBoosterList, "flex")
     }
     render()
