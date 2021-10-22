@@ -258,28 +258,10 @@ function formatSpecialCaseText(){
   const regex = new RegExp ("\{(.*?)\}")
   const timeMatches = storyText.textContent.match(regex)
   if (timeMatches.some(e => e === "currentTime")) {
-    // let formattedTime = currentTime
-    // let formattedMinutes = Math.floor((formattedTime % 1) * 60).toString()
-    // if (formattedMinutes === "0") {
-    //   formattedMinutes = "00"
-    // } else {
-    //   formattedTime += 1
-    //   formattedMinutes = (60 - formattedMinutes).toString()
-    // }
-    // let formattedHours = Math.floor(formattedTime)
     formattedText = storyText.textContent.replace(regex, formatTime(currentTime))
-    // formattedText = storyText.textContent.replace(regex, `${convertDecimalTimeTo12HourInt(formattedHours, 8) + ":" + formattedMinutes}${currentTime <= 8 ? "am" : "pm"}`)
-    // Calculate amount of time to sleep and return hours and minutes
   } else if (timeMatches.some(e => e.includes("sleepTime"))) {
     let timeChangeAmount = timeMatches[1].slice(-2, timeMatches[1].length)
     formattedText = storyText.textContent.replace(regex, formatRemainingTime(previousTime, currentTime, timeChangeAmount))
-    // let totalSleepTime = previousTime - currentTime - timeChangeAmount/60
-    // let formattedMinutes = Math.ceil((totalSleepTime % 1) * 60)
-    // if (formattedMinutes === 0) {
-    //   formattedMinutes = "00"
-    // }
-    // let formattedHours = Math.floor(totalSleepTime)
-    // formattedText = storyText.textContent.replace(regex, `${formattedHours} hours and ${formattedMinutes} minutes`)
   }
   return formattedText
 }
