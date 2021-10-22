@@ -56,7 +56,6 @@ const codeConceptIndicator = document.querySelector("#code-change-indicator")
 const timeFillLeft = document.querySelector(".left-progress")
 const timeFillRight = document.querySelector(".right-progress")
 const clockTime = document.querySelector("#clock-icon")
-const clockIndicator = document.querySelector("#clock-indicator")
 const sceneArt = document.querySelector("#scene-art")
 const storyText = document.querySelector("#story-text")
 const lightDarkBtn = document.querySelector("#light-dark-mode-icon")
@@ -434,8 +433,7 @@ function createUniqueCodeConcept() {
         <span>${newCodeItem.name}</span>
     </div>`
     codeConceptList.appendChild(newCodeConcept)
-    codeConceptIndicator.textContent = newCodeItem.name
-    codeConceptIndicator.style.color = "var(--indicator-positive)"
+    codeConceptIndicator.src = "./images/binary-code.svg" // Replace with newCodeItem.icon
     toggleElementDisplay(codeConceptIndicator, "initial")
     animateElement(codeConceptIndicator, "fadeOutDown", 0, true)
     toggleElementDisplay(codeConceptIndicator, "none", 1)
@@ -445,11 +443,6 @@ function createUniqueCodeConcept() {
 function updateClockTimeAmount(timeChangeAmount) {
   if (timeChangeAmount) {
     currentTime = Math.max(0, currentTime - timeChangeAmount)
-    // clockIndicator.textContent = timeChangeAmount + (timeChangeAmount === 1 ? " hour" : " hours")
-    // clockIndicator.style.color = timeChangeAmount < 0 ? "var(--indicator-positive)" : "var(--indicator-negative)"
-    // toggleElementDisplay(clockIndicator, "initial")
-    // animateElement(clockIndicator, "fadeOutDown", 0, true)
-    // toggleElementDisplay(clockIndicator, "none", 1)
   }
 }
 
