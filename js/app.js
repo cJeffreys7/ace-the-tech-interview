@@ -206,6 +206,7 @@ function renderValidChoices(){
   toggleElementDisplay(choice3, "none")
   toggleElementDisplay(choice4, "none")
   let currValidChoiceIdx = 0
+  // Find valid choices determined by player's coding knowledge
   if (storyScenario.includes("Interview")) {
     currValidChoiceIdx = getValidCodeChoiceIdx(currValidChoiceIdx)
     if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5, true)) {
@@ -221,6 +222,7 @@ function renderValidChoices(){
       }
     }
   } else {
+    // Find valid choices based on time available
     currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx)
     if (setNextValidChoice(choice1, currValidChoiceIdx, 0.5)) {
       currValidChoiceIdx = getValidTimeChoiceIdx(currValidChoiceIdx + 1)
