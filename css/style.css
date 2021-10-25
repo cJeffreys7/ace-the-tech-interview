@@ -102,6 +102,8 @@ h1 {
 }
 
 #sanity-status, #booster-icon-list, #code-icon-list, #time-status {
+  position: absolute;
+  top: 100px;
   display: none;
   justify-content: flex-start;
   width: fit-content;
