@@ -461,41 +461,53 @@ function updateClockTimeAmount(timeChangeAmount) {
 }
 
 function toggleSanityStatus(){
-  if (playerSanity <= 75) {
-    if (playerSanity <= 50) {
-      if (playerSanity <= 20) {
-        sanityStatus.textContent = "CRITICAL!"
-        sanityStatus.style.color = "var(--time-bg)"
+  if (!checkForAnimatingMenus()) {
+    if (playerSanity <= 75) {
+      if (playerSanity <= 50) {
+        if (playerSanity <= 20) {
+          sanityStatus.textContent = "CRITICAL!"
+          sanityStatus.style.color = "var(--time-bg)"
+        } else {
+          sanityStatus.textContent = "Stressed"
+          sanityStatus.style.color = "var(--indicator-negative)"
+        }
       } else {
-        sanityStatus.textContent = "Stressed"
+        sanityStatus.textContent = "Anxious"
         sanityStatus.style.color = "var(--indicator-negative)"
       }
     } else {
-      sanityStatus.textContent = "Anxious"
-      sanityStatus.style.color = "var(--indicator-negative)"
+      sanityStatus.textContent = "OK"
+      sanityStatus.style.color = "var(--indicator-positive)"
     }
-  } else {
-    sanityStatus.textContent = "OK"
-    sanityStatus.style.color = "var(--indicator-positive)"
+    closeOpenMenus(sanityStatus)
+    toggleSubMenu(sanityStatus, null, sanityMeter)
   }
-  closeOpenMenus(sanityStatus)
-  toggleSubMenu(sanityStatus, null, sanityMeter)
 }
 
 function toggleBoosterList(){
-  closeOpenMenus(sanityBoosterList)
-  toggleSubMenu(sanityBoosterList, playerItems, sanityBoosters)
+  if (!checkForAnimatingMenus()) {
+    closeOpenMenus(sanityBoosterList)
+    toggleSubMenu(sanityBoosterList, playerItems, sanityBoosters)
+  }
 }
 
 function toggleCodeToolbox(){
-  closeOpenMenus(codeConceptList)
-  toggleSubMenu(codeConceptList, playerCodeConcepts, codeConcepts)
+  if (!checkForAnimatingMenus()) {
+    closeOpenMenus(codeConceptList)
+    toggleSubMenu(codeConceptList, playerCodeConcepts, codeConcepts)
+  }
 }
 
 function toggleClockStatus() {
-  clockStatus.textContent = `${formatTime(currentTime)}`
-  closeOpenMenus(clockStatus)
-  toggleSubMenu(clockStatus, null, clockTime)
+  if (!checkForAnimatingMenus()) {
+    clockStatus.textContent = `${formatTime(currentTime)}`
+    closeOpenMenus(clockStatus)
+    toggleSubMenu(clockStatus, null, clockTime)
+  }
+}
+
+function checkForAnimatingMenus(){
+  return sanityStatus.className || sanityBoosterList.className || codeConceptList.className || clockStatus.className
 }
 
 function closeOpenMenus(selectedMenu){
